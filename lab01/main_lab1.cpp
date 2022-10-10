@@ -28,6 +28,9 @@
  * pnmtopng test.ppm > test.png
  *
  * You are expected to replace the line drawing function with one that only uses integers and no floats.
+ *
+ type xxx to convert image to a .png
+ * magick "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.ppm" "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.png"
  */
 
 #include <math.h>

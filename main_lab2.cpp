@@ -35,7 +35,7 @@
 #include "lab01/linedrawer.h"
 #include "polymesh_object.h"
 
-int main02(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   // Create a framebuffer
   FrameBuffer *fb = new FrameBuffer(1024,1024);

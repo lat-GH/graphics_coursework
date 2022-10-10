@@ -14,32 +14,71 @@
 
 #include <iostream>
 #include "linedrawer.h"
+#include "math.h"
+//ASSUMING s=starting e=ending so sx is the starting x point
 
-int draw_x_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
+//OLD x
+//int draw_x_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
+//{
+//  int dir = 1;
+//  if (sx > ex)
+//  {
+//    dir = -1;
+//  }
+//
+//  int   x     = sx;
+//  float y     = (float)sy;
+//  float slope = ((float)ey-(float)sy)/((float)ex-(float)sx);
+//        slope = slope * dir;
+//
+//  while (x != ex)
+//  {
+//    fb->plotPixel(x, (int)y, 1.0f, 0.0f, 0.0f);
+//
+//    y += slope;
+//
+//    x += dir;
+//  }
+//
+//  return 0;
+//}
+//NEW x
+int draw_x_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
+//iterating through all the points around in the center circle o and the outter of the circle l
 {
-  int dir = 1;
-  if (sx > ex)
-  {
-    dir = -1;
-  }
 
-  int   x     = sx;
-  float y     = (float)sy;
-  float slope = ((float)ey-(float)sy)/((float)ex-(float)sx);
-        slope = slope * dir;
-  
-  while (x != ex)
-  {
-    fb->plotPixel(x, (int)y, 1.0f, 1.0f, 1.0f);
+    int dirx = 1;
+    if (xo > xl) //if the outter point is larger than the inner point then you want to decrese to draw Right to Left
+    {
+        dirx = -1;
+    }
+    int wy = yo;
+    int x = xo;
 
-    y += slope;
+    int dy = abs(yl - yo);
+    int dx = abs(xl - xo);
+    int fy = dy/2;
 
-    x += dir;
-  }
+    int diry = 1;
+    if (yo > yl){
+        diry = -1;
+    }
 
-  return 0;
+    while (x != xl){
+        fb->plotPixel(x, (int)wy, 1.0f, 1.0f, 0.0f);
+        x += dirx;
+
+        fy += dy; // same as stepping by m
+
+        if(fy > dx){
+            wy += diry;
+            fy -= dx;
+        }
+    }
+
+    return 0;
 }
-
+//OLD y
 int draw_y_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
 {
   int dir = 1;
@@ -52,7 +91,7 @@ int draw_y_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
   float x     = (float)sx;
   float slope = ((float)ex-(float)sx)/((float)ey-(float)sy);
         slope = slope * dir;
-  
+
   while (y != ey)
   {
     fb->plotPixel((int)x, y, 1.0f, 1.0f, 1.0f);
@@ -64,19 +103,52 @@ int draw_y_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
 
   return 0;
 }
+//NEW
+//int draw_y_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
+//{
+//    int dir = 1; //increment
+//    if (yo > yl)
+//    {
+//        dir = -1;
+//    }
+//    int wx = xo;
+//    int y = yo;
+//
+//    int dx = xl - xo;
+//    int dy = yl - yo;
+//    int fx = dx/2;
+//
+//    while (y <= yl){
+//        fb->plotPixel(y, (int)wx, 1.0f, 1.0f, 1.0f);
+//        y += dir;
+//
+//        fx += dx; // same as stepping by m
+//
+//        if(fx > dy){
+//            wx += 1;
+//            fx -= dy;
+//        }
+//    }
+//
+//    return 0;
+//}
 
 
 int draw_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
 {
-  if ((sx == ex) && (sy==ey))
+//if the coordinates are exactly the same
+    if ((sx == ex) && (sy==ey))
   {
     return fb->plotPixel(sx, sy, 1.0f, 1.0f, 1.0f);
     
-  } else if (((ex-sx)* (ex-sx)) >= ((ey-sy)* (ey-sy)))
+  } // if the magnitude of the x is bigger than y
+    // if x is the longest axis
+    else if (((ex-sx)* (ex-sx)) >= ((ey-sy)* (ey-sy)))
   {
     return draw_x_line(fb, sx, sy, ex, ey);
     
-  } else
+  } //if y is the longest axis
+    else
   {
     return draw_y_line(fb, sx, sy, ex, ey);
   }

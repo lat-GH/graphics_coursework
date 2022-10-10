@@ -79,7 +79,7 @@ void build_scene(Scene& scene)
 
 
 // This is the entry point function to the program.
-int main34(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	int width = 512;
 	int height = 512;
