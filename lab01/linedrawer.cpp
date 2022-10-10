@@ -33,7 +33,7 @@
 //
 //  while (x != ex)
 //  {
-//    fb->plotPixel(x, (int)y, 1.0f, 0.0f, 0.0f);
+//    fb->plotPixel(x, (int)y, 1.0f, 1.0f, 0.0f);
 //
 //    y += slope;
 //
@@ -55,6 +55,7 @@ int draw_x_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
     int wy = yo;
     int x = xo;
 
+    //need an absolute distance, can't have negative distances
     int dy = abs(yl - yo);
     int dx = abs(xl - xo);
     int fy = dy/2;
@@ -65,7 +66,7 @@ int draw_x_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
     }
 
     while (x != xl){
-        fb->plotPixel(x, (int)wy, 1.0f, 1.0f, 0.0f);
+        fb->plotPixel(wy, (int)x, 1.0f, 1.0f, 0.0f);
         x += dirx;
 
         fy += dy; // same as stepping by m
@@ -79,59 +80,66 @@ int draw_x_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
     return 0;
 }
 //OLD y
-int draw_y_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
-{
-  int dir = 1;
-  if (sy > ey)
-  {
-    dir = -1;
-  }
-
-  int   y     = sy;
-  float x     = (float)sx;
-  float slope = ((float)ex-(float)sx)/((float)ey-(float)sy);
-        slope = slope * dir;
-
-  while (y != ey)
-  {
-    fb->plotPixel((int)x, y, 1.0f, 1.0f, 1.0f);
-
-    x += slope;
-
-    y += dir;
-  }
-
-  return 0;
-}
-//NEW
-//int draw_y_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
+//int draw_y_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
 //{
-//    int dir = 1; //increment
-//    if (yo > yl)
-//    {
-//        dir = -1;
-//    }
-//    int wx = xo;
-//    int y = yo;
+//  int dir = 1;
+//  if (sy > ey)
+//  {
+//    dir = -1;
+//  }
 //
-//    int dx = xl - xo;
-//    int dy = yl - yo;
-//    int fx = dx/2;
+//  int   y     = sy;
+//  float x     = (float)sx;
+//  float slope = ((float)ex-(float)sx)/((float)ey-(float)sy);
+//        slope = slope * dir;
 //
-//    while (y <= yl){
-//        fb->plotPixel(y, (int)wx, 1.0f, 1.0f, 1.0f);
-//        y += dir;
+//  while (y != ey)
+//  {
+//    fb->plotPixel((int)x, y, 1.0f, 1.0f, 1.0f);
 //
-//        fx += dx; // same as stepping by m
+//    x += slope;
 //
-//        if(fx > dy){
-//            wx += 1;
-//            fx -= dy;
-//        }
-//    }
+//    y += dir;
+//  }
 //
-//    return 0;
+//  return 0;
 //}
+//NEW
+int draw_y_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
+{
+
+    int dirx = 1;
+    if (xo > xl) //if the outter point is larger than the inner point then you want to decrese to draw Right to Left
+    {
+        dirx = -1;
+    }
+    int diry = 1;
+    if (yo > yl){
+        diry = -1;
+    }
+
+    int wx = xo;
+    int y = yo;
+
+    int dy = abs(yl - yo);
+    int dx = abs(xl - xo);
+    int fx = dx/2;
+
+
+
+    while (y != yl){
+        fb->plotPixel(y, (int)wx, 1.0f, 0.0f, 0.0f);
+        y += diry;
+        fx += dx; // same as stepping by m
+
+        if(fx > dx){
+            wx += dirx;
+            fx -= dy;
+        }
+    }
+
+    return 0;
+}
 
 
 int draw_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
