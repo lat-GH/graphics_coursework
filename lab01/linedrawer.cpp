@@ -15,34 +15,7 @@
 #include <iostream>
 #include "linedrawer.h"
 #include "math.h"
-//ASSUMING s=starting e=ending so sx is the starting x point
 
-//OLD x
-//int draw_x_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
-//{
-//  int dir = 1;
-//  if (sx > ex)
-//  {
-//    dir = -1;
-//  }
-//
-//  int   x     = sx;
-//  float y     = (float)sy;
-//  float slope = ((float)ey-(float)sy)/((float)ex-(float)sx);
-//        slope = slope * dir;
-//
-//  while (x != ex)
-//  {
-//    fb->plotPixel(x, (int)y, 1.0f, 1.0f, 0.0f);
-//
-//    y += slope;
-//
-//    x += dir;
-//  }
-//
-//  return 0;
-//}
-//NEW x
 int draw_x_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
 //iterating through all the points around in the center circle o and the outter of the circle l
 {
@@ -66,7 +39,7 @@ int draw_x_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
     }
 
     while (x != xl){
-        fb->plotPixel(wy, (int)x, 1.0f, 1.0f, 0.0f);
+        fb->plotPixel(wy, (int)x, 1.0f, 1.0f, 1.0f);
         x += dirx;
 
         fy += dy; // same as stepping by m
@@ -79,32 +52,7 @@ int draw_x_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
 
     return 0;
 }
-//OLD y
-//int draw_y_line(FrameBuffer *fb, int sx, int sy, int ex, int ey)
-//{
-//  int dir = 1;
-//  if (sy > ey)
-//  {
-//    dir = -1;
-//  }
-//
-//  int   y     = sy;
-//  float x     = (float)sx;
-//  float slope = ((float)ex-(float)sx)/((float)ey-(float)sy);
-//        slope = slope * dir;
-//
-//  while (y != ey)
-//  {
-//    fb->plotPixel((int)x, y, 1.0f, 1.0f, 1.0f);
-//
-//    x += slope;
-//
-//    y += dir;
-//  }
-//
-//  return 0;
-//}
-//NEW
+
 int draw_y_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
 {
 
@@ -128,7 +76,7 @@ int draw_y_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
 
 
     while (y != yl){
-        fb->plotPixel(y, (int)wx, 1.0f, 0.0f, 0.0f);
+        fb->plotPixel(y, (int)wx, 1.0f, 1.0f, 1.0f);
         y += diry;
         fx += dx; // same as stepping by m
 
