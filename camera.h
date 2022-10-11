@@ -22,7 +22,7 @@
 
 #include "ray.h"
 #include "environment.h"
-#include "lab01/framebuffer.h"
+#include "framebuffer.h"
 
 class Camera {
 public:

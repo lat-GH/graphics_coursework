@@ -4,7 +4,8 @@ project(coursework_starter)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
-add_executable(lab01 lab01/framebuffer.cpp lab01/framebuffer.h lab01/linedrawer.cpp lab01/linedrawer.h lab01/main_lab1.cpp)
+add_executable(lab01 framebuffer.cpp framebuffer.h linedrawer.cpp linedrawer.h main_lab1.cpp)
+add_executable(lab02 main_lab2.cpp framebuffer.cpp linedrawer.cpp polymesh_object.cpp hit.cpp)
 
 #add_executable(coursework_starter
 #        lab01/framebuffer.cpp

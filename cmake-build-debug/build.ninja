@@ -49,26 +49,26 @@ cmake_ninja_workdir = C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr
 
 build cmake_object_order_depends_target_lab01: phony || CMakeFiles/lab01.dir
 
-build CMakeFiles/lab01.dir/lab01/framebuffer.cpp.obj: CXX_COMPILER__lab01_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/lab01/framebuffer.cpp || cmake_object_order_depends_target_lab01
-  DEP_FILE = CMakeFiles\lab01.dir\lab01\framebuffer.cpp.obj.d
+build CMakeFiles/lab01.dir/framebuffer.cpp.obj: CXX_COMPILER__lab01_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/framebuffer.cpp || cmake_object_order_depends_target_lab01
+  DEP_FILE = CMakeFiles\lab01.dir\framebuffer.cpp.obj.d
   FLAGS = -g -std=gnu++14
   INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
   OBJECT_DIR = CMakeFiles\lab01.dir
-  OBJECT_FILE_DIR = CMakeFiles\lab01.dir\lab01
+  OBJECT_FILE_DIR = CMakeFiles\lab01.dir
 
-build CMakeFiles/lab01.dir/lab01/linedrawer.cpp.obj: CXX_COMPILER__lab01_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/lab01/linedrawer.cpp || cmake_object_order_depends_target_lab01
-  DEP_FILE = CMakeFiles\lab01.dir\lab01\linedrawer.cpp.obj.d
+build CMakeFiles/lab01.dir/linedrawer.cpp.obj: CXX_COMPILER__lab01_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/linedrawer.cpp || cmake_object_order_depends_target_lab01
+  DEP_FILE = CMakeFiles\lab01.dir\linedrawer.cpp.obj.d
   FLAGS = -g -std=gnu++14
   INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
   OBJECT_DIR = CMakeFiles\lab01.dir
-  OBJECT_FILE_DIR = CMakeFiles\lab01.dir\lab01
+  OBJECT_FILE_DIR = CMakeFiles\lab01.dir
 
-build CMakeFiles/lab01.dir/lab01/main_lab1.cpp.obj: CXX_COMPILER__lab01_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/lab01/main_lab1.cpp || cmake_object_order_depends_target_lab01
-  DEP_FILE = CMakeFiles\lab01.dir\lab01\main_lab1.cpp.obj.d
+build CMakeFiles/lab01.dir/main_lab1.cpp.obj: CXX_COMPILER__lab01_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/main_lab1.cpp || cmake_object_order_depends_target_lab01
+  DEP_FILE = CMakeFiles\lab01.dir\main_lab1.cpp.obj.d
   FLAGS = -g -std=gnu++14
   INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
   OBJECT_DIR = CMakeFiles\lab01.dir
-  OBJECT_FILE_DIR = CMakeFiles\lab01.dir\lab01
+  OBJECT_FILE_DIR = CMakeFiles\lab01.dir
 
 
 # =============================================================================
@@ -78,7 +78,7 @@ build CMakeFiles/lab01.dir/lab01/main_lab1.cpp.obj: CXX_COMPILER__lab01_Debug C$
 #############################################
 # Link the executable lab01.exe
 
-build lab01.exe: CXX_EXECUTABLE_LINKER__lab01_Debug CMakeFiles/lab01.dir/lab01/framebuffer.cpp.obj CMakeFiles/lab01.dir/lab01/linedrawer.cpp.obj CMakeFiles/lab01.dir/lab01/main_lab1.cpp.obj
+build lab01.exe: CXX_EXECUTABLE_LINKER__lab01_Debug CMakeFiles/lab01.dir/framebuffer.cpp.obj CMakeFiles/lab01.dir/linedrawer.cpp.obj CMakeFiles/lab01.dir/main_lab1.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\lab01.dir
@@ -87,6 +87,68 @@ build lab01.exe: CXX_EXECUTABLE_LINKER__lab01_Debug CMakeFiles/lab01.dir/lab01/f
   TARGET_FILE = lab01.exe
   TARGET_IMPLIB = liblab01.dll.a
   TARGET_PDB = lab01.exe.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target lab02
+
+
+#############################################
+# Order-only phony target for lab02
+
+build cmake_object_order_depends_target_lab02: phony || CMakeFiles/lab02.dir
+
+build CMakeFiles/lab02.dir/main_lab2.cpp.obj: CXX_COMPILER__lab02_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/main_lab2.cpp || cmake_object_order_depends_target_lab02
+  DEP_FILE = CMakeFiles\lab02.dir\main_lab2.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab02.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab02.dir
+
+build CMakeFiles/lab02.dir/framebuffer.cpp.obj: CXX_COMPILER__lab02_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/framebuffer.cpp || cmake_object_order_depends_target_lab02
+  DEP_FILE = CMakeFiles\lab02.dir\framebuffer.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab02.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab02.dir
+
+build CMakeFiles/lab02.dir/linedrawer.cpp.obj: CXX_COMPILER__lab02_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/linedrawer.cpp || cmake_object_order_depends_target_lab02
+  DEP_FILE = CMakeFiles\lab02.dir\linedrawer.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab02.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab02.dir
+
+build CMakeFiles/lab02.dir/polymesh_object.cpp.obj: CXX_COMPILER__lab02_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/polymesh_object.cpp || cmake_object_order_depends_target_lab02
+  DEP_FILE = CMakeFiles\lab02.dir\polymesh_object.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab02.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab02.dir
+
+build CMakeFiles/lab02.dir/hit.cpp.obj: CXX_COMPILER__lab02_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/hit.cpp || cmake_object_order_depends_target_lab02
+  DEP_FILE = CMakeFiles\lab02.dir\hit.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab02.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab02.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target lab02
+
+
+#############################################
+# Link the executable lab02.exe
+
+build lab02.exe: CXX_EXECUTABLE_LINKER__lab02_Debug CMakeFiles/lab02.dir/main_lab2.cpp.obj CMakeFiles/lab02.dir/framebuffer.cpp.obj CMakeFiles/lab02.dir/linedrawer.cpp.obj CMakeFiles/lab02.dir/polymesh_object.cpp.obj CMakeFiles/lab02.dir/hit.cpp.obj
+  FLAGS = -g
+  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\lab02.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = lab02.exe
+  TARGET_IMPLIB = liblab02.dll.a
+  TARGET_PDB = lab02.exe.dbg
 
 
 #############################################
@@ -116,6 +178,8 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 build lab01: phony lab01.exe
 
+build lab02: phony lab02.exe
+
 # =============================================================================
 # Folder targets.
 
@@ -124,7 +188,7 @@ build lab01: phony lab01.exe
 #############################################
 # Folder: C:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/cmake-build-debug
 
-build all: phony lab01.exe
+build all: phony lab01.exe lab02.exe
 
 # =============================================================================
 # Built-in targets

@@ -31,8 +31,8 @@
  * You are expected to fill in the missing code in polymesh.cpp.
  */
 
-#include "lab01/framebuffer.h"
-#include "lab01/linedrawer.h"
+#include "framebuffer.h"
+#include "linedrawer.h"
 #include "polymesh_object.h"
 
 int main(int argc, char *argv[])

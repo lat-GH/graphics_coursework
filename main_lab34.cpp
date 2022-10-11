@@ -25,7 +25,7 @@
 #include <sstream>
 
 // these are core raytracing classes
-#include "lab01/framebuffer.h"
+#include "framebuffer.h"
 #include "scene.h"
 
 // classes that contain our objects to be rendered, all derived from Object
