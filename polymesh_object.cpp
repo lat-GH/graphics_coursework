@@ -30,26 +30,47 @@ using namespace std;
 
 PolyMesh::PolyMesh(char* file, bool smooth)
 {
-//BEGIN_STAGE_ONE
-  cout << "in PolyMesh" << endl;
-  cout << file << endl;
+  //cout << file << endl;
 
-  string fileTxt;
+  string streamTxt;
+  int numLines = 0;
+
   ifstream fstream;
   fstream.open( file );
 
+  //getting the number of lines in the file
   if (fstream.is_open()){
-      cout << "opened file";
-      while (getline (fstream, fileTxt)) {
-          cout << fileTxt;
+      while (getline (fstream, streamTxt)) {
+          ++ numLines;
       }
-  }else cout << "Unable to open file";
-
+  }
   fstream.close( );
+  cout << "Number of lines " << numLines<<endl;
+
+  //creating the array based on the file
+  string plyFile[numLines];
+
+  fstream.open( file );
+  if (fstream.is_open()){
+      int i = 0;
+        cout << "opened file"<< endl;
+        while (getline (fstream, streamTxt)) {
+            //cout << streamTxt << endl;
+            plyFile[i]=streamTxt;
+            ++i;
+        }
+    }else cout << "Unable to open file";
+    fstream.close( );
+
+    //printing out the array
+    for (int i = 0; i < numLines; i++){
+        cout <<plyFile[i];
+    }
+
+    cout << "line1" << plyFile[1]; //YOU ARE HER --- extract out the number of the vertecies
 
 
-
-
+//BEGIN_STAGE_ONE
 //END_STAGE_ONE
     next = 0;
 }
