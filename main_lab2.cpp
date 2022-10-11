@@ -51,26 +51,26 @@ int main(int argc, char *argv[])
   pm->apply_transform(*transform);
 
 
-  // For each triangle in the model,
-  for (int i = 0; i< pm->triangle_count; i += 1)
-  {
-    // The following lines project the point onto the 2D image from 3D space.
-    float x0 = (pm->vertex[pm->triangle[i][0]].x/pm->vertex[pm->triangle[i][0]].z)*700.0 + 512.0;
-    float y0 = (pm->vertex[pm->triangle[i][0]].y/pm->vertex[pm->triangle[i][0]].z)*-700.0 + 256.0;
-    float x1 = (pm->vertex[pm->triangle[i][1]].x/pm->vertex[pm->triangle[i][1]].z)*700.0 + 512.0;
-    float y1 = (pm->vertex[pm->triangle[i][1]].y/pm->vertex[pm->triangle[i][1]].z)*-700.0 + 256.0;
-    float x2 = (pm->vertex[pm->triangle[i][2]].x/pm->vertex[pm->triangle[i][2]].z)*700.0 + 512.0;
-    float y2 = (pm->vertex[pm->triangle[i][2]].y/pm->vertex[pm->triangle[i][2]].z)*-700.0 + 256.0;
-
-    // then draw the three edges.
-    draw_line(fb, (int)x0, (int)y0, (int)x1, (int)y1);
-    draw_line(fb, (int)x1, (int)y1, (int)x2, (int)y2);
-    draw_line(fb, (int)x2, (int)y2, (int)x0, (int)y0);
-    printf(".");
-  }
-  
-  // Output the framebuffer.
-  fb->writeRGBFile((char *)"test.ppm");
+//  // For each triangle in the model,
+//  for (int i = 0; i< pm->triangle_count; i += 1)
+//  {
+//    // The following lines project the point onto the 2D image from 3D space.
+//    float x0 = (pm->vertex[pm->triangle[i][0]].x/pm->vertex[pm->triangle[i][0]].z)*700.0 + 512.0;
+//    float y0 = (pm->vertex[pm->triangle[i][0]].y/pm->vertex[pm->triangle[i][0]].z)*-700.0 + 256.0;
+//    float x1 = (pm->vertex[pm->triangle[i][1]].x/pm->vertex[pm->triangle[i][1]].z)*700.0 + 512.0;
+//    float y1 = (pm->vertex[pm->triangle[i][1]].y/pm->vertex[pm->triangle[i][1]].z)*-700.0 + 256.0;
+//    float x2 = (pm->vertex[pm->triangle[i][2]].x/pm->vertex[pm->triangle[i][2]].z)*700.0 + 512.0;
+//    float y2 = (pm->vertex[pm->triangle[i][2]].y/pm->vertex[pm->triangle[i][2]].z)*-700.0 + 256.0;
+//
+//    // then draw the three edges.
+//    draw_line(fb, (int)x0, (int)y0, (int)x1, (int)y1);
+//    draw_line(fb, (int)x1, (int)y1, (int)x2, (int)y2);
+//    draw_line(fb, (int)x2, (int)y2, (int)x0, (int)y0);
+//    printf(".");
+//  }
+//
+//  // Output the framebuffer.
+//  fb->writeRGBFile((char *)"test.ppm");
 
   return 0;
   

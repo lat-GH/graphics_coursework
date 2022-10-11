@@ -23,6 +23,7 @@
 #include <string>
 #include <sstream>
 
+
 #include "polymesh_object.h"
 
 using namespace std;
@@ -30,6 +31,25 @@ using namespace std;
 PolyMesh::PolyMesh(char* file, bool smooth)
 {
 //BEGIN_STAGE_ONE
+  cout << "in PolyMesh" << endl;
+  cout << file << endl;
+
+  string fileTxt;
+  ifstream fstream;
+  fstream.open( file );
+
+  if (fstream.is_open()){
+      cout << "opened file";
+      while (getline (fstream, fileTxt)) {
+          cout << fileTxt;
+      }
+  }else cout << "Unable to open file";
+
+  fstream.close( );
+
+
+
+
 //END_STAGE_ONE
     next = 0;
 }

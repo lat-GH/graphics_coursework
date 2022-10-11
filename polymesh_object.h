@@ -38,6 +38,6 @@ public:
 	Hit *intersection(Ray ray);
 	void apply_transform(Transform& trans);
 
-    PolyMesh(char *file, bool smooth);
-	~PolyMesh(){}
+    PolyMesh(char *file, bool smooth); // copy constructor
+	~PolyMesh(){} //default contrsuctor with empty body
 };
