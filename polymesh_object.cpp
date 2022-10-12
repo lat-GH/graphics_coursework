@@ -41,33 +41,46 @@ PolyMesh::PolyMesh(char* file, bool smooth)
   //getting the number of lines in the file
   if (fstream.is_open()){
       while (getline (fstream, streamTxt)) {
+          //trying to find the vertex_count
+          int posVertex = streamTxt.find("vertex");
+          if (posVertex != -1){
+            //cout << "found vertext at " << posVertex << endl;
+            vertex_count = stoi(streamTxt.substr(posVertex+7,streamTxt.length()));
+            cout << "vertex_count=" << vertex_count << endl;
+          }
+          //trying to find the triangle_count
+          int posFace = streamTxt.find("face");
+          if (posFace != -1){
+              triangle_count = stoi(streamTxt.substr(posFace+5,streamTxt.length()));
+              cout << "triangle_count=" << triangle_count << endl;
+          }
           ++ numLines;
       }
   }
   fstream.close( );
   cout << "Number of lines " << numLines<<endl;
 
-  //creating the array based on the file
-  string plyFile[numLines];
-
-  fstream.open( file );
-  if (fstream.is_open()){
-      int i = 0;
-        cout << "opened file"<< endl;
-        while (getline (fstream, streamTxt)) {
-            //cout << streamTxt << endl;
-            plyFile[i]=streamTxt;
-            ++i;
-        }
-    }else cout << "Unable to open file";
-    fstream.close( );
-
-    //printing out the array
-    for (int i = 0; i < numLines; i++){
-        cout <<plyFile[i];
-    }
-
-    cout << "line1" << plyFile[1]; //YOU ARE HER --- extract out the number of the vertecies
+//  //creating the array based on the file
+//  string plyFile[numLines];
+//
+//  fstream.open( file );
+//  if (fstream.is_open()){
+//      int i = 0;
+//        cout << "opened file"<< endl;
+//        while (getline (fstream, streamTxt)) {
+//            //cout << streamTxt << endl;
+//            plyFile[i]=streamTxt;
+//            ++i;
+//        }
+//    }else cout << "Unable to open file";
+//    fstream.close( );
+//
+//    //printing out the array
+//    for (int i = 0; i < numLines; i++){
+//        cout <<plyFile[i];
+//    }
+//
+//    cout << "line1" << plyFile[1];
 
 
 //BEGIN_STAGE_ONE
