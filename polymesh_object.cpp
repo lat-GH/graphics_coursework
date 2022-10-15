@@ -42,8 +42,8 @@ PolyMesh::PolyMesh(char* file, bool smooth)
   ifstream fstream;
   fstream.open( file );
 
-  //Vertex verticies[vertex_count];
-  vector<Vertex> verticies;
+  //define the pointer, then assign how large the memory is using malloc
+  Vertex *verticies;
 
   //getting the number of lines in the file
   if (fstream.is_open()){
@@ -52,9 +52,10 @@ PolyMesh::PolyMesh(char* file, bool smooth)
           //trying to find the vertex_count
           int posVertex = streamTxt.find("vertex");
           if (posVertex != -1){
-            //cout << "found vertext at " << posVertex << endl;
             vertex_count = stoi(streamTxt.substr(posVertex+7,streamTxt.length()));
             cout << "vertex_count=" << vertex_count << endl;
+            //need to use malloc so that the memory persists outside of the scope of the if statement
+            verticies = (Vertex*) malloc(vertex_count * sizeof(Vertex));
           }
           //trying to find the triangle_count
           int posFace = streamTxt.find("face");
@@ -69,12 +70,10 @@ PolyMesh::PolyMesh(char* file, bool smooth)
               float arr[3];
               //changing the address of the pointer, not it's value. so dont need the star
               V_str = strLine_to_Vertex(streamTxt,arr);
-              cout << "V_str[0]= " << V_str[0] <<endl;
-              //verticies[lineNum-3] = Vertex(V_str[0],V_str[1],V_str[2]);
-              //cout << streamTxt;
+              //cout << "V_str[0]= " << V_str[0] <<endl;
+              //creating a vertex and adding it to the array
+              verticies[lineNum-3] = Vertex(V_str[0],V_str[1],V_str[2]);
           }
-
-
           ++ lineNum;
       }
   }else cout << "Unable to open file";
@@ -82,8 +81,9 @@ PolyMesh::PolyMesh(char* file, bool smooth)
 
   cout << "Number of lines " << lineNum<<endl;
 
-  for(Vector i: verticies){
-      cout<<i.x<<endl;
+  //printing all of the verticies in the array
+  for(int i=0; i<vertex_count; i++){
+      cout<<verticies[i].x<<verticies[i].y<<verticies[i].z<<endl;
   }
   //BEGIN_STAGE_ONE
 //END_STAGE_ONE
@@ -91,17 +91,15 @@ PolyMesh::PolyMesh(char* file, bool smooth)
 }
 
 float *strLine_to_Vertex(string str, float *arr){
-    //cout << str<<endl;
-    //float arr[3];
     for(int i=0; i<3; i++){
         int space_pos = str.find(" ");
-        //cout<<"i="<<i<<" "<<str.substr(0,space_pos)<<"|"<<endl;
+        //get the substring from start up to the first space and store as an float into the array
         arr[i] = stof(str.substr(0,space_pos));
-        cout << arr[i]<<endl;
+        //cout << arr[i]<<endl;
+        //removing the number just found from the string
         str = str.substr(space_pos+1,str.length());
-        //cout << "new str" << str << endl;
     }
-    cout << "arr[0]= "<< arr[0] << endl;
+    //cout << "arr[0]= "<< arr[0] << endl;
     //return &arr[0]; // == arr
     return arr;
 }
