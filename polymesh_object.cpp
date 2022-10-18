@@ -52,7 +52,7 @@ PolyMesh::PolyMesh(char* file, bool smooth)
           int posVertex = streamTxt.find("vertex");
           if (posVertex != -1){
             vertex_count = stoi(streamTxt.substr(posVertex+7,streamTxt.length()));
-            cout << "vertex_count=" << vertex_count << endl;
+            //cout << "vertex_count=" << vertex_count << endl;
             //need to use malloc so that the memory persists outside of the scope of the if statement
             //verticies = (Vertex*) malloc(vertex_count * sizeof(Vertex)); //------ free this memory at the end?
             vertex = new Vertex[vertex_count];
@@ -62,7 +62,7 @@ PolyMesh::PolyMesh(char* file, bool smooth)
           if (posFace != -1){
               facesFound = true;
               triangle_count = stoi(streamTxt.substr(posFace+5,streamTxt.length()));
-              cout << "triangle_count=" << triangle_count << endl;
+              //cout << "triangle_count=" << triangle_count << endl;
               //triangle = (TriangleIndex*) malloc(triangle_count * sizeof(TriangleIndex)); //------ free this memory at the end?
               triangle = new TriangleIndex[triangle_count];
           }
@@ -105,15 +105,15 @@ PolyMesh::PolyMesh(char* file, bool smooth)
   }else cout << "Unable to open file";
   fstream.close( );
 
-  cout << "Number of lines " << lineNum-1<<endl;
+  //cout << "Number of lines " << lineNum-1<<endl;
 
-  //printing all of the verticies in the array
-  for(int i=0; i<vertex_count; i++){
-      cout<<vertex[i].x << ", " << vertex[i].y << ", " << vertex[i].z <<endl;
-  }
-  for(int i=0; i<triangle_count; i++){
-      cout<<triangle[i][0] << ", " <<triangle[i][1] << ", " <<triangle[i][2] <<endl;
-  }
+//  //printing all of the verticies in the array
+//  for(int i=0; i<vertex_count; i++){
+//      cout<<vertex[i].x << ", " << vertex[i].y << ", " << vertex[i].z <<endl;
+//  }
+//  for(int i=0; i<triangle_count; i++){
+//      cout<<triangle[i][0] << ", " <<triangle[i][1] << ", " <<triangle[i][2] <<endl;
+//  }
 
   //BEGIN_STAGE_ONE
 //END_STAGE_ONE
@@ -147,7 +147,14 @@ Hit* PolyMesh::intersection(Ray ray)
 }
 
 void PolyMesh::apply_transform(Transform& trans)
-{
+{ //passing a pointer to a transform object
+     //you only need to transform the verticies, because th traingles are linked by thier index in the array not value.
+    for (int i=0; i<vertex_count; i++){
+        //trans is a Transform which can be applied to a single vertex at a time
+        trans.apply(vertex[i]);
+    }
+
+
 //BEGIN_STAGE_ONE
 // END_STAGE_ONE
 }
