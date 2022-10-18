@@ -92,7 +92,7 @@ PolyMesh::PolyMesh(char* file, bool smooth)
                   T_str = splitStr_nItems(streamTxt,4);
                   //cout << "T_str[3]="<<T_str[3]<<endl;
 
-                  triangle[i][0]=stoi(T_str[1]); // WHy does it wokr when run normal but not with the debugger ffs
+                  triangle[i][0]=stoi(T_str[1]);
                   triangle[i][1]=stoi(T_str[2]);
                   triangle[i][2]=stoi(T_str[3]);
 

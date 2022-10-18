@@ -39,7 +39,7 @@ int draw_x_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
     }
 
     while (x != xl){
-        fb->plotPixel(wy, (int)x, 1.0f, 1.0f, 1.0f);
+        fb->plotPixel((int)x, wy, 1.0f, 1.0f, 1.0f);
         x += dirx;
 
         fy += dy; // same as stepping by m
@@ -76,7 +76,7 @@ int draw_y_line(FrameBuffer *fb, int xo, int yo, int xl, int yl)
 
 
     while (y != yl){
-        fb->plotPixel(y, (int)wx, 1.0f, 1.0f, 1.0f);
+        fb->plotPixel((int)wx, y,1.0f, 1.0f, 1.0f);
         y += diry;
         fx += dx; // same as stepping by m
 
