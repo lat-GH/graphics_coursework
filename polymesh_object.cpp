@@ -29,21 +29,20 @@
 
 using namespace std;
 
-float *strLine_to_Vertex(string str, float *arr);
+string *splitStr_nItems(string str, int n);
 
 PolyMesh::PolyMesh(char* file, bool smooth)
 {
   cout << file << endl;
 
   string streamTxt;
-  int lineNum = 0;
-  // ---------------------------------YOU ARE HERE ------- create a vector that will store all of the vertecies and all the lines https://cplusplus.com/reference/vector/vector/
+  int lineNum = 1;
 
   ifstream fstream;
   fstream.open( file );
 
-  //define the pointer, then assign how large the memory is using malloc
-  Vertex *verticies;
+  bool facesFound = false;
+
 
   //getting the number of lines in the file
   if (fstream.is_open()){
@@ -55,51 +54,84 @@ PolyMesh::PolyMesh(char* file, bool smooth)
             vertex_count = stoi(streamTxt.substr(posVertex+7,streamTxt.length()));
             cout << "vertex_count=" << vertex_count << endl;
             //need to use malloc so that the memory persists outside of the scope of the if statement
-            verticies = (Vertex*) malloc(vertex_count * sizeof(Vertex));
+            //verticies = (Vertex*) malloc(vertex_count * sizeof(Vertex)); //------ free this memory at the end?
+            vertex = new Vertex[vertex_count];
           }
           //trying to find the triangle_count
           int posFace = streamTxt.find("face");
           if (posFace != -1){
+              facesFound = true;
               triangle_count = stoi(streamTxt.substr(posFace+5,streamTxt.length()));
               cout << "triangle_count=" << triangle_count << endl;
+              //triangle = (TriangleIndex*) malloc(triangle_count * sizeof(TriangleIndex)); //------ free this memory at the end?
+              triangle = new TriangleIndex[triangle_count];
           }
 
           //populating the vertex vector
-          if(3<= lineNum and lineNum <= vertex_count+2){
-              float *V_str;
-              float arr[3];
+          if(lineNum > 3 and lineNum <= vertex_count+3){
+              //cout << "lineNum" << lineNum<<endl;
+              string *V_str;
+              //extracting an array of strings sperpated by spaces
               //changing the address of the pointer, not it's value. so dont need the star
-              V_str = strLine_to_Vertex(streamTxt,arr);
+              V_str = splitStr_nItems(streamTxt,3);
               //cout << "V_str[0]= " << V_str[0] <<endl;
               //creating a vertex and adding it to the array
-              verticies[lineNum-3] = Vertex(V_str[0],V_str[1],V_str[2]);
+              //lineNum-3 so starts at 0
+              vertex[lineNum-4] = Vertex(stof(V_str[0]),stof(V_str[1]),stof(V_str[2]));
           }
+          //populating the triangle vector
+          if(facesFound){//dont want to try and populate the trainagles till it has found the faces element
+              if(lineNum>vertex_count+3 and lineNum<=triangle_count+vertex_count+4){
+                  //cout << "lineNum" << lineNum<<endl;
+
+                  //want the triangle to start at index at 0
+                  int i =lineNum-vertex_count-4;
+                  //cout<<"i="<<i<<endl;
+
+                  string *T_str;
+                  T_str = splitStr_nItems(streamTxt,4);
+                  //cout << "T_str[3]="<<T_str[3]<<endl;
+
+                  triangle[i][0]=stoi(T_str[1]); // WHy does it wokr when run normal but not with the debugger ffs
+                  triangle[i][1]=stoi(T_str[2]);
+                  triangle[i][2]=stoi(T_str[3]);
+
+                  //cout <<  " triangle[i][0]="<<triangle[i][0]<<endl;
+              }
+          }
+
           ++ lineNum;
       }
   }else cout << "Unable to open file";
   fstream.close( );
 
-  cout << "Number of lines " << lineNum<<endl;
+  cout << "Number of lines " << lineNum-1<<endl;
 
   //printing all of the verticies in the array
   for(int i=0; i<vertex_count; i++){
-      cout<<verticies[i].x<<verticies[i].y<<verticies[i].z<<endl;
+      cout<<vertex[i].x << ", " << vertex[i].y << ", " << vertex[i].z <<endl;
   }
+  for(int i=0; i<triangle_count; i++){
+      cout<<triangle[i][0] << ", " <<triangle[i][1] << ", " <<triangle[i][2] <<endl;
+  }
+
   //BEGIN_STAGE_ONE
 //END_STAGE_ONE
     next = 0;
 }
 
-float *strLine_to_Vertex(string str, float *arr){
-    for(int i=0; i<3; i++){
+string *splitStr_nItems(string str, int n){
+    string *arr;
+    arr = new string[n]; // might it not be working because you use the same arr? does it create a new one each time the function is called?
+    for(int i=0; i<n; i++){
         int space_pos = str.find(" ");
         //get the substring from start up to the first space and store as an float into the array
-        arr[i] = stof(str.substr(0,space_pos));
+        arr[i] = str.substr(0,space_pos);
         //cout << arr[i]<<endl;
-        //removing the number just found from the string
+        //removing the content just found from the string
         str = str.substr(space_pos+1,str.length());
     }
-    //cout << "arr[0]= "<< arr[0] << endl;
+    //cout << "arr[0]= "<< arr[n-1] <<"|"<< endl;
     //return &arr[0]; // == arr
     return arr;
 }
