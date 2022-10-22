@@ -48,6 +48,7 @@ bool Scene::shadowtrace(Ray ray, float limit)
 	return false;
 }
 
+//works out the hit on the object that is closest to the camera = best_hit
 Hit *Scene::trace(Ray ray)
 {
 	Hit *best_hit = 0;
@@ -64,7 +65,8 @@ Hit *Scene::trace(Ray ray)
 			{
 				best_hit = hit;
 
-			} else if (hit->t < best_hit->t)
+			}//if the new hit found is a closer distance from the camera than the best hit
+            else if (hit->t < best_hit->t)
 			{
 				delete best_hit;
 				best_hit = hit;
@@ -128,6 +130,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
   if (best_hit != 0)
   {
 	  depth = best_hit->t;
+      //working out the colour for the best hit
 	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse); // this will be the global components such as ambient or reflect/refract
 
 	  // next, compute the light contribution for each light in the scene.

@@ -33,8 +33,6 @@ string *splitStr_nItems(string str, int n);
 
 PolyMesh::PolyMesh(char* file, bool smooth)
 {
-  cout << file << endl;
-
   string streamTxt;
   int lineNum = 1;
 
@@ -52,9 +50,7 @@ PolyMesh::PolyMesh(char* file, bool smooth)
           int posVertex = streamTxt.find("vertex");
           if (posVertex != -1){
             vertex_count = stoi(streamTxt.substr(posVertex+7,streamTxt.length()));
-            //cout << "vertex_count=" << vertex_count << endl;
             //need to use malloc so that the memory persists outside of the scope of the if statement
-            //verticies = (Vertex*) malloc(vertex_count * sizeof(Vertex)); //------ free this memory at the end?
             vertex = new Vertex[vertex_count];
           }
           //trying to find the triangle_count
@@ -62,19 +58,16 @@ PolyMesh::PolyMesh(char* file, bool smooth)
           if (posFace != -1){
               facesFound = true;
               triangle_count = stoi(streamTxt.substr(posFace+5,streamTxt.length()));
-              //cout << "triangle_count=" << triangle_count << endl;
               //triangle = (TriangleIndex*) malloc(triangle_count * sizeof(TriangleIndex)); //------ free this memory at the end?
               triangle = new TriangleIndex[triangle_count];
           }
 
           //populating the vertex vector
           if(lineNum > 3 and lineNum <= vertex_count+3){
-              //cout << "lineNum" << lineNum<<endl;
               string *V_str;
               //extracting an array of strings sperpated by spaces
               //changing the address of the pointer, not it's value. so dont need the star
               V_str = splitStr_nItems(streamTxt,3);
-              //cout << "V_str[0]= " << V_str[0] <<endl;
               //creating a vertex and adding it to the array
               //lineNum-3 so starts at 0
               vertex[lineNum-4] = Vertex(stof(V_str[0]),stof(V_str[1]),stof(V_str[2]));
@@ -82,21 +75,16 @@ PolyMesh::PolyMesh(char* file, bool smooth)
           //populating the triangle vector
           if(facesFound){//dont want to try and populate the trainagles till it has found the faces element
               if(lineNum>vertex_count+3 and lineNum<=triangle_count+vertex_count+4){
-                  //cout << "lineNum" << lineNum<<endl;
-
                   //want the triangle to start at index at 0
                   int i =lineNum-vertex_count-4;
-                  //cout<<"i="<<i<<endl;
 
                   string *T_str;
                   T_str = splitStr_nItems(streamTxt,4);
-                  //cout << "T_str[3]="<<T_str[3]<<endl;
 
                   triangle[i][0]=stoi(T_str[1]);
                   triangle[i][1]=stoi(T_str[2]);
                   triangle[i][2]=stoi(T_str[3]);
 
-                  //cout <<  " triangle[i][0]="<<triangle[i][0]<<endl;
               }
           }
 
@@ -105,7 +93,6 @@ PolyMesh::PolyMesh(char* file, bool smooth)
   }else cout << "Unable to open file";
   fstream.close( );
 
-  //cout << "Number of lines " << lineNum-1<<endl;
 
 //  //printing all of the verticies in the array
 //  for(int i=0; i<vertex_count; i++){
@@ -115,7 +102,7 @@ PolyMesh::PolyMesh(char* file, bool smooth)
 //      cout<<triangle[i][0] << ", " <<triangle[i][1] << ", " <<triangle[i][2] <<endl;
 //  }
 
-  //BEGIN_STAGE_ONE
+//BEGIN_STAGE_ONE
 //END_STAGE_ONE
     next = 0;
 }
@@ -127,11 +114,9 @@ string *splitStr_nItems(string str, int n){
         int space_pos = str.find(" ");
         //get the substring from start up to the first space and store as an float into the array
         arr[i] = str.substr(0,space_pos);
-        //cout << arr[i]<<endl;
         //removing the content just found from the string
         str = str.substr(space_pos+1,str.length());
     }
-    //cout << "arr[0]= "<< arr[n-1] <<"|"<< endl;
     //return &arr[0]; // == arr
     return arr;
 }

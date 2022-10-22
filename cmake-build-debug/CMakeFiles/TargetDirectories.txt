@@ -1,4 +1,5 @@
 C:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/cmake-build-debug/CMakeFiles/lab01.dir
 C:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/cmake-build-debug/CMakeFiles/lab02.dir
+C:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/cmake-build-debug/CMakeFiles/lab03.dir
 C:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/cmake-build-debug/CMakeFiles/rebuild_cache.dir

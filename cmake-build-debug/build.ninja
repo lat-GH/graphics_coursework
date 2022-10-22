@@ -150,6 +150,131 @@ build lab02.exe: CXX_EXECUTABLE_LINKER__lab02_Debug CMakeFiles/lab02.dir/main_la
   TARGET_IMPLIB = liblab02.dll.a
   TARGET_PDB = lab02.exe.dbg
 
+# =============================================================================
+# Object build statements for EXECUTABLE target lab03
+
+
+#############################################
+# Order-only phony target for lab03
+
+build cmake_object_order_depends_target_lab03: phony || CMakeFiles/lab03.dir
+
+build CMakeFiles/lab03.dir/main_lab34.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/main_lab34.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\main_lab34.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/framebuffer.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/framebuffer.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\framebuffer.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/linedrawer.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/linedrawer.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\linedrawer.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/compound_material.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/compound_material.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\compound_material.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/directional_light.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/directional_light.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\directional_light.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/falsecolour_material.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/falsecolour_material.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\falsecolour_material.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/full_camera.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/full_camera.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\full_camera.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/hit.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/hit.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\hit.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/phong_material.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/phong_material.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\phong_material.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/plane_object.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/plane_object.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\plane_object.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/polymesh_object.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/polymesh_object.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\polymesh_object.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/scene.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/scene.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\scene.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/simple_camera.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/simple_camera.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\simple_camera.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+build CMakeFiles/lab03.dir/sphere_object.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/sphere_object.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\sphere_object.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target lab03
+
+
+#############################################
+# Link the executable lab03.exe
+
+build lab03.exe: CXX_EXECUTABLE_LINKER__lab03_Debug CMakeFiles/lab03.dir/main_lab34.cpp.obj CMakeFiles/lab03.dir/framebuffer.cpp.obj CMakeFiles/lab03.dir/linedrawer.cpp.obj CMakeFiles/lab03.dir/compound_material.cpp.obj CMakeFiles/lab03.dir/directional_light.cpp.obj CMakeFiles/lab03.dir/falsecolour_material.cpp.obj CMakeFiles/lab03.dir/full_camera.cpp.obj CMakeFiles/lab03.dir/hit.cpp.obj CMakeFiles/lab03.dir/phong_material.cpp.obj CMakeFiles/lab03.dir/plane_object.cpp.obj CMakeFiles/lab03.dir/polymesh_object.cpp.obj CMakeFiles/lab03.dir/scene.cpp.obj CMakeFiles/lab03.dir/simple_camera.cpp.obj CMakeFiles/lab03.dir/sphere_object.cpp.obj
+  FLAGS = -g
+  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = lab03.exe
+  TARGET_IMPLIB = liblab03.dll.a
+  TARGET_PDB = lab03.exe.dbg
+
 
 #############################################
 # Utility command for edit_cache
@@ -180,6 +305,8 @@ build lab01: phony lab01.exe
 
 build lab02: phony lab02.exe
 
+build lab03: phony lab03.exe
+
 # =============================================================================
 # Folder targets.
 
@@ -188,7 +315,7 @@ build lab02: phony lab02.exe
 #############################################
 # Folder: C:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/cmake-build-debug
 
-build all: phony lab01.exe lab02.exe
+build all: phony lab01.exe lab02.exe lab03.exe
 
 # =============================================================================
 # Built-in targets
