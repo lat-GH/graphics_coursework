@@ -37,7 +37,8 @@ public:
 
   FullCamera();
 
-  FullCamera(float p_f, Vertex& p_position, Vector& p_lookat, Vector &p_up);
+  //FullCamera(float p_f, Vertex& p_position, Vector& p_lookat, Vector &p_up);
+  FullCamera(float p_f, Vertex p_position, Vector p_lookat, Vector p_up);
 	
   void get_ray_offset(int p_x, int p_y, float p_ox, float p_oy, Ray &p_ray);
 
@@ -47,3 +48,4 @@ public:
 };
 
 #endif
+

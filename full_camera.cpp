@@ -18,16 +18,29 @@
 
 #include "full_camera.h"
 
-FullCamera::FullCamera()
+FullCamera::FullCamera() //ADD an implementation of when dont have the values, whats the default
 {
 //BEGIN_STAGE_ONE
 //END_STAGE_ONE
 }
 
-FullCamera::FullCamera(float f, Vertex& p_position, Vector& p_lookat, Vector& p_up)
+//FullCamera::FullCamera(float f, Vertex& p_position, Vector& p_lookat, Vector& p_up)
+FullCamera::FullCamera(float f, Vertex p_position, Vector p_lookat, Vector p_up)
 {
-//BEGIN_STAGE_ONE
-//END_STAGE_ONE
+    fov = f;
+    position = p_position; //=Eye
+    lookat = p_lookat;
+    up = p_up;
+
+    //calculating the coordinate system of the camera
+    Vector numerator = position-lookat;
+    float denominator = 1.0f/numerator.length();
+    //float denominator = numerator.length();
+    Vector w = numerator * denominator;
+
+    cout <<"w="<< w.x<<", " << w.y<<", " << w.z<<", "<<endl;
+
+
 }
 
 void FullCamera::get_ray_offset(int p_x, int p_y, float p_ox, float p_oy, Ray& p_ray)
@@ -47,3 +60,4 @@ void FullCamera::render(Environment& env, FrameBuffer& fb)
 //BEGIN_STAGE_ONE
 //END_STAGE_ONE
 }
+

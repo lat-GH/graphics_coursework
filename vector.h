@@ -25,7 +25,7 @@
 
 class Vertex;
 
-class Vector {
+class  Vector {
 public:
 	float x;
 	float y;

@@ -17,6 +17,7 @@
  */
 
 // magick "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.ppm" "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.png"
+//magick "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\depth.ppm" "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\depth.png"
 
 /* This is the top level for the program you need to create for lab three and four.
  */
@@ -58,7 +59,9 @@ void build_scene(Scene& scene)
 			0.0f, 0.0f, 0.0f, 1.0f);
 
 	//  Read in the teapot model.
-	PolyMesh* pm = new PolyMesh("teapot_smaller.ply", false);
+	//PolyMesh* pm = new PolyMesh("teapot_smaller.ply", false);
+    PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", false);
+
 	pm->apply_transform(*transform);
 
 	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 1.0f), 0.4f);
@@ -95,8 +98,8 @@ int main(int argc, char *argv[])
 	build_scene(scene);
 	
 	// Declare a camera
-	Camera *camera = new SimpleCamera(0.5f);
-	//Camera* camera = new FullCamera(0.5f, Vertex(-1.0f, 0.0f, 0.0f), Vector(1.0f, 0.0f, 1.0f), Vector(0.0f, 1.0f, 0.0f));
+	//Camera *camera = new SimpleCamera(0.5f);
+	Camera* camera = new FullCamera(0.5f, Vertex(-1.0f, 0.0f, 0.0f), Vector(1.0f, 0.0f, 1.0f), Vector(0.0f, 1.0f, 0.0f));
 	
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
 	camera->render(scene,*fb);
