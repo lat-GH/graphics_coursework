@@ -32,6 +32,18 @@ FullCamera::FullCamera(float f, Vertex p_position, Vector p_lookat, Vector p_up)
     lookat = p_lookat;
     up = p_up;
 
+    //calculating the coordinate system of the camera
+    w = position-lookat;
+    w.normalise();
+    //cout <<"w="<< w.x<<", " << w.y<<", " << w.z<<", "<<endl;
+
+    up.cross(w,u);
+    u.normalise();
+    //cout <<"u="<< u.x<<", " << u.y<<", " << u.z<<", "<<endl;
+
+    w.cross(u,v);
+    //cout <<"v="<< v.x<<", " << v.y<<", " << v.z<<", "<<endl;
+
 }
 
 void FullCamera::get_ray_offset(int p_x, int p_y, float p_ox, float p_oy, Ray& p_ray)
@@ -39,35 +51,6 @@ void FullCamera::get_ray_offset(int p_x, int p_y, float p_ox, float p_oy, Ray& p
 //BEGIN_STAGE_ONE
 // END_STAGE_ONE
 }
-
-Vector *calculate_wuv(Vertex position, Vector lookat, Vector up){
-    Vector *wuv;
-    wuv = new Vector[3];
-
-    //calculating the coordinate system of the camera
-    Vector w_numerator = position-lookat;
-    float w_denominator = 1.0f/w_numerator.length();
-    Vector w = w_numerator * w_denominator;
-    //cout <<"w="<< w.x<<", " << w.y<<", " << w.z<<", "<<endl;
-
-    Vector u_numerator;
-    up.cross(w,u_numerator); //you pass in the vector you want to store the result into
-    float u_denominator = 1.0f/u_numerator.length();
-    Vector u = u_numerator * u_denominator;
-    //cout <<"u="<< u.x<<", " << u.y<<", " << u.z<<", "<<endl;
-
-    Vector v;
-    w.cross(u,v);
-    //cout <<"v="<< v.x<<", " << v.y<<", " << v.z<<", "<<endl;
-
-    wuv[0]=w;
-    wuv[1]=u;
-    wuv[2]=v;
-
-    //cout <<"INSIDE wuv[1].x= " <<wuv[1].x<<endl;
-    return wuv;
-}
-
 
 void FullCamera::get_ray_pixel(int p_x, int p_y, Ray &ray)
 {
@@ -80,13 +63,13 @@ void FullCamera::get_ray_pixel(int p_x, int p_y, Ray &ray)
 
     //direction
     //calculating the pixels coordinate, based on the cameras coordinate system
-    float s = 1.0f; //TODO find out what this values means, and what it should be set to inorder to see the image
+    float s = 1.0f; //--------------find out what this values means, and what it should be set to inorder to see the image
     float xu = s*(p_x - (width)/2);
     float yv = s*(p_y - (height/2));
 
-    fov = 0.5f; //NOTICED THAT----- Hit Pool = 100 if fov>1.25
+    fov = 0.5f; //NOTICED THAT--Hit Pool = 100 if fov>1.25
 
-    Vector D = u*(xu) + v*(yv) + w*(fov);//TODO how does changing the value of the fov affect the image?
+    Vector D = u*(xu) + v*(yv) - w*(fov);//------------how does changing the value of the fov affect the image?
     //cout <<"D="<< D.x<<", " << D.y<<", " << D.z<<", "<<endl;
 
     D.normalise();
@@ -101,18 +84,6 @@ void FullCamera::render(Environment& env, FrameBuffer& fb)
 {
     width = fb.width;
     height = fb.height;
-
-    // calculating the camera's coordinate system
-    Vector *wuv;
-    //calculate the camera coordinate system
-    wuv = calculate_wuv(position,lookat,up);
-
-    //cout <<"OUT"<<endl;
-    //cout <<"OUTSIDE wuv[0].x= " <<wuv[0].x<< endl;
-
-    w =wuv[0];
-    u =wuv[1];
-    v =wuv[2];
 
     //looping through the pixels of the 2d image
     for (int y = 0; y < height; y += 1)
