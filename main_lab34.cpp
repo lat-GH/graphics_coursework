@@ -16,7 +16,7 @@
  * produced it.
  */
 
-// magick "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.ppm" "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.png"
+//magick "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.ppm" "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.png"
 //magick "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\depth.ppm" "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\depth.png"
 
 /* This is the top level for the program you need to create for lab three and four.

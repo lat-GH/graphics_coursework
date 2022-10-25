@@ -80,11 +80,13 @@ void FullCamera::get_ray_pixel(int p_x, int p_y, Ray &ray)
 
     //direction
     //calculating the pixels coordinate, based on the cameras coordinate system
-    float s = 1.0f;
+    float s = 1.0f; //TODO find out what this values means, and what it should be set to inorder to see the image
     float xu = s*(p_x - (width)/2);
     float yv = s*(p_y - (height/2));
 
-    Vector D = u*(xu) + v*(yv) + w*(fov);
+    fov = 0.5f; //NOTICED THAT----- Hit Pool = 100 if fov>1.25
+
+    Vector D = u*(xu) + v*(yv) + w*(fov);//TODO how does changing the value of the fov affect the image?
     //cout <<"D="<< D.x<<", " << D.y<<", " << D.z<<", "<<endl;
 
     D.normalise();
@@ -120,8 +122,8 @@ void FullCamera::render(Environment& env, FrameBuffer& fb)
             //rays have a position and a direction
             Ray ray;
             //for each pixel in the image calculate the corresponding ray
-            //position is assigned as the origin (0,0,0)
-            //direction is ????
+            //position is equivalent to the eye of the camera
+            //direction is calculated...
             get_ray_pixel(x, y, ray);
 
             //rgba values
