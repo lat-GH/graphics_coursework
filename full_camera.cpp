@@ -67,9 +67,8 @@ void FullCamera::get_ray_pixel(int p_x, int p_y, Ray &ray)
     float xu = s*(p_x - (width)/2);
     float yv = s*(p_y - (height/2));
 
-    fov = 0.5f; //NOTICED THAT--Hit Pool = 100 if fov>1.25
-
-    Vector D = u*(xu) + v*(yv) - w*(fov);//------------how does changing the value of the fov affect the image?
+   // fov = 256.0f; //fov needs to be bigger than 0.5 in order to see it, increasing the distance from the camera, makes stuff in the scene look bigger in the image plane
+    Vector D = u*(xu) + v*(yv) - w*(fov);
     //cout <<"D="<< D.x<<", " << D.y<<", " << D.z<<", "<<endl;
 
     D.normalise();
@@ -77,7 +76,6 @@ void FullCamera::get_ray_pixel(int p_x, int p_y, Ray &ray)
     ray.direction.y = D.y;
     ray.direction.z = D.z;
 
-    //ray.direction.normalise();
 }
 
 void FullCamera::render(Environment& env, FrameBuffer& fb)
