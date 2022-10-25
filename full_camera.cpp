@@ -42,23 +42,29 @@ void FullCamera::get_ray_offset(int p_x, int p_y, float p_ox, float p_oy, Ray& p
 
 Vector *calculate_wuv(Vertex position, Vector lookat, Vector up){
     Vector *wuv;
+    wuv = new Vector[3];
 
     //calculating the coordinate system of the camera
     Vector w_numerator = position-lookat;
     float w_denominator = 1.0f/w_numerator.length();
     Vector w = w_numerator * w_denominator;
-    cout <<"w="<< w.x<<", " << w.y<<", " << w.z<<", "<<endl;
+    //cout <<"w="<< w.x<<", " << w.y<<", " << w.z<<", "<<endl;
 
     Vector u_numerator;
     up.cross(w,u_numerator); //you pass in the vector you want to store the result into
     float u_denominator = 1.0f/u_numerator.length();
     Vector u = u_numerator * u_denominator;
-    cout <<"u="<< u.x<<", " << u.y<<", " << u.z<<", "<<endl;
+    //cout <<"u="<< u.x<<", " << u.y<<", " << u.z<<", "<<endl;
 
     Vector v;
     w.cross(u,v);
-    cout <<"v="<< v.x<<", " << v.y<<", " << v.z<<", "<<endl;
+    //cout <<"v="<< v.x<<", " << v.y<<", " << v.z<<", "<<endl;
 
+    wuv[0]=w;
+    wuv[1]=u;
+    wuv[2]=v;
+
+    //cout <<"INSIDE wuv[1].x= " <<wuv[1].x<<endl;
     return wuv;
 }
 
@@ -73,34 +79,38 @@ void FullCamera::get_ray_pixel(int p_x, int p_y, Ray &ray)
     ray.position.w = 1.0f;
 
     //direction
-    Vector *wuv;
-    //calculate the camera coordinate system
-    wuv = calculate_wuv(position,lookat,up);
-    Vector w =wuv[0]; Vector u =wuv[1]; Vector v =wuv[2];
-
     //calculating the pixels coordinate, based on the cameras coordinate system
     float s = 1.0f;
-    int xu = s*(p_x - (width)/2);
-    int yv = s*(p_y - (height/2));
+    float xu = s*(p_x - (width)/2);
+    float yv = s*(p_y - (height/2));
 
-    Vector U,Y,W;
-    Vector D = U*(xu,u) + Y*(yv,v) + W*(fov,w);
-    cout <<"D="<< D.x<<", " << D.y<<", " << D.z<<", "<<endl;
+    Vector D = u*(xu) + v*(yv) + w*(fov);
+    //cout <<"D="<< D.x<<", " << D.y<<", " << D.z<<", "<<endl;
 
+    D.normalise();
     ray.direction.x = D.x;
     ray.direction.y = D.y;
     ray.direction.z = D.z;
 
-    ray.direction.normalise();
-
-
-
+    //ray.direction.normalise();
 }
 
 void FullCamera::render(Environment& env, FrameBuffer& fb)
 {
     width = fb.width;
     height = fb.height;
+
+    // calculating the camera's coordinate system
+    Vector *wuv;
+    //calculate the camera coordinate system
+    wuv = calculate_wuv(position,lookat,up);
+
+    //cout <<"OUT"<<endl;
+    //cout <<"OUTSIDE wuv[0].x= " <<wuv[0].x<< endl;
+
+    w =wuv[0];
+    u =wuv[1];
+    v =wuv[2];
 
     //looping through the pixels of the 2d image
     for (int y = 0; y < height; y += 1)
@@ -109,7 +119,6 @@ void FullCamera::render(Environment& env, FrameBuffer& fb)
         {
             //rays have a position and a direction
             Ray ray;
-
             //for each pixel in the image calculate the corresponding ray
             //position is assigned as the origin (0,0,0)
             //direction is ????

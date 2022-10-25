@@ -34,6 +34,8 @@ public:
   Vector lookat;
   Vector up;
   Vector right;
+  //Need these as global to the CameraObject
+  Vector w,u,v;
 
   FullCamera();
 
