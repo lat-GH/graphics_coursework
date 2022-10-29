@@ -135,7 +135,7 @@ bool MollerTrumbore_algorithm(Vector &vOrig, Vector &vDir, const Vector &vA, con
 
     //if the determinate is netgative, then the traingle is back facing - you are hitting it from behind
     //if the determinate is close to 0(even if not equal), the ray misses the triangle
-    if(det<EPSILON) return false;
+    if(det>EPSILON) return false;
 
     //ray and triangle are parallel if the det (angle between the vN and vAB) is close to 0
     if(fabs(det) < EPSILON) return false;
@@ -163,9 +163,10 @@ Vector get_NormalOfTriangle(Vector vA, Vector vB, Vector vC){
     Vector vAB = vB - vA;
     Vector vAC = vC - vA;
     Vector N;
-    //TODO check you dont need to cross the other points on the trainagel to get an accurate normal? --- Do you need to do more to get the normal in the center of the triangle?
+    //check you dont need to cross the other points on the trainagel to get an accurate normal? --- Do you need to do more to get the normal in the center of the triangle?
     //N = AB x AC to get the +ve normal?
     vAB.cross(vAC,N);
+    N.normalise();
     return N;
 
 }

@@ -72,8 +72,10 @@ void build_scene(Scene& scene)
 
 	Phong* bp1 = new Phong(Colour(0.2f, 0.0f, 0.0f), Colour(0.4f, 0.0f, 0.0f), Colour(0.4f, 0.4f, 0.4f), 40.f);
 	Phong* bp2 = new Phong(Colour(0.01f, 0.01f, 0.01f), Colour(0.0f, 0.0f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
+    FalseColour* bp3 = new FalseColour();
 
-	pm->set_material(bp1);
+	//pm->set_material(bp1);
+    pm->set_material(bp3);
 
 	scene.add_object(pm);
 
@@ -99,7 +101,7 @@ int main(int argc, char *argv[])
 	
 	// Declare a camera
 	//Camera *camera = new SimpleCamera(0.5f);
-	Camera* camera = new FullCamera(256.0f, Vertex(0.0f, 0.0f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, 1.0f, 0.0f));
+	Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.0f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f));
 	
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
 	camera->render(scene,*fb);
