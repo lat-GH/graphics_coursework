@@ -159,25 +159,60 @@ bool MollerTrumbore_algorithm(Vector &vOrig, Vector &vDir, const Vector &vA, con
     return true; // the ray does intersect with the triangle
 }
 
+Vector get_NormalOfTriangle(Vector vA, Vector vB, Vector vC){
+    Vector vAB = vB - vA;
+    Vector vAC = vC - vA;
+    Vector N;
+    //TODO check you dont need to cross the other points on the trainagel to get an accurate normal? --- Do you need to do more to get the normal in the center of the triangle?
+    //N = AB x AC to get the +ve normal?
+    vAB.cross(vAC,N);
+    return N;
+
+}
+
 Hit* PolyMesh::intersection(Ray ray) //------------YOU ARE HERE------- try to work out where this gets run
 {
-    int i=0; //triangle counter
-    //Vector A(vertex[triangle[i][0]].x,vertex[triangle[i][0]].y, vertex[triangle[i][0]].z);
-    Vector A(vertex[triangle[i][0]]);
-    Vector B(vertex[triangle[i][1]]);
-    Vector C(vertex[triangle[i][2]]);
-
-    cout<<"A.x=" << A.x <<endl; // indegubber says A.x = 1.38136995, BUT it prints it out only 1.38137 WHYYYYY????????????
+    Hit *hits = 0;
 
     //initialsing the Barycetric coords (scalar values)
     float u, v, t;
 
-    cout << "OUTSIDE dir.x=" << ray.direction.x <<endl;
-    bool intersect = MollerTrumbore_algorithm(ray.position, ray.direction, A,B,C,  u, v, t);
+    for(int i=0; i<triangle_count; i++){
 
+        Vector A(vertex[triangle[i][0]]);
+        Vector B(vertex[triangle[i][1]]);
+        Vector C(vertex[triangle[i][2]]);
 
-    Hit *hits = 0;//TODO find out what hits are and how is best to populate them
+        //cout<<"A.x=" << A.x <<endl; // indegubber says A.x = 1.38136995, BUT it prints it out only 1.38137 WHYYYYY????????????
 
+        bool intersect = MollerTrumbore_algorithm(ray.position, ray.direction, A,B,C,  u, v, t);
+        if (intersect == true){
+            //Hit *h = new Hit;
+
+//            if (hits == 0){
+//                hits = new Hit;
+//            }
+//            else{
+//                //hits=hits->next;
+//                hits= new Hit;
+//            }
+
+            hits = new Hit; // the new operator will handle getting the next hit available in the cache
+
+            hits->t = t;
+            //P=position of the intersection = wA + uB + vC = O + t*D
+            //Vertex P = (1-u-v)*A + u*B + v*C; // SHOULD be equal
+            Vertex P = ray.position + t*ray.direction;
+            hits->position = P;
+            hits->normal = get_NormalOfTriangle(A,B,C);
+
+            //the object its hitting is the current polymesh?
+            hits->what = this;  //TODO does the what need to be incremented as its an arr/pointer??
+            //hits->next=hits+1; // I DONT think, the next attribute is to be used in this context?
+
+            //TODO work out if need to assign to the hits->next AND hits->enters
+        }
+    }
     return hits;
 }
 
