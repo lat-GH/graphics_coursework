@@ -94,7 +94,7 @@ PolyMesh::PolyMesh(char* file, bool smooth)
   fstream.close( );
 
 
-//  //printing all of the verticies in the array
+  //printing all of the verticies in the array
 //  for(int i=0; i<vertex_count; i++){
 //      cout<<vertex[i].x << ", " << vertex[i].y << ", " << vertex[i].z <<endl;
 //  }
@@ -129,7 +129,7 @@ bool MollerTrumbore_algorithm(Vector &vOrig, Vector &vDir, const Vector &vA, con
     Vector vAC = vC - vA;
     //calculating the normal of the ray and the trainagle face for testing
     Vector vN;
-    vDir.cross(vAC, vN); // storing result in vN //TODO make sure its not altering the value of vDir
+    vDir.cross(vAC, vN); // storing result in vN
     //short for determinate (to help solve using Cramers rules)
     float det = vAB.dot(vN);
 
@@ -163,18 +163,21 @@ Hit* PolyMesh::intersection(Ray ray) //------------YOU ARE HERE------- try to wo
 {
     int i=0; //triangle counter
     //Vector A(vertex[triangle[i][0]].x,vertex[triangle[i][0]].y, vertex[triangle[i][0]].z);
-    Vector A(vertex[triangle[i][0]]); //TODO check you can use this method to convert from a Vertex to a Vector
+    Vector A(vertex[triangle[i][0]]);
     Vector B(vertex[triangle[i][1]]);
     Vector C(vertex[triangle[i][2]]);
+
+    cout<<"A.x=" << A.x <<endl; // indegubber says A.x = 1.38136995, BUT it prints it out only 1.38137 WHYYYYY????????????
 
     //initialsing the Barycetric coords (scalar values)
     float u, v, t;
 
-    //Test
+    cout << "OUTSIDE dir.x=" << ray.direction.x <<endl;
     bool intersect = MollerTrumbore_algorithm(ray.position, ray.direction, A,B,C,  u, v, t);
 
 
-    Hit* hits = 0;//TODO find out what hits are and how is best to populate them
+    Hit *hits = 0;//TODO find out what hits are and how is best to populate them
+
     return hits;
 }
 

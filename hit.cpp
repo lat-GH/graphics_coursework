@@ -26,6 +26,8 @@ Hit* Hit::free_pool = (Hit *)0;
 int Hit::allocated = 0;
 int Hit::pool_size = 0;
 
+//overleaoded the new keyword, to create its own little heap of hit objects that it uses.
+//I think this helps to make sure that it doesnt create more than 100 hits?
 void* Hit::operator new(size_t size)
 {
 	allocated += 1;
@@ -45,8 +47,11 @@ void* Hit::operator new(size_t size)
 	}
 
 	Hit* next = free_pool;
+    //moving along the free pool to use the next one in the cache
 	free_pool = free_pool->next;
+    //making sure the next of the free_pool is =0
 	next->next = 0;
+    //returns the pointer to the remaining pool of hits from the cache
 	return next;
 }
 
