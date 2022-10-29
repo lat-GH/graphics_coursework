@@ -121,13 +121,60 @@ string *splitStr_nItems(string str, int n){
     return arr;
 }
 
+bool MollerTrumbore_algorithm(Vector &vOrig, Vector &vDir, const Vector &vA, const Vector &vB, const Vector &vC, float &t, float &u, float &v){
+    const float EPSILON = 0.0000001;
 
+    //set up the Vectors for the u,v Barycentric coordinates
+    Vector vAB = vB - vA;
+    Vector vAC = vC - vA;
+    //calculating the normal of the ray and the trainagle face for testing
+    Vector vN;
+    vDir.cross(vAC, vN); // storing result in vN //TODO make sure its not altering the value of vDir
+    //short for determinate (to help solve using Cramers rules)
+    float det = vAB.dot(vN);
 
-Hit* PolyMesh::intersection(Ray ray)
+    //if the determinate is netgative, then the traingle is back facing - you are hitting it from behind
+    //if the determinate is close to 0(even if not equal), the ray misses the triangle
+    if(det<EPSILON) return false;
+
+    //ray and triangle are parallel if the det (angle between the vN and vAB) is close to 0
+    if(fabs(det) < EPSILON) return false;
+
+    float invDet = 1/det;
+
+    Vector vOA = vOrig - vA;
+    //calculating the barycentric coord u
+    u = vOA.dot(vN)*invDet;
+    //barycentric states that u + v + w = 1 therefore u must be 0<u<1
+    if (u<0 || u>1) return false;
+
+    Vector vOAxvAB;
+    vOA.cross(vAB,vOAxvAB);
+    v = vDir.dot(vOAxvAB)*invDet;
+    if (v<0 || u+v>1) return false;
+
+    // t = distance along the ray at which it intersetcs the triangle
+    t = vAC.dot(vOAxvAB)*invDet;
+
+    return true; // the ray does intersect with the triangle
+}
+
+Hit* PolyMesh::intersection(Ray ray) //------------YOU ARE HERE------- try to work out where this gets run
 {
-    Hit* hits = 0;
-//BEGIN_STAGE_ONE
-//END_STAGE_ONE
+    int i=0; //triangle counter
+    //Vector A(vertex[triangle[i][0]].x,vertex[triangle[i][0]].y, vertex[triangle[i][0]].z);
+    Vector A(vertex[triangle[i][0]]); //TODO check you can use this method to convert from a Vertex to a Vector
+    Vector B(vertex[triangle[i][1]]);
+    Vector C(vertex[triangle[i][2]]);
+
+    //initialsing the Barycetric coords (scalar values)
+    float u, v, t;
+
+    //Test
+    bool intersect = MollerTrumbore_algorithm(ray.position, ray.direction, A,B,C,  u, v, t);
+
+
+    Hit* hits = 0;//TODO find out what hits are and how is best to populate them
     return hits;
 }
 
