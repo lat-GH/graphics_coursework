@@ -135,7 +135,7 @@ bool MollerTrumbore_algorithm(Vector &vOrig, Vector &vDir, const Vector &vA, con
 
     //if the determinate is netgative, then the traingle is back facing - you are hitting it from behind
     //if the determinate is close to 0(even if not equal), the ray misses the triangle
-    if(det>EPSILON) return false;
+    if(det>EPSILON) return false; // > gives outside facing, < give inside facing
 
     //ray and triangle are parallel if the det (angle between the vN and vAB) is close to 0
     if(fabs(det) < EPSILON) return false;
@@ -171,12 +171,13 @@ Vector get_NormalOfTriangle(Vector vA, Vector vB, Vector vC){
 
 }
 
-Hit* PolyMesh::intersection(Ray ray) //------------YOU ARE HERE------- try to work out where this gets run
+Hit* PolyMesh::intersection(Ray ray)
 {
     Hit *hits = 0;
 
     //initialsing the Barycetric coords (scalar values)
     float u, v, t;
+    int hitCounter = 0;
 
     for(int i=0; i<triangle_count; i++){
 
@@ -187,18 +188,19 @@ Hit* PolyMesh::intersection(Ray ray) //------------YOU ARE HERE------- try to wo
         //cout<<"A.x=" << A.x <<endl; // indegubber says A.x = 1.38136995, BUT it prints it out only 1.38137 WHYYYYY????????????
 
         bool intersect = MollerTrumbore_algorithm(ray.position, ray.direction, A,B,C,  u, v, t);
+
         if (intersect == true){
-            //Hit *h = new Hit;
+            hitCounter ++;
 
-//            if (hits == 0){
-//                hits = new Hit;
-//            }
-//            else{
-//                //hits=hits->next;
-//                hits= new Hit;
-//            }
+            Hit *newHit = new Hit;
 
-            hits = new Hit; // the new operator will handle getting the next hit available in the cache
+            if(hits == 0){
+                hits = newHit;
+            }else{
+                newHit->next = hits;
+                hits = newHit;
+            }
+
 
             hits->t = t;
             //P=position of the intersection = wA + uB + vC = O + t*D
@@ -208,12 +210,19 @@ Hit* PolyMesh::intersection(Ray ray) //------------YOU ARE HERE------- try to wo
             hits->normal = get_NormalOfTriangle(A,B,C);
 
             //the object its hitting is the current polymesh?
-            hits->what = this;  //TODO does the what need to be incremented as its an arr/pointer??
+            hits->what = this;
             //hits->next=hits+1; // I DONT think, the next attribute is to be used in this context?
 
-            //TODO work out if need to assign to the hits->next AND hits->enters
         }
     }
+
+    //TODO sort the list of hits based on the value of t
+
+
+//    if (hits != 0 && hitCounter>2 ){
+//        cout<<"Had"<< hitCounter << "hit"<<endl;
+//    }
+
     return hits;
 }
 
