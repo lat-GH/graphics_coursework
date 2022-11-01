@@ -81,7 +81,7 @@ void build_scene(Scene& scene)
 
 	sphere->set_material(bp2);
 
-	scene.add_object(sphere);
+	//scene.add_object(sphere); //TODO uncomment later
 }
 
 

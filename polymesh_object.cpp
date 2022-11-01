@@ -176,52 +176,53 @@ Hit* PolyMesh::intersection(Ray ray)
     Hit *hits = 0;
 
     //initialsing the Barycetric coords (scalar values)
-    float u, v, t;
+    //float u, v, t = 0.0f;
     int hitCounter = 0;
 
     for(int i=0; i<triangle_count; i++){
+        float u=0.0f, v=0.0f, t = 0.0f;
 
         Vector A(vertex[triangle[i][0]]);
         Vector B(vertex[triangle[i][1]]);
         Vector C(vertex[triangle[i][2]]);
 
         //cout<<"A.x=" << A.x <<endl; // indegubber says A.x = 1.38136995, BUT it prints it out only 1.38137 WHYYYYY????????????
-
-        bool intersect = MollerTrumbore_algorithm(ray.position, ray.direction, A,B,C,  u, v, t);
+        //cout << "OU1t = "<< t << endl; //it seems to thin k it has a value for t
+        bool intersect = MollerTrumbore_algorithm(ray.position, ray.direction, A,B,C, t, u, v);
+        //cout << "OU1t = "<< t << intersect <<endl;
 
         if (intersect == true){
             hitCounter ++;
 
+            //create a new hit instance
             Hit *newHit = new Hit;
+
+            newHit->t = t;
+            //P=position of the intersection = wA + uB + vC = O + t*D
+            //Vertex P = (1-u-v)*A + u*B + v*C; // SHOULD be equal
+            Vertex P = ray.position + t*ray.direction;
+            newHit->position = P;
+            newHit->normal = get_NormalOfTriangle(A,B,C);
+            //TODO make sure your normals are facing the camera
+
+            //the object its hitting is the current polymesh?
+            newHit->what = this;
+            //hits->next=hits+1; // I DONT think, the next attribute is to be used in this context?
 
             if(hits == 0){
                 hits = newHit;
             }else{
-                newHit->next = hits;
-                hits = newHit;
+                //inorder to add the hit to the linked list, you need to traverse to the end first
+                Hit *traverser = hits;
+                while(traverser->next != NULL){
+                    traverser = traverser->next;
+                }
+                //adding the new hit to the end of the linked list
+                traverser->next = newHit;
+
             }
-
-
-            hits->t = t;
-            //P=position of the intersection = wA + uB + vC = O + t*D
-            //Vertex P = (1-u-v)*A + u*B + v*C; // SHOULD be equal
-            Vertex P = ray.position + t*ray.direction;
-            hits->position = P;
-            hits->normal = get_NormalOfTriangle(A,B,C);
-
-            //the object its hitting is the current polymesh?
-            hits->what = this;
-            //hits->next=hits+1; // I DONT think, the next attribute is to be used in this context?
-
         }
     }
-
-    //TODO sort the list of hits based on the value of t
-
-
-//    if (hits != 0 && hitCounter>2 ){
-//        cout<<"Had"<< hitCounter << "hit"<<endl;
-//    }
 
     return hits;
 }
@@ -234,7 +235,4 @@ void PolyMesh::apply_transform(Transform& trans)
         trans.apply(vertex[i]);
     }
 
-
-//BEGIN_STAGE_ONE
-// END_STAGE_ONE
 }
