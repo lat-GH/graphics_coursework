@@ -34,6 +34,8 @@ public:
   Object *object_list;
   Light *light_list;
 
+  float ambient_intensity = 0.5f; //TODO try making this a colour term?
+
   Scene();
 
   // Filter the list of returned hits to the closest +ve

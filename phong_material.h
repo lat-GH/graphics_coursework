@@ -14,6 +14,12 @@
 
 class Phong : public Material {
 public:
+
+    Colour ambient_coeff;
+    Colour diffuse_coeff;
+    Colour specular_coeff;
+    float powerOfn;
+
 //BEGIN_STAGE_ONE
 	Phong(Colour p_ambient, Colour p_diffuse, Colour p_specular, float p_power);
 //END_STAGE_ONE

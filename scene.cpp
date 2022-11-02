@@ -131,7 +131,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
   {
 	  depth = best_hit->t;
       //working out the colour for the best hit
-	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse); // this will be the global components such as ambient or reflect/refract
+	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
 	  // next, compute the light contribution for each light in the scene.
 	  Light* light = light_list;

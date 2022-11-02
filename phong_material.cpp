@@ -24,16 +24,18 @@
 
 Phong::Phong(Colour p_ambient, Colour p_diffuse, Colour p_specular, float p_power)
 {
-//BEGIN_STAGE_ONE
-//END_STAGE_ONE
+    ambient_coeff = p_ambient;
+    diffuse_coeff = p_diffuse;
+    specular_coeff = p_specular;
+    powerOfn = p_power;
+
 }
 
 // The compute_once() method supplies the ambient term.
 Colour Phong::compute_once(Ray& viewer, Hit& hit, int recurse)
 {
 	Colour result;
-//BEGIN_STAGE_ONE
-//END_STAGE_ONE
+    result = ambient_coeff;
 	return result;
 }
 
@@ -41,8 +43,14 @@ Colour Phong::compute_once(Ray& viewer, Hit& hit, int recurse)
 Colour Phong::compute_per_light(Vector& viewer, Hit& hit, Vector& ldir)
 {
 	Colour result;
-//BEGIN_STAGE_ONE
-//END_STAGE_ONE
+    Vector N = hit.normal;
+    Vector L = ldir;
+    L.negate(); //ldir is direction of light, BUT L is direction towards the light?
+    Vector R;
+    R.reflection(ldir,R);
+    Vector V = viewer;
+
+    result = (diffuse_coeff * (N.dot(L))) + (specular_coeff * (pow(R.dot(V),powerOfn)));
 	return result;
 }
 

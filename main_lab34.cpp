@@ -71,17 +71,17 @@ void build_scene(Scene& scene)
 	scene.add_light(dl);
 
 	Phong* bp1 = new Phong(Colour(0.2f, 0.0f, 0.0f), Colour(0.4f, 0.0f, 0.0f), Colour(0.4f, 0.4f, 0.4f), 40.f);
-	Phong* bp2 = new Phong(Colour(0.01f, 0.01f, 0.01f), Colour(0.0f, 0.0f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
+	Phong* bp2 = new Phong(Colour(0.01f, 0.01f, 0.01f), Colour(0.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     FalseColour* bp3 = new FalseColour();
 
-	//pm->set_material(bp1);
-    pm->set_material(bp3);
+	pm->set_material(bp1);
+    //pm->set_material(bp3);
 
 	scene.add_object(pm);
 
 	sphere->set_material(bp2);
 
-	//scene.add_object(sphere); //TODO uncomment later
+	scene.add_object(sphere);
 }
 
 
