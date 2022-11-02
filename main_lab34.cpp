@@ -66,7 +66,7 @@ void build_scene(Scene& scene)
 
 	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 1.0f), 0.4f);
 
-	DirectionalLight* dl = new DirectionalLight(Vector(1.01f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
+	DirectionalLight* dl = new DirectionalLight(Vector(0, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
 
 	scene.add_light(dl);
 

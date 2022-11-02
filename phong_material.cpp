@@ -46,8 +46,9 @@ Colour Phong::compute_per_light(Vector& viewer, Hit& hit, Vector& ldir)
     Vector N = hit.normal;
     Vector L = ldir;
     L.negate(); //ldir is direction of light, BUT L is direction towards the light?
-    Vector R;
-    R.reflection(ldir,R);
+    Vector R = 2*(N.dot(L))*(N-L);
+    //R.reflection(ldir,R);
+
     Vector V = viewer;
 
     result = (diffuse_coeff * (N.dot(L))) + (specular_coeff * (pow(R.dot(V),powerOfn)));
