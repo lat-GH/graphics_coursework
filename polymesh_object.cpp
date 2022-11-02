@@ -159,7 +159,7 @@ bool MollerTrumbore_algorithm(Vector &vOrig, Vector &vDir, const Vector &vA, con
     return true; // the ray does intersect with the triangle
 }
 
-Vector get_NormalOfTriangle(Vector vA, Vector vB, Vector vC){
+Vector get_NormalOfTriangle(Vector vA, Vector vB, Vector vC, const Ray ray){
     Vector vAB = vB - vA;
     Vector vAC = vC - vA;
     Vector N;
@@ -167,6 +167,12 @@ Vector get_NormalOfTriangle(Vector vA, Vector vB, Vector vC){
     //N = AB x AC to get the +ve normal?
     vAB.cross(vAC,N);
     N.normalise();
+
+    float dotProduct = N.dot(ray.direction);
+    //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction, so negate
+    if (dotProduct>0){
+        N.negate();
+    }
     return N;
 
 }
@@ -175,21 +181,19 @@ Hit* PolyMesh::intersection(Ray ray)
 {
     Hit *hits = 0;
 
-    //initialsing the Barycetric coords (scalar values)
-    //float u, v, t = 0.0f;
     int hitCounter = 0;
 
     for(int i=0; i<triangle_count; i++){
+        //initialsing the Barycetric coords (scalar values)
         float u=0.0f, v=0.0f, t = 0.0f;
-
+        //getting the verticies of the triangle
         Vector A(vertex[triangle[i][0]]);
         Vector B(vertex[triangle[i][1]]);
         Vector C(vertex[triangle[i][2]]);
 
         //cout<<"A.x=" << A.x <<endl; // indegubber says A.x = 1.38136995, BUT it prints it out only 1.38137 WHYYYYY????????????
-        //cout << "OU1t = "<< t << endl; //it seems to thin k it has a value for t
+
         bool intersect = MollerTrumbore_algorithm(ray.position, ray.direction, A,B,C, t, u, v);
-        //cout << "OU1t = "<< t << intersect <<endl;
 
         if (intersect == true){
             hitCounter ++;
@@ -202,17 +206,15 @@ Hit* PolyMesh::intersection(Ray ray)
             //Vertex P = (1-u-v)*A + u*B + v*C; // SHOULD be equal
             Vertex P = ray.position + t*ray.direction;
             newHit->position = P;
-            newHit->normal = get_NormalOfTriangle(A,B,C);
-            //TODO make sure your normals are facing the camera
+            newHit->normal = get_NormalOfTriangle(A,B,C,ray);
 
             //the object its hitting is the current polymesh?
             newHit->what = this;
-            //hits->next=hits+1; // I DONT think, the next attribute is to be used in this context?
 
             if(hits == 0){
                 hits = newHit;
             }else{
-                //inorder to add the hit to the linked list, you need to traverse to the end first
+                //in order to add the hit to the linked list, you need to traverse to the end first
                 Hit *traverser = hits;
                 while(traverser->next != NULL){
                     traverser = traverser->next;
