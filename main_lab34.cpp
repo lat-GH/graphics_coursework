@@ -64,10 +64,11 @@ void build_scene(Scene& scene)
 
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 1.0f), 0.4f);
+	Sphere* sphere = new Sphere(Vertex(-1.0f, 0.0f, 2.0f), 0.4f);
+    //-1 0 2
 
-	DirectionalLight* dl = new DirectionalLight(Vector(0, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
-
+	DirectionalLight* dl = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
+    //1 -1 1
 	scene.add_light(dl);
 
 	Phong* bp1 = new Phong(Colour(0.2f, 0.0f, 0.0f), Colour(0.4f, 0.0f, 0.0f), Colour(0.4f, 0.4f, 0.4f), 40.f);

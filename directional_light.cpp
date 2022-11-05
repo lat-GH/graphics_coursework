@@ -32,6 +32,7 @@ DirectionalLight::DirectionalLight(Vector dir, Colour col)
 	intensity = col;
 }
 
+//it doesnt matter the surface? it will recieve light?
 bool DirectionalLight::get_direction(Vertex &surface, Vector &dir)
 {
 	dir = direction;

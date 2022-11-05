@@ -54,4 +54,6 @@ public:
 
   void add_object(Object *obj);
   void add_light(Light *light);
+
+  void generateShadowRay(Ray &shadowRay, Hit *hit, Vector lit_dir);
 };

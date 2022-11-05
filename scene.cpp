@@ -34,6 +34,7 @@ bool Scene::shadowtrace(Ray ray, float limit)
 
 		if (hit != 0)
 		{
+          //testing if hit the same surface with the 0.0000, because it would be super close
 		  if ((hit->t > 0.00000001f) &&( hit->t < limit))
 		    {
 			  delete hit;
@@ -111,6 +112,28 @@ Hit* Scene::select_first(Hit* list) //-----------YOU ARE HERE ----- trying to wo
 	return result;
 }
 
+void Scene::generateShadowRay(Ray &shadowRay, Hit *hit, Vector lit_dir){
+    //origin of the shadow ray is the same as the position of the hit
+    //shadowRay.position = hit->position;
+    //need to move it up along the normal by a small amount so that it doesnt inersect again
+    float bias = 1.000005f;
+    Vector shadow_bias = Vector(bias, bias, bias);
+
+    //shadowRay.position = hit->position + (hit->normal * shadow_bias);
+    //multiplying the position by the direction towards the light, i guess that means it would lift it off the surface a little?
+    shadowRay.position = hit->position + (-lit_dir * shadow_bias);
+
+//    Vector hit_dir = hit->position;
+//    //gives you the ray from the light source to the hit position
+//    shadowRay.direction = hit_dir - lit_dir;
+//    //then you negate it to get the shadow ray going out towards the light source
+//    shadowRay.direction.negate();
+//    shadowRay.direction.normalise();
+    //TODO check this is the correct value for the shadows direction
+    shadowRay.direction = -lit_dir;
+
+}
+
 void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 {
   Object *objects = object_list;
@@ -140,10 +163,13 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 		  Vector viewer;
 		  Vector ldir;
 
+          //why is the viewer the negative to the position?
+          //because want vector going towards the eye, from the intersection (not dir from eye to intersect)
 		  viewer = -best_hit->position;
 		  viewer.normalise();
 
 		  bool lit;
+          //assigns the direction of the light to ldir
 		  lit = light->get_direction(best_hit->position, ldir);
 
 		  if (ldir.dot(best_hit->normal) > 0)
@@ -151,9 +177,21 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 			  lit = false;//light is facing wrong way.
 		  }
 
-		  // Put the shadow check here, if lit==true and in shadow, set lit=false
-//BEGIN_STAGE_ONE
-//END_STAGE_ONE
+          // Put the shadow check here, if lit==true and in shadow, set lit=false
+          if(lit){
+              bool inShadow;
+              Ray shadowRay;
+              int shadowRayLimit = 1000;
+              //create a shadow ray between the intersection point and the light direction
+              generateShadowRay(shadowRay, best_hit, ldir);
+              //trace the shadow ray to see if it hits an object casting a shadow
+              inShadow = shadowtrace(shadowRay, shadowRayLimit);
+              //if shadow ray intersects with an object then the pixel is not lit
+              if (inShadow){
+                  lit = false;
+              }
+
+          }
 
 		  if (lit)
 		  {

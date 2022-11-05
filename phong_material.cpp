@@ -44,14 +44,16 @@ Colour Phong::compute_per_light(Vector& viewer, Hit& hit, Vector& ldir)
 {
 	Colour result;
     Vector N = hit.normal;
-    Vector L = ldir;
-    L.negate(); //ldir is direction of light, BUT L is direction towards the light?
-    Vector R = 2*(N.dot(L))*(N-L);
-    //R.reflection(ldir,R);
+    Vector L = -ldir; //ldir is direction of light, BUT L is direction towards the light?
+    Vector R = ldir - 2.0f *(ldir.dot(N)) * N;
+//    Vector R;
+//    N.reflection(ldir,R);
+    R.normalise();
 
     Vector V = viewer;
-
+    //TODO double check have the diffue term looking alright
     result = (diffuse_coeff * (N.dot(L))) + (specular_coeff * (pow(R.dot(V),powerOfn)));
 	return result;
 }
+
 
