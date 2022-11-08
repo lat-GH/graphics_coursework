@@ -113,23 +113,13 @@ Hit* Scene::select_first(Hit* list) //-----------YOU ARE HERE ----- trying to wo
 }
 
 void Scene::generateShadowRay(Ray &shadowRay, Hit *hit, Vector lit_dir){
-    //origin of the shadow ray is the same as the position of the hit
-    //shadowRay.position = hit->position;
     //need to move it up along the normal by a small amount so that it doesnt inersect again
     float bias = 1.000005f;
     Vector shadow_bias = Vector(bias, bias, bias);
-
-    //shadowRay.position = hit->position + (hit->normal * shadow_bias);
     //multiplying the position by the direction towards the light, i guess that means it would lift it off the surface a little?
     shadowRay.position = hit->position + (-lit_dir * shadow_bias);
 
-//    Vector hit_dir = hit->position;
-//    //gives you the ray from the light source to the hit position
-//    shadowRay.direction = hit_dir - lit_dir;
-//    //then you negate it to get the shadow ray going out towards the light source
-//    shadowRay.direction.negate();
-//    shadowRay.direction.normalise();
-    //TODO check this is the correct value for the shadows direction
+    //when you negate it get the shadow ray going out towards the light source
     shadowRay.direction = -lit_dir;
 
 }

@@ -102,9 +102,7 @@ PolyMesh::PolyMesh(char* file, bool smooth)
 //      cout<<triangle[i][0] << ", " <<triangle[i][1] << ", " <<triangle[i][2] <<endl;
 //  }
 
-//BEGIN_STAGE_ONE
-//END_STAGE_ONE
-    next = 0;
+
 }
 
 string *splitStr_nItems(string str, int n){
@@ -163,13 +161,12 @@ Vector get_NormalOfTriangle(Vector vA, Vector vB, Vector vC, const Ray ray){
     Vector vAB = vB - vA;
     Vector vAC = vC - vA;
     Vector N;
-    //check you dont need to cross the other points on the trainagel to get an accurate normal? --- Do you need to do more to get the normal in the center of the triangle?
-    //N = AB x AC to get the +ve normal?
+    //N = AB x AC to get the normal?
     vAB.cross(vAC,N);
     N.normalise();
 
     float dotProduct = N.dot(ray.direction);
-    //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction, so negate
+    //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction to face the camera, so negate
     if (dotProduct>0){
         N.negate();
     }
