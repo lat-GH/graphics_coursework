@@ -19,6 +19,8 @@
 //magick "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.ppm" "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\test.png"
 //magick "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\depth.ppm" "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-debug\depth.png"
 
+//magick "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-release\test.ppm" "C:\Users\latma\OneDrive\Documents\ComputerScience_FINALyr\Graphics\coursework-starter\cmake-build-release\test.png"
+
 /* This is the top level for the program you need to create for lab three and four.
  */
 
@@ -60,7 +62,7 @@ void build_scene(Scene& scene)
 
 	//  Read in the teapot model.
 	//PolyMesh* pm = new PolyMesh("teapot_smaller.ply", false);
-    PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", false);
+    PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
 
 	pm->apply_transform(*transform);
 

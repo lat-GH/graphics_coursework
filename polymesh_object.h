@@ -31,12 +31,16 @@ public:
 	int triangle_count;
     Vertex *vertex;
 	TriangleIndex *triangle;
+    Vector *triangle_normals;
+    Vector *vertex_normals;
 	bool smoothing;
+
 //BEGIN_STAGE_ONE
 //END_STAGE_ONE
 
 	Hit *intersection(Ray ray);
 	void apply_transform(Transform& trans);
+    void setup_triangleNormals_and_vertexNormals();
 
     PolyMesh(char *file, bool smooth); // copy constructor
 	~PolyMesh(){} //default contrsuctor with empty body

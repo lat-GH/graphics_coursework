@@ -30,12 +30,16 @@
 using namespace std;
 
 string *splitStr_nItems(string str, int n);
+Vector get_TriangleNormal(Vector vA, Vector vB, Vector vC);
+void setup_triangleNormals_and_vertexNormals();
 
 PolyMesh::PolyMesh(char* file, bool smooth)
 {
+
+  smoothing = smooth;
+
   string streamTxt;
   int lineNum = 1;
-
   ifstream fstream;
   fstream.open( file );
 
@@ -103,6 +107,10 @@ PolyMesh::PolyMesh(char* file, bool smooth)
 //  }
 
 
+    //calculating all the normals for the triangles, and calculating each of the vertex normals
+    triangle_normals = new Vector[triangle_count];
+    vertex_normals = new Vector[vertex_count];
+
 }
 
 string *splitStr_nItems(string str, int n){
@@ -118,6 +126,8 @@ string *splitStr_nItems(string str, int n){
     //return &arr[0]; // == arr
     return arr;
 }
+
+
 
 bool MollerTrumbore_algorithm(Vector &vOrig, Vector &vDir, const Vector &vA, const Vector &vB, const Vector &vC, float &t, float &u, float &v){
     const float EPSILON = 0.0000001;
@@ -157,25 +167,46 @@ bool MollerTrumbore_algorithm(Vector &vOrig, Vector &vDir, const Vector &vA, con
     return true; // the ray does intersect with the triangle
 }
 
-Vector get_NormalOfTriangle(Vector vA, Vector vB, Vector vC, const Ray ray){
+void PolyMesh::setup_triangleNormals_and_vertexNormals(){
+    for(int i=0; i<triangle_count; i++){
+        //getting the verticies of the triangle
+        Vector A(vertex[triangle[i][0]]);
+        Vector B(vertex[triangle[i][1]]);
+        Vector C(vertex[triangle[i][2]]);
+        //calculating and assigning the value of the normal of the curr triangle
+        triangle_normals[i] = get_TriangleNormal(A,B,C);
+
+        //appeneing the value of the newly calcualted tNormal to all of the verticies that are used by this triangle
+        vertex_normals[triangle[i][0]] = triangle_normals[i] + vertex_normals[triangle[i][0]]; //vertex A
+        //normal @ vertex A = Normal of curr triangle attached to this vertex + all the normals of the triangles youve already calculated that relate to this vertex
+        vertex_normals[triangle[i][1]] = triangle_normals[i] + vertex_normals[triangle[i][1]]; // B
+        vertex_normals[triangle[i][2]] = triangle_normals[i] + vertex_normals[triangle[i][2]]; // C
+
+    }
+
+    //averageing the vertex normals (currenlty a sum of 3 normals)
+    for(int i=0; i<vertex_count; i++){
+        vertex_normals[i] = vertex_normals[i] * Vector(1/3.0f, 1/3.0f, 1/3.0f);
+        vertex_normals[i].normalise();
+    }
+
+}
+
+Vector get_TriangleNormal(Vector vA, Vector vB, Vector vC){
     Vector vAB = vB - vA;
     Vector vAC = vC - vA;
     Vector N;
     //N = AB x AC to get the normal?
     vAB.cross(vAC,N);
     N.normalise();
-
-    float dotProduct = N.dot(ray.direction);
-    //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction to face the camera, so negate
-    if (dotProduct>0){
-        N.negate();
-    }
     return N;
-
 }
 
 Hit* PolyMesh::intersection(Ray ray)
 {
+    //dont want to define the normals till have the verticies have been transformed
+    setup_triangleNormals_and_vertexNormals();
+
     Hit *hits = 0;
 
     int hitCounter = 0;
@@ -203,10 +234,24 @@ Hit* PolyMesh::intersection(Ray ray)
             //Vertex P = (1-u-v)*A + u*B + v*C; // SHOULD be equal
             Vertex P = ray.position + t*ray.direction;
             newHit->position = P;
-            newHit->normal = get_NormalOfTriangle(A,B,C,ray);
-
             //the object its hitting is the current polymesh?
             newHit->what = this;
+
+            if (smoothing){
+                //(1-u-v)*A + u*B + v*C;
+                newHit->normal = (1-u-v)*vertex_normals[triangle[i][0]] + u*vertex_normals[triangle[i][1]] + v*vertex_normals[triangle[i][2]];
+                //newHit->normal = vertex_normals[triangle[i][0]];
+            }
+            else{
+                newHit->normal = triangle_normals[i];
+            }
+
+            //need to test if the normal is facing towards the camera
+            float dotProduct = newHit->normal.dot(ray.direction);
+            //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction to face the camera, so negate
+            if (dotProduct>0){
+                newHit->normal.negate();
+            }
 
             if(hits == 0){
                 hits = newHit;
