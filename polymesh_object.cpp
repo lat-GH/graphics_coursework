@@ -205,6 +205,7 @@ Vector get_TriangleNormal(Vector vA, Vector vB, Vector vC){
 Hit* PolyMesh::intersection(Ray ray)
 {
     //dont want to define the normals till have the verticies have been transformed
+    //TODO transform these verticies in the transform method
     setup_triangleNormals_and_vertexNormals();
 
     Hit *hits = 0;
@@ -238,7 +239,7 @@ Hit* PolyMesh::intersection(Ray ray)
             newHit->what = this;
 
             if (smoothing){
-                //(1-u-v)*A + u*B + v*C;
+                //(1-u-v)*A + u*B + v*C; using barycentric coords to interpolate the values of the vertex normal to calculate the intersection normal
                 newHit->normal = (1-u-v)*vertex_normals[triangle[i][0]] + u*vertex_normals[triangle[i][1]] + v*vertex_normals[triangle[i][2]];
                 //newHit->normal = vertex_normals[triangle[i][0]];
             }
