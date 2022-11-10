@@ -246,7 +246,7 @@ Hit* PolyMesh::intersection(Ray ray)
             else{
                 newHit->normal = triangle_normals[i];
             }
-
+            //return the smallest t and +ve
             //need to test if the normal is facing towards the camera
             float dotProduct = newHit->normal.dot(ray.direction);
             //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction to face the camera, so negate
@@ -254,18 +254,16 @@ Hit* PolyMesh::intersection(Ray ray)
                 newHit->normal.negate();
             }
 
-            if(hits == 0){
-                hits = newHit;
-            }else{
-                //in order to add the hit to the linked list, you need to traverse to the end first
-                Hit *traverser = hits;
-                while(traverser->next != NULL){
-                    traverser = traverser->next;
-                }
-                //adding the new hit to the end of the linked list
-                traverser->next = newHit;
-
+            if(hits==0){
+               hits = newHit;
             }
+            else{
+                //if the current hit is bigger than the new hit and its positive then return the smaller of the hits
+                if(hits->t > newHit->t && newHit->t > 0){
+                    hits = newHit;
+                }
+            }
+
         }
     }
 

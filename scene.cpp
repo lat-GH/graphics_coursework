@@ -155,7 +155,8 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 
           //why is the viewer the negative to the position?
           //because want vector going towards the eye, from the intersection (not dir from eye to intersect)
-		  viewer = -best_hit->position;
+		  //viewer = -best_hit->position;
+          viewer = ray.position - best_hit->position;
 		  viewer.normalise();
 
 		  bool lit;

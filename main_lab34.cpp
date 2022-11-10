@@ -71,6 +71,7 @@ void build_scene(Scene& scene)
     //-1 0 2
 
 	DirectionalLight* dl = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
+    //DirectionalLight* dl = new DirectionalLight(Vector(-1.0f, -1.0f, -1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
     //1 -1 1
 	scene.add_light(dl);
 
@@ -105,7 +106,10 @@ int main(int argc, char *argv[])
 	
 	// Declare a camera
 	//Camera *camera = new SimpleCamera(0.5f);
+    //postion = 0,0.1,-1
+    //good test = pos=8,0,15 look=0,0,8
 	Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f));
+    //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f));
 	
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
 	camera->render(scene,*fb);
