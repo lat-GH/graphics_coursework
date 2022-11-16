@@ -68,6 +68,7 @@ void build_scene(Scene& scene)
 	pm->apply_transform(*transform);
 
 	Sphere* sphere = new Sphere(Vertex(-1.0f, 0.0f, 2.0f), 0.4f);
+    Sphere* skydome = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 50);
     //-1 0 2
 
 	DirectionalLight* dl = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
@@ -75,18 +76,21 @@ void build_scene(Scene& scene)
     //1 -1 1
 	scene.add_light(dl);
 
-	Phong* bp1 = new Phong(Colour(0.2f, 0.0f, 0.0f), Colour(0.4f, 0.0f, 0.0f), Colour(0.4f, 0.4f, 0.4f), 40.f);
-	Phong* bp2 = new Phong(Colour(0.01f, 0.01f, 0.01f), Colour(0.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
-    FalseColour* bp3 = new FalseColour();
+	Phong* redPhong = new Phong(Colour(0.2f, 0.0f, 0.0f), Colour(0.4f, 0.0f, 0.0f), Colour(0.4f, 0.4f, 0.4f), 40.f);
+	Phong* bluePhong = new Phong(Colour(0.01f, 0.01f, 0.2f), Colour(0.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
+    FalseColour* rainbow = new FalseColour();
+    //GlobalMaterial* globalMat = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 0.0);
 
-	pm->set_material(bp1);
-    //pm->set_material(bp3);
-
+	pm->set_material(rainbow);
+    //pm->set_material(rainbow);
 	scene.add_object(pm);
 
-	sphere->set_material(bp2);
-
+	sphere->set_material(bluePhong);
+    //sphere->set_material(bp4);
 	scene.add_object(sphere);
+
+    skydome->set_material(redPhong);
+    scene.add_object(skydome);
 }
 
 

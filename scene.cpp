@@ -84,7 +84,7 @@ Hit *Scene::trace(Ray ray)
 	return best_hit;
 }
 
-Hit* Scene::select_first(Hit* list) //-----------YOU ARE HERE ----- trying to work out how this works ;')
+Hit* Scene::select_first(Hit* list)
 {
 	Hit* result = 0;
 
