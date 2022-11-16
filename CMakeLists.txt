@@ -25,6 +25,8 @@ add_executable(lab03
         falsecolour_material.h
         full_camera.cpp
         full_camera.h
+        global_material.cpp
+        global_material.h
         hit.cpp
         hit.h
         light.h
