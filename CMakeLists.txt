@@ -45,4 +45,4 @@ add_executable(lab03
         sphere_object.h
         transform.h
         vector.h
-        vertex.h)
+        vertex.h global_material.h global_material.cpp)

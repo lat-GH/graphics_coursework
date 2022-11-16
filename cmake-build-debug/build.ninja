@@ -257,6 +257,13 @@ build CMakeFiles/lab03.dir/sphere_object.cpp.obj: CXX_COMPILER__lab03_Debug C$:/
   OBJECT_DIR = CMakeFiles\lab03.dir
   OBJECT_FILE_DIR = CMakeFiles\lab03.dir
 
+build CMakeFiles/lab03.dir/global_material.cpp.obj: CXX_COMPILER__lab03_Debug C$:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/global_material.cpp || cmake_object_order_depends_target_lab03
+  DEP_FILE = CMakeFiles\lab03.dir\global_material.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  INCLUDES = -IC:/Users/latma/OneDrive/Documents/ComputerScience_FINALyr/Graphics/coursework-starter/.
+  OBJECT_DIR = CMakeFiles\lab03.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab03.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target lab03
@@ -265,7 +272,7 @@ build CMakeFiles/lab03.dir/sphere_object.cpp.obj: CXX_COMPILER__lab03_Debug C$:/
 #############################################
 # Link the executable lab03.exe
 
-build lab03.exe: CXX_EXECUTABLE_LINKER__lab03_Debug CMakeFiles/lab03.dir/main_lab34.cpp.obj CMakeFiles/lab03.dir/framebuffer.cpp.obj CMakeFiles/lab03.dir/linedrawer.cpp.obj CMakeFiles/lab03.dir/compound_material.cpp.obj CMakeFiles/lab03.dir/directional_light.cpp.obj CMakeFiles/lab03.dir/falsecolour_material.cpp.obj CMakeFiles/lab03.dir/full_camera.cpp.obj CMakeFiles/lab03.dir/hit.cpp.obj CMakeFiles/lab03.dir/phong_material.cpp.obj CMakeFiles/lab03.dir/plane_object.cpp.obj CMakeFiles/lab03.dir/polymesh_object.cpp.obj CMakeFiles/lab03.dir/scene.cpp.obj CMakeFiles/lab03.dir/simple_camera.cpp.obj CMakeFiles/lab03.dir/sphere_object.cpp.obj
+build lab03.exe: CXX_EXECUTABLE_LINKER__lab03_Debug CMakeFiles/lab03.dir/main_lab34.cpp.obj CMakeFiles/lab03.dir/framebuffer.cpp.obj CMakeFiles/lab03.dir/linedrawer.cpp.obj CMakeFiles/lab03.dir/compound_material.cpp.obj CMakeFiles/lab03.dir/directional_light.cpp.obj CMakeFiles/lab03.dir/falsecolour_material.cpp.obj CMakeFiles/lab03.dir/full_camera.cpp.obj CMakeFiles/lab03.dir/hit.cpp.obj CMakeFiles/lab03.dir/phong_material.cpp.obj CMakeFiles/lab03.dir/plane_object.cpp.obj CMakeFiles/lab03.dir/polymesh_object.cpp.obj CMakeFiles/lab03.dir/scene.cpp.obj CMakeFiles/lab03.dir/simple_camera.cpp.obj CMakeFiles/lab03.dir/sphere_object.cpp.obj CMakeFiles/lab03.dir/global_material.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\lab03.dir

@@ -16,20 +16,28 @@
 * produced it.
 */
 
-// An inifinite plane that has volume. It returns +/- big number on the inside of the ray
-
+// The global material generates a reflection/refraction layer
 #pragma once
 
-#include "object.h"
+#include "material.h"
+#include "environment.h"
 
-class Plane : public Object
-{
+class GlobalMaterial: public Material {
 public:
-    //a,b,c are the compoents of the normal and d is the
-	float a, b, c, d;
+    Colour reflect_weight;
+    Colour refract_weight;
+    float ior;
+    Environment* environment;
+//BEGIN_STAGE_ONE
+    void fresnel(Vector& view, Vector& normal, float etai, float etat, float& kr);
+    bool refract_ray(Vector& view, Vector& normal, float ior, Vector& refract_ray);
+//END_STAGE_ONE
 
-	Plane(float a, float b, float c, float d);
+    GlobalMaterial(Environment* p_env, Colour p_reflect_weight, Colour p_refract_weight, float ior);
 
-	Hit* intersection(Ray ray);
-	void apply_transform(Transform& trans);
+    Colour compute_once(Ray& viewer, Hit& hit, int recurse);
+
+    Colour compute_per_light(Vector& viewer, Hit& hit, Vector& ldir);
+
 };
+
