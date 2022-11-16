@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(.)
 add_executable(lab01 framebuffer.cpp framebuffer.h linedrawer.cpp linedrawer.h main_lab1.cpp)
 add_executable(lab02 main_lab2.cpp framebuffer.cpp linedrawer.cpp polymesh_object.cpp hit.cpp teapot_smaller.ply)
-#add_executable(lab03 main_lab34.cpp simple_camera.cpp full_camera.cpp)
 
 add_executable(lab03
         main_lab34.cpp

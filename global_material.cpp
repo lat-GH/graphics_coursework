@@ -34,37 +34,31 @@ GlobalMaterial::GlobalMaterial(Environment* p_env, Colour p_reflect_weight, Colo
 //END_STAGE_TWO
 //
 //// reflection and recursion computation
-//Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
-//{
-//	Colour result;
-//
-//    Colour col;
-//    Hit hit;
-//
-//    if (recurse == 0){
-//        return col;
-//    }
-//    if (environment.raytrace()){
-//
-//    }
-//
-//    Ray reflection_ray;
-//    reflection_ray.direction = reflect(ray.direction, hit.normal)
-//
-//
-//
-//
-//	return result;
-//}
-//
-//Colour reflection_raytrace(Ray &ray, int depth){
-//
-//
-//}
-//
-//Vector reflect(Vector Incident, Vector Normal){
-//    return Incident - 2.0f * (Normal.dot(Incident)) * Normal;
-//}
+Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
+{
+	Colour result;
+
+    if (recurse == 0){
+        return result;// = hit.what->; //TODO the result never really gets assigned to a colour!? it should at least get assigned to the background colour?
+    }
+    //dont check if the ray intersects because it wouldnt call this method if it didnt intersect?
+
+
+    Ray reflection_ray;
+    reflection_ray.direction = reflect(viewer.direction, hit.normal);
+    reflection_ray.position = hit.position + 1.000005f*reflection_ray.direction; //want to start the reflection ray just above the surface
+
+    float kr = 0.8f;
+    environment->raytrace(reflection_ray, recurse-1, result, hit.t);
+    result += result * kr;
+
+	return result;
+}
+
+
+Vector reflect(Vector Incident, Vector Normal){
+    return Incident - 2.0f * (Normal.dot(Incident)) * Normal;
+}
 
 
 Colour GlobalMaterial::compute_per_light(Vector& viewer, Hit& hit, Vector& ldir)
