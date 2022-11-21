@@ -238,6 +238,7 @@ Hit* PolyMesh::intersection(Ray ray)
             //the object its hitting is the current polymesh?
             newHit->what = this;
 
+
             if (smoothing){
                 //(1-u-v)*A + u*B + v*C; using barycentric coords to interpolate the values of the vertex normal to calculate the intersection normal
                 newHit->normal = (1-u-v)*vertex_normals[triangle[i][0]] + u*vertex_normals[triangle[i][1]] + v*vertex_normals[triangle[i][2]];
@@ -246,12 +247,25 @@ Hit* PolyMesh::intersection(Ray ray)
             else{
                 newHit->normal = triangle_normals[i];
             }
-            //return the smallest t and +ve
-            //need to test if the normal is facing towards the camera
-            float dotProduct = newHit->normal.dot(ray.direction);
-            //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction to face the camera, so negate
-            if (dotProduct>0){
-                newHit->normal.negate();
+            //TODO test how it looks without forcing the normal to face the direction of the camera
+//            //return the smallest t and +ve
+//            //need to test if the normal is facing towards the camera
+//            float dotProduct = newHit->normal.dot(ray.direction);
+//            //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction to face the camera, so negate
+//            if (dotProduct>0){
+//                newHit->normal.negate();
+//            }
+
+              //they all seem to be facing the wrong way lets just try negating them
+              newHit->normal.negate();
+
+
+            //check if entering or exiting
+            if(ray.direction.dot(newHit->normal) < 0){ //if angle between is negavtive then ray is outside == entering
+                newHit->entering = true;
+            }else{
+                //cout << "ray is exiting!! and the hit count =" << hitCounter <<endl;
+                newHit->entering = false;
             }
 
             if(hits==0){

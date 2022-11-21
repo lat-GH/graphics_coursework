@@ -69,11 +69,11 @@ void build_scene(Scene& scene)
 
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(-1.0f, 0.0f, 2.0f), 0.4f);//-1 0 2
-    Sphere* skydome = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 50);
+	Sphere* sphere = new Sphere(Vertex(-0.2f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
+    //Sphere* skydome = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 50);
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
-    Plane* background02 = new Plane(-1.0f, 0.0f, 0.0f, 2.0f);
-    //Plane* background03 = new Plane(0.0f, 0.0f, 1.0f, 2.0f);
+    Plane* background02 = new Plane(-1.0f, 0.0f, 0.0f, 3.0f);
+    Plane* background03 = new Plane(0.0f, 1.0f, 0.0f, 4.0f);
 
 
 	DirectionalLight* dl = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
@@ -85,24 +85,24 @@ void build_scene(Scene& scene)
 	Phong* bluePhong = new Phong(Colour(0.01f, 0.01f, 0.2f), Colour(0.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     Phong* greenPhong = new Phong(Colour(0.0f, 0.2f, 0.0f), Colour(0.0f, 1.0f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     FalseColour* rainbow = new FalseColour();
-    GlobalMaterial* globalMat = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 0.0);
+    GlobalMaterial* globalMat = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 0.5); //TODO try other ior values
 
 	pm->set_material(redPhong);
     //pm->set_material(rainbow);
 	scene.add_object(pm);
 
-	sphere->set_material(greenPhong);
+	sphere->set_material(globalMat);
     //sphere->set_material(bp4);
 	scene.add_object(sphere);
 
     //skydome->set_material(redPhong);
     //scene.add_object(skydome);
     background->set_material(bluePhong);
-    background02->set_material(globalMat);
-    //background03->set_material(greenPhong);
+    background02->set_material(bluePhong);
+    background03->set_material(bluePhong);
     scene.add_object(background);
     scene.add_object(background02);
-    //scene.add_object(background03);
+    scene.add_object(background03);
 }
 
 
@@ -124,8 +124,9 @@ int main(int argc, char *argv[])
 	//Camera *camera = new SimpleCamera(0.5f);
     //postion = 0,0.1,-1
     //good test = pos=8,0,15 look=0,0,8
-	Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f));
-    //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f));
+    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
+    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
 	
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
 	camera->render(scene,*fb);
