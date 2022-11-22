@@ -69,7 +69,7 @@ void build_scene(Scene& scene)
 
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(-0.2f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
+	Sphere* sphere = new Sphere(Vertex(0.2f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
     //Sphere* skydome = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 50);
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
     Plane* background02 = new Plane(-1.0f, 0.0f, 0.0f, 3.0f);
@@ -84,12 +84,13 @@ void build_scene(Scene& scene)
 	Phong* redPhong = new Phong(Colour(0.2f, 0.0f, 0.0f), Colour(0.4f, 0.0f, 0.0f), Colour(0.4f, 0.4f, 0.4f), 40.f);
 	Phong* bluePhong = new Phong(Colour(0.01f, 0.01f, 0.2f), Colour(0.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     Phong* greenPhong = new Phong(Colour(0.0f, 0.2f, 0.0f), Colour(0.0f, 1.0f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
+    Phong* purplePhong = new Phong(Colour(0.2f, 0.0f, 0.2f), Colour(1.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     FalseColour* rainbow = new FalseColour();
-    GlobalMaterial* globalMat = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 0.5); //TODO try other ior values
+    GlobalMaterial* globalMat = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 1.0);
 
-	pm->set_material(redPhong);
-    //pm->set_material(rainbow);
-	scene.add_object(pm);
+    pm->set_material(redPhong);
+    //pm->set_material(globalMat);// TODO why does my whole scene break when i apply the globalmat to the teapot
+	//scene.add_object(pm);
 
 	sphere->set_material(globalMat);
     //sphere->set_material(bp4);
@@ -98,8 +99,8 @@ void build_scene(Scene& scene)
     //skydome->set_material(redPhong);
     //scene.add_object(skydome);
     background->set_material(bluePhong);
-    background02->set_material(bluePhong);
-    background03->set_material(bluePhong);
+    background02->set_material(greenPhong);
+    background03->set_material(purplePhong);
     scene.add_object(background);
     scene.add_object(background02);
     scene.add_object(background03);

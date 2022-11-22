@@ -34,7 +34,7 @@ public:
   Object *object_list;
   Light *light_list;
 
-  float ambient_intensity = 0.9f; //TODO try making this a colour term?
+  float ambient_intensity = 0.9f;
 
   Scene();
 

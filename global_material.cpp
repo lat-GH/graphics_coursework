@@ -63,6 +63,9 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
             refraction_ray.direction = refraction_dir;
             refraction_ray.direction.normalise();
 
+            //cout << "refraction_dir=" << refraction_dir.x << refraction_dir.y << refraction_dir.z << endl;
+            //cout << "entering = "<< hit.entering  << "hit.normal.dot(refraction_dir) " << hit.normal.dot(refraction_dir)<< endl; the dot of normal and refraction ray is always -ve, menaing they are always facing opposite directions as they should be?
+
             if(hit.entering){
                 //want the new ray inside the material to start below the normal
                 refraction_ray.position = hit.position - bias;
@@ -84,7 +87,9 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
     environment->raytrace(reflection_ray, recurse-1, result_reflection, hit.t);
     //float kr = 0.8f;
     //result += result * kr;
+    //result +=  result_reflection*reflectionTerm;
     result +=  result_reflection*reflectionTerm + result_refraction*(1-reflectionTerm);
+
 
 	return result;
 }
@@ -130,7 +135,7 @@ void GlobalMaterial::fresnel(Vector& Incident, Vector& Normal, float etai, float
     //cout <<"refracIndx_I "<<refracIndx_I << "refracIndx_T "<< refracIndx_T << "snellsRatio<"<< snellsRatio<< endl;
 
     //checking for total interal reflection
-    float sinTransmitted = snellsRatio * sqrtf(max(0.f, 1 - cosIncident*cosIncident)); //TODO check this maths is happening
+    float sinTransmitted = snellsRatio * sqrtf(max(0.f, 1 - cosIncident*cosIncident)); //-----check this maths is correct
     //cout << "cosIncident = "<< cosIncident << "^^2" << cosIncident*cosIncident << "1-" << 1 - cosIncident*cosIncident<< endl;
     //cout << "sinTransmitted = "<< sinTransmitted<<endl;
     if (sinTransmitted >= 1){
@@ -159,8 +164,12 @@ bool GlobalMaterial::refract_ray(Vector& Incident, Vector& Normal, float ior, Ve
     //making a copy so can manipulate it
     Vector N = Normal;
 
+    //when entering
+    //need the cos of the angle to be +ve
     if(cosIncident < 0) { cosIncident = -cosIncident;}
+    //when exiting
     else{
+        //swapping the values of snells ratio
         swap(refracIndx_I,refracIndx_T);
         N = -N;
     }
