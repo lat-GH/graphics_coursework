@@ -99,38 +99,40 @@ Vector reflect(Vector Incident, Vector Normal){
     return Incident - 2.0f * (Normal.dot(Incident)) * Normal;
 }
 
-bool going_in(float IdotN, float ior){
-    if(IdotN > 0){ //going out
-        //ior/1 = ior
-        //return ior;
-        return false;
-    }
-    else{//going in
-        //return 1/ior;
-        return true;
-    }
-}
+//bool going_in(float IdotN, float ior){
+//    if(IdotN > 0){ //going out
+//        //ior/1 = ior
+//        //return ior;
+//        return false;
+//    }
+//    else{//going in
+//        //return 1/ior;
+//        return true;
+//    }
+//}
 
-void GlobalMaterial::fresnel(Vector& Incident, Vector& Normal, float etai, float etat, float& reflectionTerm){
+void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float etai, float etat, float& reflectionTerm){
+    Vector Incident = viewer;//making a copy so not to edit the viewer value
+    Incident.negate();
     float cosIncident = Incident.dot(Normal);
     //clamping the value of cosIncident to the range of -1 - 1
     if (cosIncident > 1){cosIncident = 1;}
     else if(cosIncident < -1){cosIncident = -1;}
 
-    float refracIndx_I;
-    float refracIndx_T;
+    float refracIndx_air;
+    float refracIndx_glass;
     //will flip the direction of the ratio based on the value of the cosIncident
     //if(going_in(cosIncident, etai)){
-    if(cosIncident < 0){ //going into the material
-        refracIndx_I = etai;//1.0f;
-        refracIndx_T = etat;//ior;
+    if(cosIncident > 0){ //going into the material
+        refracIndx_air = etai;//1.0f;
+        refracIndx_glass = etat;//ior;
     }
     else{
         //coming out of the material
-        refracIndx_I = etat;//ior;
-        refracIndx_T = etai; //1.0f;
+        refracIndx_air = etat;//ior;
+        refracIndx_glass = etai; //1.0f;
     }
-    float snellsRatio = refracIndx_I/refracIndx_T;
+    float snellsRatio = refracIndx_glass/refracIndx_air;
     //cout << "etai" << etai << "etat" << etat <<endl;
     //cout <<"refracIndx_I "<<refracIndx_I << "refracIndx_T "<< refracIndx_T << "snellsRatio<"<< snellsRatio<< endl;
 
@@ -139,14 +141,16 @@ void GlobalMaterial::fresnel(Vector& Incident, Vector& Normal, float etai, float
     //cout << "cosIncident = "<< cosIncident << "^^2" << cosIncident*cosIncident << "1-" << 1 - cosIncident*cosIncident<< endl;
     //cout << "sinTransmitted = "<< sinTransmitted<<endl;
     if (sinTransmitted >= 1){
+        //cout << "frens Internal Reflection"<<endl;
         reflectionTerm = 1;
         //return 1;
     }
     else{
+        //cout << "frens Refracted" << endl;
         float cosTransmitted = sqrtf(max(0.f, 1 - sinTransmitted*sinTransmitted));
         cosIncident = fabsf(cosIncident);
-        float wavelenght_S = ((refracIndx_T*cosIncident) - (refracIndx_I*cosTransmitted) / (refracIndx_T*cosIncident) + (refracIndx_I*cosTransmitted));
-        float wavelenght_P = ((refracIndx_I*cosIncident) - (refracIndx_T*cosTransmitted) / (refracIndx_I*cosIncident) + (refracIndx_T*cosTransmitted));
+        float wavelenght_S = ((refracIndx_glass*cosIncident) - (refracIndx_air*cosTransmitted) / (refracIndx_glass*cosIncident) + (refracIndx_air*cosTransmitted));
+        float wavelenght_P = ((refracIndx_air*cosIncident) - (refracIndx_glass*cosTransmitted) / (refracIndx_air*cosIncident) + (refracIndx_glass*cosTransmitted));
 
         reflectionTerm = (wavelenght_S*wavelenght_S + wavelenght_P*wavelenght_P)/2;
         //return (wavelenght_S*wavelenght_S + wavelenght_P*wavelenght_P)/2;
@@ -154,33 +158,57 @@ void GlobalMaterial::fresnel(Vector& Incident, Vector& Normal, float etai, float
 
 }
 
-bool GlobalMaterial::refract_ray(Vector& Incident, Vector& Normal, float ior, Vector& refract_ray){
+bool GlobalMaterial::refract_ray(Vector& viewer, Vector& Normal, float ior, Vector& refract_ray){
+    Vector Incident = viewer;
+    Incident.negate();
+
     float cosIncident = Incident.dot(Normal);
     //clamping the value of cosIncident to the range of -1 - 1
     if (cosIncident > 1){cosIncident = 1;}
     else if(cosIncident < -1){cosIncident = -1;}
 
-    float refracIndx_I = 1, refracIndx_T = ior;
+    float refracIndx_air = 1, refracIndx_glass = ior;
+    //    cout << refracIndx_I << refracIndx_T << endl;
     //making a copy so can manipulate it
     Vector N = Normal;
 
     //when entering
-    //need the cos of the angle to be +ve
-    if(cosIncident < 0) { cosIncident = -cosIncident;}
+    //need the cos of the angle to be +ve when entering
+    if(cosIncident > 0) { cosIncident = -cosIncident;}
     //when exiting
     else{
         //swapping the values of snells ratio
-        swap(refracIndx_I,refracIndx_T);
-        N = -N;
+        //swap(refracIndx_I,refracIndx_T);
+        refracIndx_air = ior;
+        refracIndx_glass = 1;
+        //cout << refracIndx_air << refracIndx_glass << endl;
+        //N = -N;
     }
-    float snellsRatio = refracIndx_I/refracIndx_T;
+    //scratch pixel's refraction equation
+    float snellsRatio = refracIndx_glass/refracIndx_air;
     float insideSqrt = 1 - snellsRatio*snellsRatio * (1 - cosIncident*cosIncident);
 
-    if(insideSqrt<0){return false;} //total internal refelction and therefore no refraction ray returned
+    if(insideSqrt<0){
+        //cout << "refrca Internal Reflection"<<endl;
+        return false;
+    } //total internal refelction and therefore no refraction ray returned
     else{
+        //cout << "refrac Refraction" <<endl;
         refract_ray = snellsRatio * Incident + (snellsRatio * cosIncident - sqrtf(insideSqrt)) * N;
         return true;
     }
+
+//    //KENS refraction equation
+//    float cosTransmitted = sqrtf( (1 - pow(1/snellsRatio,2)) * (1-pow(cosIncident,2)));
+//
+//    if(cosTransmitted > cosIncident){
+//        return false;
+//    }else{
+//        refract_ray = 1/snellsRatio * Incident - (cosTransmitted - 1/snellsRatio*cosIncident) * N;
+//        return true;
+//    }
+
+
 
 }
 

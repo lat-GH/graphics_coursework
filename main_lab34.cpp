@@ -86,14 +86,14 @@ void build_scene(Scene& scene)
     Phong* greenPhong = new Phong(Colour(0.0f, 0.2f, 0.0f), Colour(0.0f, 1.0f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     Phong* purplePhong = new Phong(Colour(0.2f, 0.0f, 0.2f), Colour(1.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     FalseColour* rainbow = new FalseColour();
-    GlobalMaterial* globalMat = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 1.0);
+    GlobalMaterial* globalMat = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 1.5);
 
-    pm->set_material(redPhong);
+    //pm->set_material(redPhong);
     //pm->set_material(globalMat);// TODO why does my whole scene break when i apply the globalmat to the teapot
 	//scene.add_object(pm);
 
 	sphere->set_material(globalMat);
-    //sphere->set_material(bp4);
+    //sphere->set_material(redPhong);
 	scene.add_object(sphere);
 
     //skydome->set_material(redPhong);
