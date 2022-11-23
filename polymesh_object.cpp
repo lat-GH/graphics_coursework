@@ -247,17 +247,18 @@ Hit* PolyMesh::intersection(Ray ray)
             else{
                 newHit->normal = triangle_normals[i];
             }
-            //TODO test how it looks without forcing the normal to face the direction of the camera
-//            //return the smallest t and +ve
-//            //need to test if the normal is facing towards the camera
-//            float dotProduct = newHit->normal.dot(ray.direction);
-//            //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction to face the camera, so negate
-//            if (dotProduct>0){
-//                newHit->normal.negate();
-//            }
 
-              //they all seem to be facing the wrong way lets just try negating them
-              newHit->normal.negate();
+//            //return the smallest t and +ve
+            //need to test if the normal is facing towards the camera
+            float dotProduct = newHit->normal.dot(ray.direction);
+            //if the nagle between is +ve then they are facing in the same direction, but you want it to be facing in the opposite direction to face the camera, so negate
+            if (dotProduct>0){
+                newHit->normal.negate();
+            }
+
+            //TODO test how it looks without forcing the normal to face the direction of the camera
+//              //they all seem to be facing the wrong way lets just try negating them
+//              newHit->normal.negate();
 
 
             //check if entering or exiting

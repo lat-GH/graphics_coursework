@@ -117,14 +117,14 @@ public:
 		return result;
 	}
 
-	Colour operator+= (Colour& other)
-	{
-		r += other.r;
-		g += other.g;
-		b += other.b;
-		a += other.a;
-		return *this;
-	}
+//	Colour operator+= (Colour& other)
+//	{
+//		r += other.r;
+//		g += other.g;
+//		b += other.b;
+//		a += other.a;
+//		return *this;
+//	}
 
 	Colour operator+= (Colour other)
 	{

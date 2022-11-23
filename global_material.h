@@ -29,7 +29,8 @@ public:
     float ior;
     Scene* environment;
 //BEGIN_STAGE_ONE
-    void fresnel(Vector& view, Vector& normal, float etai, float etat, float& kr);
+    //void fresnel(Vector& view, Vector& normal, float etai, float etat, float& kr);
+    void fresnel(Vector& view, Vector& normal, float ior, float& kr);
     bool refract_ray(Vector& view, Vector& normal, float ior, Vector& refract_ray);
 //END_STAGE_ONE
 
