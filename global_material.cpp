@@ -77,7 +77,7 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
 
             environment->raytrace(refraction_ray, recurse-1, result_refraction, hit.t);
 
-            //cout << "result_refraction = "<<result_refraction.r << result_refraction.g << result_refraction.b << endl;
+            cout << "result_refraction = "<<result_refraction.r << result_refraction.g << result_refraction.b << endl;
         }
     }
 
@@ -92,8 +92,9 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
     //float kr = 0.8f;
     //result += result * kr;
     //result +=  result_reflection*0.8f;
-    result +=  result_reflection*reflectionTerm + result_refraction*(1-reflectionTerm);
-
+    result += result_refraction*1;//*(1-reflectionTerm);
+    cout << "result = " << result.r << result.g << result.b << endl;
+    //result +=  result_reflection*reflectionTerm + result_refraction*(1-reflectionTerm);
 
 	return result;
 }
@@ -136,7 +137,7 @@ void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float etai, float e
     //cout << "cosIncident = "<< cosIncident << "^^2" << cosIncident*cosIncident << "1-" << 1 - cosIncident*cosIncident<< endl;
     //cout << "sinTransmitted = "<< sinTransmitted<<endl; // always a +ve 0.somtheing number
     if (sinTransmitted >= 1){
-        //cout << "frens Internal Reflection"<<endl; // never gets called...?
+        //cout << "frens Internal Reflection"<<endl;
         reflectionTerm = 1;
         //return 1;
     }
@@ -189,11 +190,12 @@ bool GlobalMaterial::refract_ray(Vector& viewer, Vector& Normal, float ior, Vect
     float insideSqrt = 1 - snellsRatio*snellsRatio * (1 - cosIncident*cosIncident);
     //cout << "insideSqrt" << insideSqrt <<endl;
     if(insideSqrt<0){
-        //cout << "refrca Internal Reflection"<<endl; //this never gets called either...?
+//        cout << "refrca Internal Reflection"<<endl; //----------this never gets called BUT is it because we catch the total internal reflection case in the frenel term
         return false;
     } //total internal refelction and therefore no refraction ray returned
     else{
         //cout << "refrac Refraction" <<endl;
+        //Incident.negate();
         refract_ray = snellsRatio * Incident + (snellsRatio * cosIncident - sqrtf(insideSqrt)) * N;
         return true;
     }
