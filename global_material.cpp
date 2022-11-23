@@ -50,7 +50,7 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
     fresnel(viewer.direction, hit.normal, 1, ior, reflectionTerm);
     //cout << "reflectionTerm= " <<reflectionTerm<< endl;
     //bias used to determine the distance from the surface to start the ray
-    Vector bias = 1.000005f *  hit.normal ;
+    Vector bias = 0.005f *  hit.normal ;
 
     //checking for total internal reflection??? ------------- WHY do I need to do this inside and outside of the refract_ray?
     if ( reflectionTerm < 1){
@@ -64,17 +64,20 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
             refraction_ray.direction.normalise();
 
             //cout << "refraction_dir=" << refraction_dir.x << refraction_dir.y << refraction_dir.z << endl;
-            //cout << "entering = "<< hit.entering  << "hit.normal.dot(refraction_dir) " << hit.normal.dot(refraction_dir)<< endl; the dot of normal and refraction ray is always -ve, menaing they are always facing opposite directions as they should be?
+            //cout << "entering = "<< hit.entering  << "hit.normal.dot(refraction_dir) " << hit.normal.dot(refraction_dir)<< endl; //the dot of normal and refraction ray is always -ve, menaing they are always facing opposite directions as they should be?
 
             if(hit.entering){
                 //want the new ray inside the material to start below the normal
                 refraction_ray.position = hit.position - bias;
             }
             else{
+                cout << "EXITING"<<endl; // the ray is never exiting
                 refraction_ray.position = hit.position + bias;
             }
 
             environment->raytrace(refraction_ray, recurse-1, result_refraction, hit.t);
+
+            //cout << "result_refraction = "<<result_refraction.r << result_refraction.g << result_refraction.b << endl;
         }
     }
 
@@ -85,9 +88,10 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
     reflection_ray.position = hit.position + 1.000005f*reflection_ray.direction; //want to start the reflection ray just above the surface
 
     environment->raytrace(reflection_ray, recurse-1, result_reflection, hit.t);
+    //cout << "result_reflection = "<<result_reflection.r << result_reflection.g << result_reflection.b << endl;
     //float kr = 0.8f;
     //result += result * kr;
-    //result +=  result_reflection*reflectionTerm;
+    //result +=  result_reflection*0.8f;
     result +=  result_reflection*reflectionTerm + result_refraction*(1-reflectionTerm);
 
 
@@ -99,22 +103,11 @@ Vector reflect(Vector Incident, Vector Normal){
     return Incident - 2.0f * (Normal.dot(Incident)) * Normal;
 }
 
-//bool going_in(float IdotN, float ior){
-//    if(IdotN > 0){ //going out
-//        //ior/1 = ior
-//        //return ior;
-//        return false;
-//    }
-//    else{//going in
-//        //return 1/ior;
-//        return true;
-//    }
-//}
-
 void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float etai, float etat, float& reflectionTerm){
     Vector Incident = viewer;//making a copy so not to edit the viewer value
     Incident.negate();
     float cosIncident = Incident.dot(Normal);
+    //cout << "frenel cosIncident" << cosIncident << endl;
     //clamping the value of cosIncident to the range of -1 - 1
     if (cosIncident > 1){cosIncident = 1;}
     else if(cosIncident < -1){cosIncident = -1;}
@@ -128,20 +121,22 @@ void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float etai, float e
         refracIndx_glass = etat;//ior;
     }
     else{
+        //cout << "frenel cosIncident" << cosIncident << endl;
+        //cout << "frensel coming out"<<endl;
         //coming out of the material
         refracIndx_air = etat;//ior;
         refracIndx_glass = etai; //1.0f;
     }
     float snellsRatio = refracIndx_glass/refracIndx_air;
-    //cout << "etai" << etai << "etat" << etat <<endl;
-    //cout <<"refracIndx_I "<<refracIndx_I << "refracIndx_T "<< refracIndx_T << "snellsRatio<"<< snellsRatio<< endl;
+    //float snellsRatio = refracIndx_air/refracIndx_glass; // when used this way around it breaks everything
+    //cout << "snellsRatio"<<snellsRatio <<endl;
 
     //checking for total interal reflection
     float sinTransmitted = snellsRatio * sqrtf(max(0.f, 1 - cosIncident*cosIncident)); //-----check this maths is correct
     //cout << "cosIncident = "<< cosIncident << "^^2" << cosIncident*cosIncident << "1-" << 1 - cosIncident*cosIncident<< endl;
-    //cout << "sinTransmitted = "<< sinTransmitted<<endl;
+    //cout << "sinTransmitted = "<< sinTransmitted<<endl; // always a +ve 0.somtheing number
     if (sinTransmitted >= 1){
-        //cout << "frens Internal Reflection"<<endl;
+        //cout << "frens Internal Reflection"<<endl; // never gets called...?
         reflectionTerm = 1;
         //return 1;
     }
@@ -159,10 +154,12 @@ void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float etai, float e
 }
 
 bool GlobalMaterial::refract_ray(Vector& viewer, Vector& Normal, float ior, Vector& refract_ray){
+
     Vector Incident = viewer;
     Incident.negate();
 
     float cosIncident = Incident.dot(Normal);
+    //cout << "refract cosIncident" << cosIncident << endl;
     //clamping the value of cosIncident to the range of -1 - 1
     if (cosIncident > 1){cosIncident = 1;}
     else if(cosIncident < -1){cosIncident = -1;}
@@ -177,19 +174,22 @@ bool GlobalMaterial::refract_ray(Vector& viewer, Vector& Normal, float ior, Vect
     if(cosIncident > 0) { cosIncident = -cosIncident;}
     //when exiting
     else{
+        //cout << "refract coming out"<<endl;
         //swapping the values of snells ratio
         //swap(refracIndx_I,refracIndx_T);
         refracIndx_air = ior;
         refracIndx_glass = 1;
         //cout << refracIndx_air << refracIndx_glass << endl;
-        //N = -N;
+        N = -N;
     }
     //scratch pixel's refraction equation
     float snellsRatio = refracIndx_glass/refracIndx_air;
+    //float snellsRatio = refracIndx_air/refracIndx_glass;// when use this way round it breaks everything
+    //cout << "snellsRatio"<<snellsRatio <<endl;
     float insideSqrt = 1 - snellsRatio*snellsRatio * (1 - cosIncident*cosIncident);
-
+    //cout << "insideSqrt" << insideSqrt <<endl;
     if(insideSqrt<0){
-        //cout << "refrca Internal Reflection"<<endl;
+        //cout << "refrca Internal Reflection"<<endl; //this never gets called either...?
         return false;
     } //total internal refelction and therefore no refraction ray returned
     else{
