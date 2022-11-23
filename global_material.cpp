@@ -22,7 +22,7 @@
 
 Vector reflect(Vector incident, Vector Normal);
 
-GlobalMaterial::GlobalMaterial(Environment* p_env, Colour p_reflect_weight, Colour p_refract_weight, float p_ior)
+GlobalMaterial::GlobalMaterial(Scene* p_env, Colour p_reflect_weight, Colour p_refract_weight, float p_ior)
 {
     reflect_weight = p_reflect_weight;
     refract_weight = p_refract_weight;
@@ -39,47 +39,40 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
 	Colour result;
     Colour result_reflection;
     Colour result_refraction;
-    //cout<< "recurse"<<recurse << endl;
-    if (recurse == 0){
-        //cout << "end of recurse" << endl;
+
+    //how far to shoot the ray into the scene
+    float raytrace_depth = 9999999.0;
+    float snellRatio;
+
+    if (recurse <= 0){
         return result;
     }
 
-    //get the reflection ratio using the frensel term
-    float reflectionTerm;
-    fresnel(viewer.direction, hit.normal, 1, ior, reflectionTerm);
-    //cout << "reflectionTerm= " <<reflectionTerm<< endl;
-    //bias used to determine the distance from the surface to start the ray
-    Vector bias = 0.005f *  hit.normal ;
-
-    //checking for total internal reflection??? ------------- WHY do I need to do this inside and outside of the refract_ray?
-    if ( reflectionTerm < 1){
-        Vector refraction_dir;
-        //cout<<"reflectionTerm < 1"<<endl;
-
-        if(refract_ray(viewer.direction,hit.normal, ior, refraction_dir)){
-            //cout << "refraction_dir=" << refraction_dir.x << refraction_dir.y << refraction_dir.z << endl;
-            Ray refraction_ray;
-            refraction_ray.direction = refraction_dir;
-            refraction_ray.direction.normalise();
-
-            //cout << "refraction_dir=" << refraction_dir.x << refraction_dir.y << refraction_dir.z << endl;
-            //cout << "entering = "<< hit.entering  << "hit.normal.dot(refraction_dir) " << hit.normal.dot(refraction_dir)<< endl; //the dot of normal and refraction ray is always -ve, menaing they are always facing opposite directions as they should be?
-
-            if(hit.entering){
-                //want the new ray inside the material to start below the normal
-                refraction_ray.position = hit.position - bias;
-            }
-            else{
-                cout << "EXITING"<<endl; // the ray is never exiting
-                refraction_ray.position = hit.position + bias;
-            }
-
-            environment->raytrace(refraction_ray, recurse-1, result_refraction, hit.t);
-
-            cout << "result_refraction = "<<result_refraction.r << result_refraction.g << result_refraction.b << endl;
-        }
+    //calculating the value of the snells ratio that you pass into the refract()
+    if (hit.entering){
+        snellRatio = ior/1;
     }
+    else{snellRatio = 1/ior;}
+
+    Vector refraction_dir;
+    if(refract_ray(viewer.direction,hit.normal, snellRatio, refraction_dir))
+    {
+        Ray refraction_ray;
+        refraction_ray.direction = refraction_dir;
+        refraction_ray.direction.normalise();
+        //need to move slightly ahead along the ray
+        refraction_ray.position = hit.position + 0.00001 * refraction_ray.direction;
+        environment->raytrace(refraction_ray, recurse-1, result_refraction, raytrace_depth);
+    }
+
+
+    return result + result_refraction;
+
+
+
+    //get the reflection ratio using the frensel term
+    float fresnel_reflection;
+    fresnel(viewer.direction, hit.normal, 1, ior, fresnel_reflection);
 
 
     Ray reflection_ray;
@@ -154,63 +147,66 @@ void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float etai, float e
 
 }
 
-bool GlobalMaterial::refract_ray(Vector& viewer, Vector& Normal, float ior, Vector& refract_ray){
+bool GlobalMaterial::refract_ray(Vector& viewer, Vector& Normal, float snellsRatio, Vector& refract_ray){
 
     Vector Incident = viewer;
-    Incident.negate();
+//    Incident.negate();
 
-    float cosIncident = Incident.dot(Normal);
-    //cout << "refract cosIncident" << cosIncident << endl;
-    //clamping the value of cosIncident to the range of -1 - 1
-    if (cosIncident > 1){cosIncident = 1;}
-    else if(cosIncident < -1){cosIncident = -1;}
+//    float cosIncident = Incident.dot(Normal);
+    float cosIncident = Normal.dot(-viewer);
 
-    float refracIndx_air = 1, refracIndx_glass = ior;
-    //    cout << refracIndx_I << refracIndx_T << endl;
-    //making a copy so can manipulate it
-    Vector N = Normal;
-
-    //when entering
-    //need the cos of the angle to be +ve when entering
-    if(cosIncident > 0) { cosIncident = -cosIncident;}
-    //when exiting
-    else{
-        //cout << "refract coming out"<<endl;
-        //swapping the values of snells ratio
-        //swap(refracIndx_I,refracIndx_T);
-        refracIndx_air = ior;
-        refracIndx_glass = 1;
-        //cout << refracIndx_air << refracIndx_glass << endl;
-        N = -N;
-    }
-    //scratch pixel's refraction equation
-    float snellsRatio = refracIndx_glass/refracIndx_air;
-    //float snellsRatio = refracIndx_air/refracIndx_glass;// when use this way round it breaks everything
-    //cout << "snellsRatio"<<snellsRatio <<endl;
-    float insideSqrt = 1 - snellsRatio*snellsRatio * (1 - cosIncident*cosIncident);
-    //cout << "insideSqrt" << insideSqrt <<endl;
-    if(insideSqrt<0){
-//        cout << "refrca Internal Reflection"<<endl; //----------this never gets called BUT is it because we catch the total internal reflection case in the frenel term
+    float cosTransmitted_squared = 1 - (1/pow(snellsRatio,2)) * (1-pow(cosIncident,2));
+    //dont want to sqrt a -ve num
+    if(cosTransmitted_squared < 0){
         return false;
-    } //total internal refelction and therefore no refraction ray returned
-    else{
-        //cout << "refrac Refraction" <<endl;
-        //Incident.negate();
-        refract_ray = snellsRatio * Incident + (snellsRatio * cosIncident - sqrtf(insideSqrt)) * N;
-        return true;
     }
+    float cosTransmitted = sqrtf( cosTransmitted_squared );
+    refract_ray = (1/snellsRatio) * viewer - (cosTransmitted - ((1 / snellsRatio) * cosIncident)) * Normal;
+    return true;
 
-//    //KENS refraction equation
-//    float cosTransmitted = sqrtf( (1 - pow(1/snellsRatio,2)) * (1-pow(cosIncident,2)));
+//    Vector Incident = viewer;
+//    Incident.negate();
 //
-//    if(cosTransmitted > cosIncident){
+//    float cosIncident = Incident.dot(Normal);
+//    //cout << "refract cosIncident" << cosIncident << endl;
+//    //clamping the value of cosIncident to the range of -1 - 1
+//    if (cosIncident > 1){cosIncident = 1;}
+//    else if(cosIncident < -1){cosIncident = -1;}
+//
+//    float refracIndx_air = 1, refracIndx_glass = ior;
+//    //    cout << refracIndx_I << refracIndx_T << endl;
+//    //making a copy so can manipulate it
+//    Vector N = Normal;
+//
+//    //when entering
+//    //need the cos of the angle to be +ve when entering
+//    if(cosIncident > 0) { cosIncident = -cosIncident;}
+//    //when exiting
+//    else{
+//        //cout << "refract coming out"<<endl;
+//        //swapping the values of snells ratio
+//        //swap(refracIndx_I,refracIndx_T);
+//        refracIndx_air = ior;
+//        refracIndx_glass = 1;
+//        //cout << refracIndx_air << refracIndx_glass << endl;
+//        N = -N;
+//    }
+//    //scratch pixel's refraction equation
+//    float snellsRatio = refracIndx_glass/refracIndx_air;
+//    //float snellsRatio = refracIndx_air/refracIndx_glass;// when use this way round it breaks everything
+//    //cout << "snellsRatio"<<snellsRatio <<endl;
+//    float insideSqrt = 1 - snellsRatio*snellsRatio * (1 - cosIncident*cosIncident);
+//    //cout << "insideSqrt" << insideSqrt <<endl;
+//    if(insideSqrt<0){
+////        cout << "refrca Internal Reflection"<<endl; //----------this never gets called BUT is it because we catch the total internal reflection case in the frenel term
 //        return false;
-//    }else{
-//        refract_ray = 1/snellsRatio * Incident - (cosTransmitted - 1/snellsRatio*cosIncident) * N;
+//    } //total internal refelction and therefore no refraction ray returned
+//    else{
+//        //cout << "refrac Refraction" <<endl;
+//        //Incident.negate();
+//        refract_ray = snellsRatio * Incident + (snellsRatio * cosIncident - sqrtf(insideSqrt)) * N;
 //        return true;
 //    }
-
-
 
 }
 

@@ -80,10 +80,10 @@ Hit *Sphere::intersection(Ray ray)
 	hit1->normal.normalise();
 
     //TODO does this mean the normals of the exiting face will also be facing the camera...?
-//	if (hit1->normal.dot(ray.direction) > 0.0)
-//	{
-//		hit1->normal.negate();
-//	}
+	if (hit1->normal.dot(ray.direction) > 0.0)
+	{
+		hit1->normal.negate();
+	}
 
 	hit0->next = hit1;
 	hit1->next = 0;
