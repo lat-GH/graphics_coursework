@@ -4,7 +4,7 @@
 21	1369	6865947400444766	CMakeFiles/coursework_starter.dir/main_lab2.cpp.obj	42a28ad6ca439c36
 55	966	6865942372617397	CMakeFiles/coursework_starter.dir/falsecolour_material.cpp.obj	313374beed8a9039
 10	1018	6871988638513747	CMakeFiles/lab01.dir/lab01/linedrawer.cpp.obj	b918add459c98347
-3	590	6903295431128358	build.ninja	22af1a1700667a6e
+3	590	6910044328294678	build.ninja	22af1a1700667a6e
 13	888	6865942371879114	CMakeFiles/coursework_starter.dir/lab01/linedrawer.cpp.obj	ec6cf86c8c35543b
 42	989	6865942372525864	CMakeFiles/coursework_starter.dir/hit.cpp.obj	23715b149a992add
 21	978	6865942372688565	CMakeFiles/coursework_starter.dir/compound_material.cpp.obj	3d0dd01bf5aebc0d
@@ -14,7 +14,7 @@
 366	1383	6865942376794442	CMakeFiles/coursework_starter.dir/phong_material.cpp.obj	267c2fe2211b9a32
 36	1141	6872063578421218	CMakeFiles/lab02.dir/hit.cpp.obj	fa1af44307bfe65
 896	1902	6865942381949150	CMakeFiles/coursework_starter.dir/full_camera.cpp.obj	f8234dff02618faa
-1851	2357	6909203763460005	lab03.exe	de1c7221e1f6488e
+522	754	6909212611572936	lab03.exe	de1c7221e1f6488e
 1197	1473	6881469795431837	lab02.exe	6e762694f2dd597c
 10	979	6865947396490150	CMakeFiles/coursework_starter.dir/main_lab34.cpp.obj	453cce7792dfda4
 1903	2959	6865942392669491	CMakeFiles/coursework_starter.dir/simple_camera.cpp.obj	71a545d23b74e9af
@@ -32,7 +32,7 @@
 1	1122	6871993212206430	CMakeFiles/lab01.dir/framebuffer.cpp.obj	48e3aa7fe29f29fa
 10	900	6878080834127919	CMakeFiles/lab02.dir/linedrawer.cpp.obj	5ba0e378ce33ace6
 47	1182	6872063578811255	CMakeFiles/lab02.dir/framebuffer.cpp.obj	9fba5cd45809216a
-39	1608	6909203756006804	CMakeFiles/lab03.dir/sphere_object.cpp.obj	149a56992e0336b4
+11	880	6909205815852639	CMakeFiles/lab03.dir/sphere_object.cpp.obj	149a56992e0336b4
 11	1193	6881469792654762	CMakeFiles/lab02.dir/polymesh_object.cpp.obj	ba196273c8a7b34a
 13	1628	6878049159922148	CMakeFiles/lab02.dir/main_lab2.cpp.obj	b120e0c2e79ecf22
 31	853	6909175522416914	CMakeFiles/lab03.dir/directional_light.cpp.obj	8212c0d83445dcad
@@ -45,12 +45,4 @@
 6	835	6909196158739314	CMakeFiles/lab03.dir/scene.cpp.obj	c289fd828f839ed7
 2179	3737	6909175551592756	CMakeFiles/lab03.dir/plane_object.cpp.obj	cf1fb13a4b2ba48
 2373	3868	6909175552924818	CMakeFiles/lab03.dir/simple_camera.cpp.obj	702c79ec827c2a82
-28	1743	6909203756250851	CMakeFiles/lab03.dir/global_material.cpp.obj	e690b1603cfd8725
-9	701	6909205005912105	CMakeFiles/lab03.dir/sphere_object.cpp.obj	149a56992e0336b4
-703	979	6909205008622317	lab03.exe	de1c7221e1f6488e
-11	880	6909205815852639	CMakeFiles/lab03.dir/sphere_object.cpp.obj	149a56992e0336b4
-882	1167	6909205818652832	lab03.exe	de1c7221e1f6488e
-5	517	6909209919603812	CMakeFiles/lab03.dir/global_material.cpp.obj	e690b1603cfd8725
-519	765	6909209922014025	lab03.exe	de1c7221e1f6488e
 5	519	6909212609288702	CMakeFiles/lab03.dir/global_material.cpp.obj	e690b1603cfd8725
-522	754	6909212611572936	lab03.exe	de1c7221e1f6488e

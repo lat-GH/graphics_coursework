@@ -44,4 +44,9 @@ add_executable(lab03
         sphere_object.h
         transform.h
         vector.h
-        vertex.h global_material.h global_material.cpp)
+        vertex.h global_material.h global_material.cpp
+        csg_object.cpp
+        csg_object.h
+        quadratic_object.cpp
+        quadratic_object.h
+        )
