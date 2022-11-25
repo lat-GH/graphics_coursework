@@ -38,6 +38,7 @@
 #include "polymesh_object.h"
 #include "sphere_object.h"
 #include "plane_object.h"
+#include "quadratic_object.h"
 
 // classes that contain our lights, all derived from Light
 #include "directional_light.h"
@@ -75,6 +76,10 @@ void build_scene(Scene& scene)
     Plane* background02 = new Plane(-1.0f, 0.0f, 0.0f, 3.0f);
     Plane* background03 = new Plane(0.0f, 1.0f, 0.0f, 4.0f);
 
+    Quadratic* quad_Obj = new Quadratic(0.25f,0,0,0,0.25f,0,0,0.25f,0,-1); //ellipsoid
+    //Quadratic* quad_Obj = new Quadratic(1/2,0,0,0,1/2,0,0,-1/2,0,0); //cone
+    //quad_Obj->apply_transform(*transform);
+
 
 	DirectionalLight* dl = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
     //DirectionalLight* dl = new DirectionalLight(Vector(-1.0f, -1.0f, -1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
@@ -90,11 +95,11 @@ void build_scene(Scene& scene)
 
     pm->set_material(redPhong);
     //pm->set_material(globalMat);
-	scene.add_object(pm);
+	//scene.add_object(pm);
 
 	sphere->set_material(globalMat);
     //sphere->set_material(redPhong);
-	scene.add_object(sphere);
+	//scene.add_object(sphere);
 
     //skydome->set_material(redPhong);
     //scene.add_object(skydome);
@@ -102,9 +107,13 @@ void build_scene(Scene& scene)
     background02->set_material(greenPhong);
     background03->set_material(purplePhong);
     //background03->set_material(globalMat);
-    scene.add_object(background);
-    scene.add_object(background02);
-    scene.add_object(background03);
+    //scene.add_object(background);
+    //scene.add_object(background02);
+    //scene.add_object(background03);
+
+
+    quad_Obj->set_material(redPhong);
+    scene.add_object(quad_Obj);
 }
 
 
@@ -126,10 +135,11 @@ int main(int argc, char *argv[])
 	//Camera *camera = new SimpleCamera(0.5f);
     //postion = 0,0.1,-1
     //good test = pos=8,0,15 look=0,0,8
-    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
     //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
-	
+    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.0f, -1.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
 	camera->render(scene,*fb);
 	

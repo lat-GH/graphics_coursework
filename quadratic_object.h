@@ -27,5 +27,6 @@ class Quadratic : public Object {
 public:
   Quadratic(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j);
   Hit *intersection(Ray ray);
+  Vector calcNormal(Vector P);
   void apply_transform(Transform& trans);
 };
