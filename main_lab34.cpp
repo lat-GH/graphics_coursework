@@ -76,8 +76,8 @@ void build_scene(Scene& scene)
     Plane* background02 = new Plane(-1.0f, 0.0f, 0.0f, 3.0f);
     Plane* background03 = new Plane(0.0f, 1.0f, 0.0f, 4.0f);
 
-    Quadratic* quad_Obj = new Quadratic(0.25f,0,0,0,0.25f,0,0,0.25f,0,-1); //ellipsoid
-    //Quadratic* quad_Obj = new Quadratic(1/2,0,0,0,1/2,0,0,-1/2,0,0); //cone
+    Quadratic* quad_Obj = new Quadratic(10.0f,0,0,0,10.0f,0,0,10.0f,0,-1); //ellipsoid
+    //Quadratic* quad_Obj = new Quadratic(0.5f,0,0,0,0.5f,0,0,-0.5f,0,0); //cone
     //quad_Obj->apply_transform(*transform);
 
 
@@ -97,9 +97,9 @@ void build_scene(Scene& scene)
     //pm->set_material(globalMat);
 	//scene.add_object(pm);
 
-	sphere->set_material(globalMat);
-    //sphere->set_material(redPhong);
-	//scene.add_object(sphere);
+	//sphere->set_material(globalMat);
+    sphere->set_material(purplePhong);
+	scene.add_object(sphere);
 
     //skydome->set_material(redPhong);
     //scene.add_object(skydome);
@@ -138,7 +138,8 @@ int main(int argc, char *argv[])
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
     //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
-    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.0f, -1.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    Camera* camera = new FullCamera(350.0f, Vertex(-1000000000000.0f, 0.0f, -1000000000000.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// good to see tip of epsiloiod
+    //Camera* camera = new FullCamera(350.0f, Vertex(.0f, 0.0f, -10000000.0f), Vector(1000000.0f, 100000000000.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f)); //can see cone
 
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
 	camera->render(scene,*fb);

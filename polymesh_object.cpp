@@ -256,11 +256,6 @@ Hit* PolyMesh::intersection(Ray ray)
                 newHit->normal.negate();
             }
 
-            //TODO test how it looks without forcing the normal to face the direction of the camera
-//              //they all seem to be facing the wrong way lets just try negating them
-//              newHit->normal.negate();
-
-
             //check if entering or exiting
             if(ray.direction.dot(newHit->normal) < 0){ //if angle between is negavtive then ray is outside == entering
                 newHit->entering = true;

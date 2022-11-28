@@ -62,6 +62,7 @@ Hit *Quadratic::intersection(Ray ray)
         newHit->what = this;
 
         newHit->normal = calcNormal(newHit->position);
+        newHit->normal.normalise();
 
         newHit->entering = false; //TODO check this might not be the correct way to assign it...?
         newHit->next = 0;
@@ -85,6 +86,8 @@ Hit *Quadratic::intersection(Ray ray)
 
         hit_in->normal = calcNormal(hit_in->position);
         hit_out->normal = calcNormal(hit_out->position);
+        hit_in->normal.normalise();
+        hit_out->normal.normalise();
 
         hit_in->what = this;
         hit_out->what = this;
@@ -101,9 +104,9 @@ Hit *Quadratic::intersection(Ray ray)
 }
 
 Vector Quadratic::calcNormal(Vector P){
-    float Nx = 2* (A*P.x + B*P.y + C*P.z + D);
-    float Ny = 2* (B*P.x + E*P.y + F*P.z + G);
-    float Nz = 2* (C*P.x + F*P.y + H*P.z + I);
+    float Nx = (A*P.x + B*P.y + C*P.z + D);
+    float Ny = (B*P.x + E*P.y + F*P.z + G);
+    float Nz = (C*P.x + F*P.y + H*P.z + I);
 
     return Vector(Nx, Ny, Nz);
 }
