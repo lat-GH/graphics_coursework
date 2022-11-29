@@ -256,26 +256,80 @@ Hit* PolyMesh::intersection(Ray ray)
                 newHit->normal.negate();
             }
 
-            //check if entering or exiting
-            if(ray.direction.dot(newHit->normal) < 0){ //if angle between is negavtive then ray is outside == entering
-                newHit->entering = true;
-            }else{
-                //cout << "ray is exiting!! and the hit count =" << hitCounter <<endl;
-                newHit->entering = false;
-            }
+//            //check if entering or exiting
+//            if(ray.direction.dot(newHit->normal) < 0){ //if angle between is negavtive then ray is outside == entering
+//                newHit->entering = true;
+//            }else{
+//                //cout << "ray is exiting!! and the hit count =" << hitCounter <<endl;
+//                newHit->entering = false;
+//            }
 
-            if(hits==0){
-               hits = newHit;
-            }
-            else{
-                //if the current hit is bigger than the new hit and its positive then return the smaller of the hits
-                if(hits->t > newHit->t && newHit->t > 0){
+//            if(hits==0){
+//               hits = newHit;
+//            }
+//            else{
+//                //if the current hit is bigger than the new hit and its positive then return the smaller of the hits
+//                if(hits->t > newHit->t && newHit->t > 0){
+//                    hits = newHit;
+//                }
+//            }
+
+            //adding the newHit into the correct order in the hits list
+            if (newHit != 0)
+            {
+                if (hits != 0)
+                {
+                    Hit* step = hits;
+                    Hit* prev = 0;
+                    while (step != 0)
+                    {
+                        if (newHit->t < step->t)
+                        {
+                            // if the new hit is in front of the current step, it inserts before it.
+                            newHit->next = step;
+                            if (prev != 0)
+                            {
+                                prev->next = newHit;
+                            }
+                            else
+                            {
+                                hits = newHit;
+                            }
+                            break;
+                        }
+
+                        prev = step;
+                        step = step->next;
+                    }
+
+                    if (step == 0)
+                    {
+                        // hit if bigger than step, insert it afterwards
+                        prev->next = newHit;
+                        newHit->next = 0;
+                    }
+                }
+                else
+                {
+                    newHit->next = 0;
                     hits = newHit;
                 }
             }
 
         }
     }
+
+    //applys whether a hit point is entering or exiting based on the other they come in the hits list
+    Hit* temp = hits;
+    bool entering = true;
+
+    while (temp != 0)
+    {
+        temp->entering = entering;
+        entering = !entering;
+        temp = temp->next;
+    }
+
 
     return hits;
 }

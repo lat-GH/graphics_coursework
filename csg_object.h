@@ -31,13 +31,17 @@ public:
 		CSG_UNION=0,
 		CSG_INTER,
 		CSG_DIFF
-	};
+	} chosenMode;
 
-//BEGIN_STAGE_TWO
-//END_STAGE_TWO
+    Object *obj_A;
+    Object *obj_B;
+
+
 
 	CSG(CSG::Mode p_mode, Object* p_left, Object* p_right);
 
+
 	Hit* intersection(Ray ray);
+    void Difference(Hit* &output, Ray ray);
 	void apply_transform(Transform& transform);
 };

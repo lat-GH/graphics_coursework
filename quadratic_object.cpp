@@ -114,15 +114,26 @@ Vector Quadratic::calcNormal(Vector P){
 
 void Quadratic::apply_transform(Transform& trans)
 {
+
     //TODO work out how to assign the values from the matrix transformation to the  A,B,C,D,E,F,G,H,I,J;
     Transform Q = Transform(A,B,C,D,B,E,F,G,C,F,H,I,D,G,I,J);
     //Transform Q = Transform(&A,&B,&C,&D,&B,&E,&F,&G,&C,&F,&H,&I,&D,&G,&I,&J);
     Transform transpose = trans.transpose();
-    Transform result = transpose * Q * trans;
-    //Vector v = Vector();
-    //result.apply(v);
+    Transform temp = Q * trans;
+    Transform result = transpose * temp;
 
+    //cout<< trans.matrix[0][0] << Q.matrix[0][0] << transpose.matrix[0][0] <<  temp.matrix[0][0] << result.matrix[0][0] << endl;
 
+    A = result.matrix[0][0];
+    B = result.matrix[0][1];
+    C = result.matrix[0][2];
+    D = result.matrix[0][3];
+    E = result.matrix[1][1];
+    F = result.matrix[1][2];
+    G = result.matrix[1][3];
+    H = result.matrix[2][2];
+    I = result.matrix[2][3];
+    J = result.matrix[3][3];
 
 }
 

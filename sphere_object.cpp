@@ -28,7 +28,6 @@ Sphere::Sphere(Vertex c, float r)
 
 Hit *Sphere::intersection(Ray ray)
 {
-
 	Vector ro;
 
 	// offset ray by sphere position
