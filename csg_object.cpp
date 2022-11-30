@@ -75,17 +75,26 @@ void CSG::Difference(Hit* &output, Ray ray){
         return;
     }
 
-    while (A->next != 0 || B->next != 0){
+    int whileCounter = 0;
+    //while (A->next != 0 || B->next != 0){
+    while (A != 0 && B!= 0){
+//        cout << "while" << endl;
+        whileCounter ++;
+        //cout << "whileCounter = "<<whileCounter <<endl;
+//        if (whileCounter > 3){
+//            cout << "TOo many whiles"<< endl; // when reach here the output has sooo many items in its linked list why? after maxed out on the step counter it contiues to add the same item in over again
+//            break;
+//        }
         if(A_outside && B_outside){
             if (A->t < B->t){
                 action(output, true, A,A_outside);//keep A
             }
-            if (A->t > B->t){
+            else if (A->t > B->t){
                 //discarding B is the same as not adding it to the output,
                 //but also need to increment so looking at the next one
                 action(output, false, B,B_outside);//discard B
             }
-            if (A->t == B->t){
+            else if (A->t == B->t){
                 action(output, false, B,B_outside);//discard B
             }
         }
@@ -94,10 +103,10 @@ void CSG::Difference(Hit* &output, Ray ray){
             if (A->t < B->t){
                 action(output, true, A,A_outside);//keep A
             }
-            if (A->t > B->t){
+            else if (A->t > B->t){
                 action(output, true, B,B_outside);//keep B
             }
-            if (A->t == B->t){
+            else if (A->t == B->t){
                 action(output, true, A,A_outside);//keep A
             }
         }
@@ -105,10 +114,10 @@ void CSG::Difference(Hit* &output, Ray ray){
             if (A->t < B->t){
                 action(output, false, A,A_outside);//discard A
             }
-            if (A->t > B->t){
+            else if (A->t > B->t){
                 action(output, true, B,B_outside);//keep B
             }
-            if (A->t == B->t){
+            else if (A->t == B->t){
                 action(output, false, A,A_outside);//discard A
             }
         }
@@ -116,33 +125,52 @@ void CSG::Difference(Hit* &output, Ray ray){
             if (A->t < B->t){
                 action(output, false, A,A_outside);//discard A
             }
-            if (A->t > B->t){
+            else if (A->t > B->t){
                 action(output, false, B,B_outside);//discard B
             }
-            if (A->t == B->t){
+            else if (A->t == B->t){
                 action(output, false, B,B_outside);//discard B
             }
         }
     }
-
-    //there are no more B hits, then add the remaining As
-    if(B->next == 0 ){
-        while(A->next != 0){
-            add_to_output(output, A);
-            A = A->next;
-        }
-    }
+//
+//    int Abreak =0;
+//    //there are no more B hits, then add the remaining As
+//    if(B == NULL && A !=0){
+//        while(A !=0 && Abreak<10){
+//            Abreak ++;
+//            add_to_output(output, A);
+//            A = A->next;
+//        }
+//    }
 
 
 }
 
+//TODO this needs to be sorted and add it to the Hit class, then call it here
 void add_to_output(Hit* &output, Hit* &val){
     Hit *stepper = output;
+    int stepCounter = 0;
+    //create a pointer to the head of the Hits, and copy the value into it
+    Hit* newHit = val;
+    //then move the pointer of the hits to be looking at the next value (it has been popped off the list)
+    val = val->next;
+
+    newHit->next = 0;
+
+
     if(output != 0){
         while(stepper->next != 0){
+            stepCounter ++;
+            //cout << "stepCounter = "<< stepCounter << endl;
+//            if(stepCounter == 1){
+//                cout << "stepCounter = "<< stepCounter << endl;
+//            }
+
             stepper = stepper->next;
         }
-        stepper->next = val;
+        //how do you only add on the current val and not all of it's children?
+        stepper->next = newHit; // value is super long so gets added because the A and B are super long
 
     }else{
         output = val;
@@ -151,11 +179,15 @@ void add_to_output(Hit* &output, Hit* &val){
 
 
 
-void action(Hit* &output,bool keep, Hit* &what, bool &out){
+void action(Hit* &output,bool keep, Hit* &AorB, bool &out){
     if(keep){
-        add_to_output(output, what);
+        add_to_output(output, AorB);
     }
-    what = what->next;
+    else{
+        //add_to_output already pops it off, dont need to do it twice
+        AorB = AorB->next;
+    }
+    //filp so if it was indside its now outside
     out = !out;
 
 }

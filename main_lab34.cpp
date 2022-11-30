@@ -65,7 +65,7 @@ void build_scene(Scene& scene)
 			0.0f, 1.0f, 0.0f, 5.0f,
 			0.0f, 0.0f, 0.0f, 1.0f);
     Transform * transform02 = new Transform(1.0f, 0.0f, 0.0f, 0.0f,
-                                          0.0f, 1.0f, 0.0f, 10.7f,
+                                          0.0f, 1.0f, 0.0f, 10.7f, //try by less??????????????
                                           0.0f, 0.0f, 1.0f, 0.0f,
                                           0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -76,7 +76,7 @@ void build_scene(Scene& scene)
 	pm->apply_transform(*transform);
 
 	Sphere* sphere = new Sphere(Vertex(-0.7f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
-    Sphere* sphere02 = new Sphere(Vertex(-0.5f, 0.2f, 1.5f), 0.6f);//-1 0 2 r=0.4
+    Sphere* sphere02 = new Sphere(Vertex(-0.5f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
     //Sphere* skydome = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 50);
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
     Plane* background02 = new Plane(-1.0f, 0.0f, 0.0f, 3.0f);
@@ -84,7 +84,8 @@ void build_scene(Scene& scene)
 
     Quadratic* quad_Obj = new Quadratic(10.0f,0,0,0,10.0f,0,0,10.0f,0,-1); //ellipsoid
     //Quadratic* quad_Obj = new Quadratic(0.5f,0,0,0,0.5f,0,0,-0.5f,0,0); //cone
-    quad_Obj->apply_transform(*transform02); //step through to check if the values get changed
+    //Quadratic* quad_Obj = new Quadratic(4.0f,0,0,0,4.0f,0,0,0.0f,0,-1); //cylinder
+    //quad_Obj->apply_transform(*transform02); //step through to check if the values get changed
 
     CSG::Mode csg_mode = CSG::CSG_DIFF;
     CSG* csg_object = new CSG(csg_mode,sphere, sphere02);
@@ -108,26 +109,24 @@ void build_scene(Scene& scene)
 
 	//sphere->set_material(globalMat);
     sphere->set_material(purplePhong);
-	//scene.add_object(sphere);
+	scene.add_object(sphere);
 
     sphere02->set_material(greenPhong);
-    //scene.add_object(sphere02);
+    scene.add_object(sphere02);
 
-    //skydome->set_material(redPhong);
-    //scene.add_object(skydome);
     background->set_material(bluePhong);
     background02->set_material(greenPhong);
     background03->set_material(purplePhong);
     //background03->set_material(globalMat);
-//    scene.add_object(background);
-//    scene.add_object(background02);
-//    scene.add_object(background03);
+    scene.add_object(background);
+    scene.add_object(background02);
+    scene.add_object(background03);
 
 
     quad_Obj->set_material(redPhong);
-    scene.add_object(quad_Obj);
+    //scene.add_object(quad_Obj);
 
-    //scene.add_object(csg_object);
+    scene.add_object(csg_object);
 }
 
 
@@ -149,12 +148,13 @@ int main(int argc, char *argv[])
 	//Camera *camera = new SimpleCamera(0.5f);
     //postion = 0,0.1,-1
     //good test = pos=8,0,15 look=0,0,8
-    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
     //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
-    Camera* camera = new FullCamera(100.0f, Vertex(-100.0f, 0.0f, -100.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// good to see tip of epsiloiod
+    //Camera* camera = new FullCamera(100.0f, Vertex(-100.0f, 0.0f, -100.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// good to see tip of epsiloiod
     //Camera* camera = new FullCamera(100.0f, Vertex(.0f, 0.0f, -10000000.0f), Vector(1000000.0f, 100000000000.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f)); //can see cone
     //Camera* camera = new FullCamera(100.0f, Vertex(0.0f, 10.0f, -100.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //TODO find a camera that can see the epsilode
+    //Camera* camera = new FullCamera(100.0f, Vertex(-100.0f, 0.0f, -100.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// cylinder
 
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
 	camera->render(scene,*fb);
