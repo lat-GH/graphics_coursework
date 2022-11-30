@@ -62,6 +62,69 @@ void Hit::operator delete(void* p)
 	free_pool = (Hit*)p;
 }
 
+Hit* Hit::add_intoList(Hit* &newHit){
+    Hit *hits = this;
+    //check the hit you want to add exists
+    if (newHit != 0)
+    {
+        //check this hit isnt empty
+        if ( hits != 0)
+        {
+            Hit* step = this;
+            Hit* prev = 0;
+            //starts at the head and steps through the list
+            while (step != 0)
+            {
+                //check if the new one you want to add is less than - if so should be added in before hand
+                if (newHit->t < step->t)
+                {
+                    // if the new hit is in front of the current step, it inserts before it.
+                    newHit->next = step;
+                    if (prev != 0)
+                    {
+                        //prev will keep track of the hit before step, so that newHit can be inserted linked in (not creatign a new head, and loing all teh old list)
+                        prev->next = newHit;
+                    }
+                    else
+                    {
+                        //if there is nothing previous, it becomes the new head of the list
+                        hits = newHit;
+                    }
+                    break;
+                }
+                prev = step;
+                step = step->next;
+            }
+
+            if (step == 0)
+            {
+                //if get to end of the list will isert it at the end
+                prev->next = newHit;
+                //make sure dont keep the rest of the old hits
+                newHit->next = 0;
+            }
+        }
+        else
+        {
+            //no entries in teh list yet
+            newHit->next = 0;
+            hits = newHit;
+        }
+
+        //applys whether a hit point as entering or exiting based on thier order in the hitlist
+        Hit* temp = hits;
+        bool entering = true;
+        while (temp != 0)
+        {
+            temp->entering = entering;
+            entering = !entering;
+            temp = temp->next;
+        }
+    }
+
+    return hits;
+}
+
 ostream& operator<<(ostream& os, const Hit& h)
 {
   os << "Hit{" <<",[" << h.position.x << "," << h.position.y << "," << h.position.z << "],[" << h.normal.x << "," << h.normal.y << "," << h.normal.z << "]}\n";

@@ -43,7 +43,7 @@ Hit *Quadratic::intersection(Ray ray)
     float Px = Pos.x, Py = Pos.y, Pz = Pos.z;
     float Dx = dir.x, Dy = dir.y, Dz = dir.z;
 
-    float A_quad = (A*pow(Dx,2)) + (2*B*Dx*Dy) + (2*C*Dx*Dz) + (E*pow(Dy,2)) + (2*F*Dy*Dz) + (G*pow(Dz,2));
+    float A_quad = (A*pow(Dx,2)) + (2*B*Dx*Dy) + (2*C*Dx*Dz) + (E*pow(Dy,2)) + (2*F*Dy*Dz) + (H*pow(Dz,2));
     float B_quad  = 2*( (A*Px*Dx) + (B *(Px*Dy+Dx*Py)) + (C *(Px*Dz+Dx*Pz)) + (D*Dx) + (E*Py*Dy) + (F *(Py*Dz+Dy*Pz)) + (G*Dy) + (H*Pz*Dz) + (I*Dz));
     float C_qaud = (A*pow(Px,2)) + (2*B*Px*Py) + (2*C*Px*Pz) + (2*D*Px) + (E*pow(Py,2)) + (2*F*Py*Pz) + (2*G*Py) + (H*pow(Pz,2)) + (2*I*Pz) + J;
 

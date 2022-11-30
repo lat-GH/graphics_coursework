@@ -22,7 +22,7 @@ using namespace std;
 
 #include "csg_object.h"
 
-void add_to_output(Hit* &output, Hit* &val);
+//void add_to_output(Hit* &output, Hit* &val);
 void action(Hit* &output,bool keep, Hit* &what, bool &out);
 
 CSG::CSG(CSG::Mode p_mode, Object* p_left, Object* p_right)
@@ -41,7 +41,6 @@ Hit* CSG::intersection(Ray ray)
         //difference
         case Mode::CSG_DIFF:
         {
-            //cout<<"diff case"<<endl;
             Difference(output, ray);
         }break;
 
@@ -60,31 +59,26 @@ Hit* CSG::intersection(Ray ray)
 
 //Calculates the difference between A and B = A - B
 void CSG::Difference(Hit* &output, Ray ray){
-    Hit *A_hits = obj_A->intersection(ray);
-    Hit *B_hits = obj_B->intersection(ray);
+    Hit *A = obj_A->intersection(ray);
+    Hit *B = obj_B->intersection(ray);
 
     //ASSUME the ray starts outside of both the objects
-    //TODO set these base on thier entering values
+    //TODO set these base on thier entering values?
     bool A_outside = true;
     bool B_outside = true;
 
-    Hit *A = A_hits;
-    Hit *B = B_hits;
     //if there arent any hits dont do anything
     if (A == NULL || B == NULL ){
         return;
     }
 
     int whileCounter = 0;
-    //while (A->next != 0 || B->next != 0){
-    while (A != 0 && B!= 0){
+    //loop until run out of either As or Bs
+    while (A != NULL && B!= NULL){
 //        cout << "while" << endl;
+//        cout << "whileCounter = "<<whileCounter <<endl;
         whileCounter ++;
-        //cout << "whileCounter = "<<whileCounter <<endl;
-//        if (whileCounter > 3){
-//            cout << "TOo many whiles"<< endl; // when reach here the output has sooo many items in its linked list why? after maxed out on the step counter it contiues to add the same item in over again
-//            break;
-//        }
+
         if(A_outside && B_outside){
             if (A->t < B->t){
                 action(output, true, A,A_outside);//keep A
@@ -133,82 +127,80 @@ void CSG::Difference(Hit* &output, Ray ray){
             }
         }
     }
-//
-//    int Abreak =0;
-//    //there are no more B hits, then add the remaining As
-//    if(B == NULL && A !=0){
-//        while(A !=0 && Abreak<10){
-//            Abreak ++;
-//            add_to_output(output, A);
-//            A = A->next;
-//        }
-//    }
 
+    // If there are A left over add all A
 
-}
+    // If there are B left over, delete all B
 
-//TODO this needs to be sorted and add it to the Hit class, then call it here
-void add_to_output(Hit* &output, Hit* &val){
-    Hit *stepper = output;
-    int stepCounter = 0;
-    //create a pointer to the head of the Hits, and copy the value into it
-    Hit* newHit = val;
-    //then move the pointer of the hits to be looking at the next value (it has been popped off the list)
-    val = val->next;
-
-    newHit->next = 0;
-
-
-    if(output != 0){
-        while(stepper->next != 0){
-            stepCounter ++;
-            //cout << "stepCounter = "<< stepCounter << endl;
-//            if(stepCounter == 1){
-//                cout << "stepCounter = "<< stepCounter << endl;
-//            }
-
-            stepper = stepper->next;
-        }
-        //how do you only add on the current val and not all of it's children?
-        stepper->next = newHit; // value is super long so gets added because the A and B are super long
-
-    }else{
-        output = val;
+    //there are no more B hits, then add the remaining As
+    while(A != NULL){
+        Hit *A_single = A;
+        A = A->next;
+        output = output->add_intoList(A_single);
     }
+    //get rid of any remaining B hits
+    while(B != NULL)
+    {
+        Hit *temp = B;
+        B = B->next;
+        delete temp;
+    }
+
+
 }
 
 
-
-void action(Hit* &output,bool keep, Hit* &AorB, bool &out){
+void action(Hit* &output, bool keep, Hit* &AorB, bool &out){
     if(keep){
-        add_to_output(output, AorB);
+        //add_to_output(output, AorB);
+        Hit *AorB_single = AorB;
+        //stepping along the list to be looking at the new value
+        AorB = AorB->next;
+        output = output->add_intoList(AorB_single);
     }
     else{
-        //add_to_output already pops it off, dont need to do it twice
+        Hit* temp = AorB;
+        //stepping along the list to be looking at the new value
         AorB = AorB->next;
+        delete temp;
     }
-    //filp so if it was indside its now outside
+
+    //flip so if it was inside its now outside
     out = !out;
 
 }
 
-//            if (A->t < B->t){
-//                add_to_output(output, A);
-//                //stepping along to now look at the next value of A
-//                A = A->next;
-//                A_outside = !A_outside;
-//            }
-//            if (A->t > B->t){
-//                //discarding B is the same as not adding it to the output,
-//                //but also need to increment so looking at the next one
-//                B = B->next;
-//                B_outside = !B_outside;
-//            }
-//            if (A->t == B->t){
-//                B = B->next;
-//                B_outside = !B_outside;
-//            }
+//void add_to_output(Hit* &output, Hit* &val){
+//    Hit *stepper = output;
+//    int stepCounter = 0;
+//    //create a pointer to the head of the Hits, and copy the value into it
+//    Hit* newHit = val;
+//    //then move the pointer of the hits to be looking at the next value (it has been popped off the list)
+//    val = val->next;
+//
+//    newHit->next = 0;
+//
+//
+//    if(output != 0){
+//        while(stepper->next != 0){
+//            stepCounter ++;
+//            //cout << "stepCounter = "<< stepCounter << endl;
+////            if(stepCounter == 1){
+////                cout << "stepCounter = "<< stepCounter << endl;
+////            }
+//
+//            stepper = stepper->next;
 //        }
+//        //how do you only add on the current val and not all of it's children?
+//        stepper->next = newHit; // value is super long so gets added because the A and B are super long
+//
+//    }else{
+//        output = val;
+//    }
+//}
+
+
+
 
 
 void CSG::apply_transform(Transform& transform)
