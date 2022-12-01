@@ -43,5 +43,8 @@ public:
 
 	Hit* intersection(Ray ray);
     void Difference(Hit* &output, Ray ray);
+    void Union(Hit* &output, Ray ray);
+    void Intersection(Hit* &output, Ray ray);
 	void apply_transform(Transform& transform);
 };
+

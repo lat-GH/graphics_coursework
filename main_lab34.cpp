@@ -76,7 +76,7 @@ void build_scene(Scene& scene)
 	pm->apply_transform(*transform);
 
 	Sphere* sphere = new Sphere(Vertex(-0.7f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
-    Sphere* sphere02 = new Sphere(Vertex(-0.5f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
+    Sphere* sphere02 = new Sphere(Vertex(-0.5f, 0.1f, 1.5f), 0.6f);//-1 0 2 r=0.4
     //Sphere* skydome = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 50);
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
     Plane* background02 = new Plane(-1.0f, 0.0f, 0.0f, 3.0f);
@@ -88,6 +88,8 @@ void build_scene(Scene& scene)
     //quad_Obj->apply_transform(*transform02); //step through to check if the values get changed
 
     CSG::Mode csg_mode = CSG::CSG_DIFF;
+    //CSG::Mode csg_mode = CSG::CSG_UNION;
+    //CSG::Mode csg_mode = CSG::CSG_INTER;
     CSG* csg_object = new CSG(csg_mode,sphere, sphere02);
 
 
@@ -148,11 +150,11 @@ int main(int argc, char *argv[])
 	//Camera *camera = new SimpleCamera(0.5f);
     //postion = 0,0.1,-1
     //good test = pos=8,0,15 look=0,0,8
-    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
     //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
-//    Camera* camera = new FullCamera(100.0f, Vertex(-100.0f, 0.0f, -100.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// good to see tip of epsiloiod
-    Camera* camera = new FullCamera(350.0f, Vertex(10.0f, 0.0f, -5.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// good to see tip of epsiloiod
+//    Camera* camera = new FullCamera(100.0f, Vertex(-100.0f, 0.0f, -100.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// OLD epsiloiod
+    //Camera* camera = new FullCamera(350.0f, Vertex(10.0f, 0.0f, -5.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// NEW epsiloiod
     //Camera* camera = new FullCamera(100.0f, Vertex(.0f, 0.0f, -10000000.0f), Vector(1000000.0f, 100000000000.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f)); //can see cone
     //Camera* camera = new FullCamera(100.0f, Vertex(0.0f, 10.0f, -100.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //TODO find a camera that can see the epsilode
     //Camera* camera = new FullCamera(100.0f, Vertex(-100.0f, 0.0f, -100.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// cylinder
