@@ -62,15 +62,15 @@ void Hit::operator delete(void* p)
 	free_pool = (Hit*)p;
 }
 
-Hit* Hit::add_intoList(Hit* &newHit){
-    Hit *hits = this;
+Hit* Hit::add_intoList(Hit* &head, Hit* &newHit){
+        Hit *hits = head;
     //check the hit you want to add exists
     if (newHit != 0)
     {
         //check this hit isnt empty
         if ( hits != 0)
         {
-            Hit* step = this;
+            Hit* step = head;
             Hit* prev = 0;
             //starts at the head and steps through the list
             while (step != 0)
@@ -106,7 +106,7 @@ Hit* Hit::add_intoList(Hit* &newHit){
         }
         else
         {
-            //no entries in teh list yet
+            //no entries in the list yet
             newHit->next = 0;
             hits = newHit;
         }

@@ -89,9 +89,7 @@ void FullCamera::render(Environment& env, FrameBuffer& fb)
         for (int x = 0; x < width; x += 1)
         {
             //cout << x << "," << y << endl;
-            if (x == 282 && y == 240){
-                cout << "yo" <<endl;
-            }
+
             //rays have a position and a direction
             Ray ray;
             //for each pixel in the image calculate the corresponding ray

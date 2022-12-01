@@ -21,6 +21,7 @@
 using namespace std;
 
 #include "csg_object.h"
+#include "hit.h"
 
 //void add_to_output(Hit* &output, Hit* &val);
 void action(Hit* &output,bool keep, Hit* &what, bool &out);
@@ -63,7 +64,8 @@ void action(Hit* &output, bool keep, Hit* &AorB, bool &out){
         Hit *AorB_single = AorB;
         //stepping along the list to be looking at the new value
         AorB = AorB->next;
-        output = output->add_intoList(AorB_single);
+        cout.flush();
+        output = Hit::add_intoList(output, AorB_single);
     }
     else{
         Hit* temp = AorB;
@@ -122,7 +124,7 @@ void CSG::Difference(Hit* &output, Ray ray){
         while(A != NULL){
             Hit *A_single = A;
             A = A->next;
-            output = output->add_intoList(A_single);
+            output = Hit::add_intoList(output,A_single);
         }
         return;
     }
@@ -201,7 +203,7 @@ void CSG::Difference(Hit* &output, Ray ray){
     while(A != NULL){
         Hit *A_single = A;
         A = A->next;
-        output = output->add_intoList(A_single);
+        output = Hit::add_intoList(output,A_single);
     }
     //get rid of any remaining B hits
     while(B != NULL)
@@ -234,7 +236,7 @@ void CSG::Union(Hit* &output, Ray ray){
         {
             Hit *B_single = B;
             B = B->next;
-            output = output->add_intoList(B_single);
+            output = Hit::add_intoList(output, B_single);
         }
     }
     else if( A != NULL && B == NULL){
@@ -242,7 +244,7 @@ void CSG::Union(Hit* &output, Ray ray){
         while(A != NULL){
             Hit *A_single = A;
             A = A->next;
-            output = output->add_intoList(A_single);
+            output = Hit::add_intoList(output,A_single);
         }
     }
 
@@ -308,14 +310,14 @@ void CSG::Union(Hit* &output, Ray ray){
     while(A != NULL){
         Hit *A_single = A;
         A = A->next;
-        output = output->add_intoList(A_single);
+        output = Hit::add_intoList(output,A_single);
     }
     //if there are no more As add the remaining Bs
     while(B != NULL)
     {
         Hit *B_single = B;
         B = B->next;
-        output = output->add_intoList(B_single);
+        output = Hit::add_intoList(output, B_single);
     }
 
 }
