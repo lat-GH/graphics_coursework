@@ -46,6 +46,11 @@ public:
 	{
 
 	}
+    virtual float get_distanceToLight(Vertex &hit_position)
+    {
+        return 1000; //distance is very far away
+    }
+
 
 	// You will need additional light methods to support Photon-mapping.
 

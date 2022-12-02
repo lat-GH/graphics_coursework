@@ -44,3 +44,9 @@ void DirectionalLight::get_intensity(Vertex &surface, Colour &level)
 {
 	level = intensity;
 }
+
+float DirectionalLight::get_distanceToLight(Vertex &hit_position)
+{
+    //directionl lights re very far away
+    return 1000;
+}

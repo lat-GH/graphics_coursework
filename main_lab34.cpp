@@ -43,6 +43,7 @@
 
 // classes that contain our lights, all derived from Light
 #include "directional_light.h"
+#include "point_light.h"
 
 // classes that contain the materials applied to an object, all derived from Material
 #include "phong_material.h"
@@ -64,26 +65,26 @@ void build_scene(Scene& scene)
 			0.0f, 0.0f, 1.0f, -2.7f,
 			0.0f, 1.0f, 0.0f, 5.0f,
 			0.0f, 0.0f, 0.0f, 1.0f);
+    //transform02 just moves it up a little
     Transform * transform02 = new Transform(1.0f, 0.0f, 0.0f, 0.0f,
-                                          0.0f, 1.0f, 0.0f, 10.7f, //try by less??????????????
+                                          0.0f, 1.0f, 0.0f, 1.4f,
                                           0.0f, 0.0f, 1.0f, 0.0f,
                                           0.0f, 0.0f, 0.0f, 1.0f);
 
-	//  Read in the teapot model.
-	//PolyMesh* pm = new PolyMesh("teapot_smaller.ply", false);
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
-
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(-0.7f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
+	Sphere* sphere = new Sphere(Vertex(0.2f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
     Sphere* sphere02 = new Sphere(Vertex(-0.5f, 0.1f, 1.5f), 0.6f);//-1 0 2 r=0.4
-    //Sphere* skydome = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 50);
-    Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
-    Plane* background02 = new Plane(-1.0f, 0.0f, 0.0f, 3.0f);
-    Plane* background03 = new Plane(0.0f, 1.0f, 0.0f, 4.0f);
 
-    Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,-1.0f,0,0,1.0f,0,0); //ellipsoid
-    //Quadratic* quad_Obj = new Quadratic(0.5f,0,0,0,0.5f,0,0,-0.5f,0,0); //cone
+    Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
+    Plane* background_RHS = new Plane(-1.0f, 0.0f, 0.0f, 5.0f);
+    Plane* background_LHS = new Plane(1.0f, 0.0f, 0.0f, 5.0f);
+    Plane* background_Bottom = new Plane(0.0f, 1.0f, 0.0f, 5.0f);
+    Plane* background_Top= new Plane(0.0f, -1.0f, 0.0f, 5.0f);
+
+    //Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,4.0f,0,0,1.0f,0,-1); //cone
+    Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,-1.0f,0,0,1.0f,0,0); //cone
     //Quadratic* quad_Obj = new Quadratic(4.0f,0,0,0,4.0f,0,0,0.0f,0,-1); //cylinder
     //quad_Obj->apply_transform(*transform02); //step through to check if the values get changed
 
@@ -91,12 +92,13 @@ void build_scene(Scene& scene)
     //CSG::Mode csg_mode = CSG::CSG_UNION;
     //CSG::Mode csg_mode = CSG::CSG_INTER;
     CSG* csg_object = new CSG(csg_mode,sphere, sphere02);
+    //csg_object->apply_transform(*transform02);
 
+	//DirectionalLight* light = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f)); //1 -1 1
+    PointLight* light = new PointLight(Vertex(0.0f, -1.0f, 0.0f), Colour(1.0f, 1.0f, 1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f));
+    //Light* light = new Light();
 
-	DirectionalLight* dl = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
-    //DirectionalLight* dl = new DirectionalLight(Vector(-1.0f, -1.0f, -1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f));
-    //1 -1 1
-	scene.add_light(dl);
+	scene.add_light(light);
 
 	Phong* redPhong = new Phong(Colour(0.2f, 0.0f, 0.0f), Colour(0.4f, 0.0f, 0.0f), Colour(0.4f, 0.4f, 0.4f), 40.f);
 	Phong* bluePhong = new Phong(Colour(0.01f, 0.01f, 0.2f), Colour(0.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
@@ -109,26 +111,29 @@ void build_scene(Scene& scene)
     //pm->set_material(globalMat);
 	//scene.add_object(pm);
 
-	//sphere->set_material(globalMat);
-    sphere->set_material(purplePhong);
-	//scene.add_object(sphere);
+	sphere->set_material(globalMat);
+    //sphere->set_material(purplePhong);
+	scene.add_object(sphere);
 
     sphere02->set_material(greenPhong);
     //scene.add_object(sphere02);
 
     background->set_material(bluePhong);
-    background02->set_material(greenPhong);
-    background03->set_material(purplePhong);
-    //background03->set_material(globalMat);
+    background_RHS->set_material(greenPhong);
+    background_LHS->set_material(greenPhong);
+    background_Bottom->set_material(purplePhong);
+    background_Top->set_material(purplePhong);
     scene.add_object(background);
-    scene.add_object(background02);
-    scene.add_object(background03);
+    scene.add_object(background_RHS);
+    scene.add_object(background_LHS);
+    scene.add_object(background_Bottom);
+    scene.add_object(background_Top);
 
 
     quad_Obj->set_material(redPhong);
     //scene.add_object(quad_Obj);
 
-    scene.add_object(csg_object);
+    //scene.add_object(csg_object);
 }
 
 
@@ -150,14 +155,16 @@ int main(int argc, char *argv[])
 	//Camera *camera = new SimpleCamera(0.5f);
     //postion = 0,0.1,-1
     //good test = pos=8,0,15 look=0,0,8
-    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
     //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
-//    Camera* camera = new FullCamera(100.0f, Vertex(-100.0f, 0.0f, -100.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// OLD epsiloiod
-    //Camera* camera = new FullCamera(350.0f, Vertex(10.0f, 0.0f, -5.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// NEW epsiloiod
-    //Camera* camera = new FullCamera(100.0f, Vertex(.0f, 0.0f, -10000000.0f), Vector(1000000.0f, 100000000000.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f)); //can see cone
-    //Camera* camera = new FullCamera(100.0f, Vertex(0.0f, 10.0f, -100.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //TODO find a camera that can see the epsilode
-    //Camera* camera = new FullCamera(100.0f, Vertex(-100.0f, 0.0f, -100.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// cylinder
+    //---------box scene camera ------------
+    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -4.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+
+    //--------------CSG cameras------------------------
+    //Camera* camera = new FullCamera(350.0f, Vertex(-10.0f, 0.0f, -2.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));//epsiloiod
+    //Camera* camera = new FullCamera(350.0f, Vertex(10.0f, 0.0f, -5.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// good for cone
+
 
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
 	camera->render(scene,*fb);

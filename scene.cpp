@@ -34,7 +34,8 @@ bool Scene::shadowtrace(Ray ray, float limit)
 
 		if (hit != 0)
 		{
-          //testing if hit the same surface with the 0.0000, because it would be super close
+          //testing if hit the same surface with the 0.0000, because it would be super close,
+          //and dont want it to go past the position of the light
 		  if ((hit->t > 0.00000001f) &&( hit->t < limit))
 		    {
 			  delete hit;
@@ -172,9 +173,10 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
           if(lit){
               bool inShadow;
               Ray shadowRay;
-              int shadowRayLimit = 1000;
               //create a shadow ray between the intersection point and the light direction
               generateShadowRay(shadowRay, best_hit, ldir);
+              //get the max distance that it should trace the shadow ray till
+              int shadowRayLimit = light->get_distanceToLight(best_hit->position);
               //trace the shadow ray to see if it hits an object casting a shadow
               inShadow = shadowtrace(shadowRay, shadowRayLimit);
               //if shadow ray intersects with an object then the pixel is not lit

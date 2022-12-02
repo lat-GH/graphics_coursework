@@ -58,6 +58,7 @@ Hit* CSG::intersection(Ray ray)
 	return output;
 }
 
+// will perform the action of keeping or discarding intersections and produce the relevant resulting output of hits
 void action(Hit* &output, bool keep, Hit* &AorB, bool &out){
     if(keep){
         //add_to_output(output, AorB);
@@ -79,34 +80,6 @@ void action(Hit* &output, bool keep, Hit* &AorB, bool &out){
 
 }
 
-//void add_to_output(Hit* &output, Hit* &val){
-//    Hit *stepper = output;
-//    int stepCounter = 0;
-//    //create a pointer to the head of the Hits, and copy the value into it
-//    Hit* newHit = val;
-//    //then move the pointer of the hits to be looking at the next value (it has been popped off the list)
-//    val = val->next;
-//
-//    newHit->next = 0;
-//
-//
-//    if(output != 0){
-//        while(stepper->next != 0){
-//            stepCounter ++;
-//            //cout << "stepCounter = "<< stepCounter << endl;
-////            if(stepCounter == 1){
-////                cout << "stepCounter = "<< stepCounter << endl;
-////            }
-//
-//            stepper = stepper->next;
-//        }
-//        //how do you only add on the current val and not all of it's children?
-//        stepper->next = newHit; // value is super long so gets added because the A and B are super long
-//
-//    }else{
-//        output = val;
-//    }
-//}
 
 //Calculates the difference between A and B = A - B
 void CSG::Difference(Hit* &output, Ray ray){
@@ -139,12 +112,8 @@ void CSG::Difference(Hit* &output, Ray ray){
         return;
     }
 
-    int whileCounter = 0;
     //loop until run out of either As or Bs
     while (A != NULL && B!= NULL){
-//        cout << "while" << endl;
-//        cout << "whileCounter = "<<whileCounter <<endl;
-        whileCounter ++;
 
         if(A_outside && B_outside){
             if (A->t < B->t){
@@ -194,11 +163,6 @@ void CSG::Difference(Hit* &output, Ray ray){
             }
         }
     }
-
-    // If there are A left over add all A
-
-    // If there are B left over, delete all B
-
     //there are no more B hits, then add the remaining As
     while(A != NULL){
         Hit *A_single = A;
@@ -248,12 +212,8 @@ void CSG::Union(Hit* &output, Ray ray){
         }
     }
 
-    int whileCounter = 0;
     //loop until run out of either As or Bs
     while (A != NULL && B!= NULL){
-//        cout << "while" << endl;
-//        cout << "whileCounter = "<<whileCounter <<endl;
-        whileCounter ++;
 
         if(A_outside && B_outside){
             if (A->t < B->t){
@@ -275,7 +235,7 @@ void CSG::Union(Hit* &output, Ray ray){
                 action(output, false, B,B_outside);//discard B
             }
             else if (A->t == B->t){
-                action(output, false, B,B_outside);//discard B --- not so sure????
+                action(output, false, B,B_outside);//discard B
             }
         }
         else if(!A_outside && !B_outside){
@@ -286,7 +246,7 @@ void CSG::Union(Hit* &output, Ray ray){
                 action(output, false, B,B_outside);//discard B
             }
             else if (A->t == B->t){
-                action(output, true, A,A_outside);//keep A ----------------not certain about this one...
+                action(output, true, A,A_outside);//keep A
             }
         }
         else if(A_outside && !B_outside){
@@ -301,10 +261,6 @@ void CSG::Union(Hit* &output, Ray ray){
             }
         }
     }
-
-    // If there are A left over add all A
-
-    // If there are B left over, delete all B
 
     //there are no more B hits, then add the remaining As
     while(A != NULL){
@@ -348,12 +304,8 @@ void CSG::Intersection(Hit *&output, Ray ray) {
         return;
     }
 
-    int whileCounter = 0;
     //loop until run out of either As or Bs
     while (A != NULL && B!= NULL){
-//        cout << "while" << endl;
-//        cout << "whileCounter = "<<whileCounter <<endl;
-        whileCounter ++;
 
         if(A_outside && B_outside){
             if (A->t < B->t){
@@ -404,11 +356,7 @@ void CSG::Intersection(Hit *&output, Ray ray) {
         }
     }
 
-    // If there are A left over add all A
-
-    // If there are B left over, delete all B
-
-    //there are no more B hits, then add the remaining As
+    //get rid of any remainign As
     while(A != NULL){
         Hit *temp = A;
         A = A->next;
@@ -421,15 +369,13 @@ void CSG::Intersection(Hit *&output, Ray ray) {
         B = B->next;
         delete temp;
     }
-
-
 }
 
 
 
 void CSG::apply_transform(Transform& transform)
 {
-//BEGIN_STAGE_TWO
-//END_STAGE_TWO
+    obj_A->apply_transform(transform);
+    obj_B->apply_transform(transform);
 }
 

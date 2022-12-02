@@ -49,4 +49,4 @@ add_executable(lab03
         csg_object.h
         quadratic_object.cpp
         quadratic_object.h
-        )
+        point_light.h point_light.cpp)
