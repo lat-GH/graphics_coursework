@@ -74,7 +74,7 @@ void build_scene(Scene& scene)
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(0.2f, 0.0f, 1.5f), 0.6f);//-1 0 2 r=0.4
+	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 1.5f), 1.0f);//-1 0 2 r=0.4
     Sphere* sphere02 = new Sphere(Vertex(-0.5f, 0.1f, 1.5f), 0.6f);//-1 0 2 r=0.4
 
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
@@ -95,7 +95,8 @@ void build_scene(Scene& scene)
     //csg_object->apply_transform(*transform02);
 
 	//DirectionalLight* light = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f)); //1 -1 1
-    PointLight* light = new PointLight(Vertex(0.0f, -1.0f, 0.0f), Colour(1.0f, 1.0f, 1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f));
+    Vector lightDirection = Vector(1.0f, 4.0f, -5.0f);
+    PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection);
     //Light* light = new Light();
 
 	scene.add_light(light);
@@ -105,13 +106,15 @@ void build_scene(Scene& scene)
     Phong* greenPhong = new Phong(Colour(0.0f, 0.2f, 0.0f), Colour(0.0f, 0.5f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     Phong* purplePhong = new Phong(Colour(0.2f, 0.0f, 0.2f), Colour(1.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     FalseColour* rainbow = new FalseColour();
-    GlobalMaterial* globalMat = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 1.5);
+    GlobalMaterial* globalMat_reflect = new GlobalMaterial(&scene, Colour(0.9f, 0.9f, 0.9f), Colour(0.0f, 0.0f, 0.0f), 1.0f);
+    GlobalMaterial* globalMat_refract = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 1.5);
+
 
     pm->set_material(redPhong);
     //pm->set_material(globalMat);
 	//scene.add_object(pm);
 
-	sphere->set_material(globalMat);
+	sphere->set_material(globalMat_reflect);
     //sphere->set_material(purplePhong);
 	scene.add_object(sphere);
 
@@ -159,7 +162,7 @@ int main(int argc, char *argv[])
     //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
     //---------box scene camera ------------
-    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -4.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
 
     //--------------CSG cameras------------------------
     //Camera* camera = new FullCamera(350.0f, Vertex(-10.0f, 0.0f, -2.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));//epsiloiod

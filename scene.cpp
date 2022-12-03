@@ -177,6 +177,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
               generateShadowRay(shadowRay, best_hit, ldir);
               //get the max distance that it should trace the shadow ray till
               int shadowRayLimit = light->get_distanceToLight(best_hit->position);
+              //int shadowRayLimit = 1000;
               //trace the shadow ray to see if it hits an object casting a shadow
               inShadow = shadowtrace(shadowRay, shadowRayLimit);
               //if shadow ray intersects with an object then the pixel is not lit

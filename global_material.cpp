@@ -73,9 +73,12 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
 
     //get the reflection ratio using the frensel term
     float fresnel_reflection;
-    fresnel(viewer.direction, hit.normal, snellRatio, fresnel_reflection);
+    fresnel(viewer.direction, hit.normal, snellRatio, fresnel_reflection); //TODO work out why the fresnel term has no reflection
+    if(fresnel_reflection != 0){
+        cout << "has reflection"<< endl;
+    }
 
-    result +=  result_reflection*fresnel_reflection + result_refraction*(1-fresnel_reflection);
+    result +=  reflect_weight*result_reflection*fresnel_reflection + refract_weight*result_refraction*(1-fresnel_reflection);
     //result +=  result_reflection;
 
     return result;

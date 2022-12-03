@@ -50,6 +50,14 @@ public:
 		w = 1.0f;
 	}
 
+    Vertex(Vector v)
+    {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+        w = 1.0f;
+    }
+
 	
 	Vertex operator+(Vector const& b)
 	{
