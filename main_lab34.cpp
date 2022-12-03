@@ -74,10 +74,11 @@ void build_scene(Scene& scene)
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 1.5f), 1.0f);//-1 0 2 r=0.4
-    Sphere* sphere02 = new Sphere(Vertex(-0.5f, 0.1f, 1.5f), 0.6f);//-1 0 2 r=0.4
+	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 2.0f), 1.0f);//-1 0 2 r=0.4
+    Sphere* sphere02 = new Sphere(Vertex(1.0f, 0.1f, 0.0f), 0.6f);//-1 0 2 r=0.4
 
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
+    Plane* background_behind = new Plane(0.0f, 0.0f, 1.0f, 10.0f);
     Plane* background_RHS = new Plane(-1.0f, 0.0f, 0.0f, 5.0f);
     Plane* background_LHS = new Plane(1.0f, 0.0f, 0.0f, 5.0f);
     Plane* background_Bottom = new Plane(0.0f, 1.0f, 0.0f, 5.0f);
@@ -115,22 +116,25 @@ void build_scene(Scene& scene)
 	//scene.add_object(pm);
 
 	sphere->set_material(globalMat_reflect);
-    //sphere->set_material(purplePhong);
+    //sphere->set_material(greenPhong);
 	scene.add_object(sphere);
 
-    sphere02->set_material(greenPhong);
-    //scene.add_object(sphere02);
+    sphere02->set_material(bluePhong);
+    scene.add_object(sphere02);
 
     background->set_material(bluePhong);
     background_RHS->set_material(greenPhong);
     background_LHS->set_material(greenPhong);
     background_Bottom->set_material(purplePhong);
     background_Top->set_material(purplePhong);
+    background_behind->set_material(rainbow);
     scene.add_object(background);
+    scene.add_object(background_behind);
     scene.add_object(background_RHS);
     scene.add_object(background_LHS);
     scene.add_object(background_Bottom);
     scene.add_object(background_Top);
+
 
 
     quad_Obj->set_material(redPhong);

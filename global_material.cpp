@@ -67,26 +67,27 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
 
     Ray reflection_ray;
     reflection_ray.direction = reflect(viewer.direction, hit.normal);
-    reflection_ray.direction.normalise();
     reflection_ray.position = hit.position + 1.000005f*reflection_ray.direction; //want to start the reflection ray just above the surface
+    reflection_ray.direction.normalise();
     environment->raytrace(reflection_ray, recurse-1, result_reflection, hit.t);
 
     //get the reflection ratio using the frensel term
     float fresnel_reflection;
     fresnel(viewer.direction, hit.normal, snellRatio, fresnel_reflection); //TODO work out why the fresnel term has no reflection
-    if(fresnel_reflection != 0){
-        cout << "has reflection"<< endl;
-    }
-
+//    if(fresnel_reflection != 0){
+//        cout << "has reflection"<< endl;
+//    }
+    fresnel_reflection = 1; // even when set the reflections to 1 it still looks wrong
     result +=  reflect_weight*result_reflection*fresnel_reflection + refract_weight*result_refraction*(1-fresnel_reflection);
-    //result +=  result_reflection;
+    //result +=  result_reflection*0.8;
 
     return result;
 }
 
 
 Vector reflect(Vector Incident, Vector Normal){
-    return Incident - 2.0f * (Normal.dot(Incident)) * Normal;
+    return Incident - 2.0f * (Normal.dot(Incident)) * Normal; //original
+    //return -Incident - 2.0f * (Normal.dot(-Incident)) * Normal;
 }
 
 //void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float etai, float etat, float& reflectionTerm){
