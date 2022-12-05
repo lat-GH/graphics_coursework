@@ -74,7 +74,7 @@ void build_scene(Scene& scene)
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 2.0f), 1.0f);//-1 0 2 r=0.4
+	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, -1.0f), 0.6f);//-1 0 2 r=0.4
     Sphere* sphere02 = new Sphere(Vertex(1.0f, 0.1f, 0.0f), 0.6f);//-1 0 2 r=0.4
 
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
@@ -96,7 +96,7 @@ void build_scene(Scene& scene)
     //csg_object->apply_transform(*transform02);
 
 	//DirectionalLight* light = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f)); //1 -1 1
-    Vector lightDirection = Vector(1.0f, 4.0f, -5.0f);
+    Vector lightDirection = Vector(1.0f, 4.0f, -5.0f);//1, 4. -5
     PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection);
     //Light* light = new Light();
 
@@ -107,19 +107,19 @@ void build_scene(Scene& scene)
     Phong* greenPhong = new Phong(Colour(0.0f, 0.2f, 0.0f), Colour(0.0f, 0.5f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     Phong* purplePhong = new Phong(Colour(0.2f, 0.0f, 0.2f), Colour(1.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     FalseColour* rainbow = new FalseColour();
-    GlobalMaterial* globalMat_reflect = new GlobalMaterial(&scene, Colour(0.9f, 0.9f, 0.9f), Colour(0.0f, 0.0f, 0.0f), 1.0f);
-    GlobalMaterial* globalMat_refract = new GlobalMaterial(&scene, Colour(0.8f, 0.8f, 0.8f), Colour(0.8f, 0.8f, 0.8f), 1.5);
+    //GlobalMaterial* globalMat_reflect = new GlobalMaterial(&scene, Colour(0.9f, 0.9f, 0.9f), Colour(0.0f, 0.0f, 0.0f), 1.0f);
+    GlobalMaterial* globalMat_refract = new GlobalMaterial(&scene, Colour(0.9f, 0.9f, 0.9f), Colour(0.9f, 0.9f, 0.9f), 1.5);
 
 
     pm->set_material(redPhong);
     //pm->set_material(globalMat);
 	//scene.add_object(pm);
 
-	sphere->set_material(globalMat_reflect);
+	sphere->set_material(globalMat_refract);
     //sphere->set_material(greenPhong);
 	scene.add_object(sphere);
 
-    sphere02->set_material(bluePhong);
+    sphere02->set_material(redPhong);
     scene.add_object(sphere02);
 
     background->set_material(bluePhong);

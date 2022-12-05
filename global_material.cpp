@@ -70,17 +70,20 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
     reflection_ray.position = hit.position + 1.000005f*reflection_ray.direction; //want to start the reflection ray just above the surface
     reflection_ray.direction.normalise();
     environment->raytrace(reflection_ray, recurse-1, result_reflection, hit.t);
+//    if(reflect_weight.r == 0.0f &&  reflect_weight.g == 0.0 && reflect_weight.b == 0.0){
+//        result +=  reflect_weight*result_reflection;
+//        return result;
+//    }
 
     //get the reflection ratio using the frensel term
     float fresnel_reflection;
-    fresnel(viewer.direction, hit.normal, snellRatio, fresnel_reflection); //TODO work out why the fresnel term has no reflection
-//    if(fresnel_reflection != 0){
-//        cout << "has reflection"<< endl;
-//    }
-    fresnel_reflection = 1; // even when set the reflections to 1 it still looks wrong
-    result +=  reflect_weight*result_reflection*fresnel_reflection + refract_weight*result_refraction*(1-fresnel_reflection);
-    //result +=  result_reflection*0.8;
+    if(refract_weight.r == 0.0f &&  refract_weight.g == 0.0 && refract_weight.b == 0.0){
+        fresnel_reflection = 1;
+    }else{
+        fresnel(viewer.direction, hit.normal, snellRatio, fresnel_reflection);
+    }
 
+    result +=  reflect_weight*result_reflection*fresnel_reflection + refract_weight*result_refraction*(1-fresnel_reflection);
     return result;
 }
 
@@ -99,7 +102,7 @@ void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float snellsRatio, 
         return;
     }
     float cosTransmitted = sqrtf( cosTransmitted_squared );
-    float Rx = ((snellsRatio*cosIncident) - cosTransmitted) / ((snellsRatio*cosIncident) + cosTransmitted);
+    float Rx = ((snellsRatio*cosIncident) - cosTransmitted) / ((snellsRatio*cosIncident) + cosTransmitted); //TODO whyy is cosIncident == cosTransmitted
     float Ry = (cosIncident - (snellsRatio*cosTransmitted)) / (cosIncident + (snellsRatio*cosTransmitted));
 
     fresnel_reflection = (pow(Rx,2) + pow(Ry,2)) / 2;
