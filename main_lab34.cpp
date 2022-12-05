@@ -97,7 +97,7 @@ void build_scene(Scene& scene)
 
 	//DirectionalLight* light = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f)); //1 -1 1
     Vector lightDirection = Vector(1.0f, 4.0f, -5.0f);//1, 4. -5
-    PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection);
+    PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection, 0.5);
     //Light* light = new Light();
 
 	scene.add_light(light);

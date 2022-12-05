@@ -16,12 +16,14 @@ public:
     Vertex position;
     Colour colour;
     Vector look_at;
+    float power;
 
     PointLight();
-    PointLight(Vertex pos, Colour col, Vector look);
+    PointLight(Vertex pos, Colour col, Vector look, float n);
 
     bool get_direction(Vertex &surface, Vector &dir);
     void get_intensity(Vertex &surface, Colour &intensity);
     float get_distanceToLight(Vertex &hit_position);
+    void generate_photon(Photon &p);
 
 };

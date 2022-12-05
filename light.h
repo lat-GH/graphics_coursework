@@ -23,6 +23,7 @@
 #include "vertex.h"
 #include "vector.h"
 #include "colour.h"
+#include "photon.h"
 
 class Light {
 public:
@@ -53,5 +54,8 @@ public:
 
 
 	// You will need additional light methods to support Photon-mapping.
+    virtual void generate_photon(Photon &p){
+
+    }
 
 };

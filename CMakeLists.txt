@@ -49,4 +49,4 @@ add_executable(lab03
         csg_object.h
         quadratic_object.cpp
         quadratic_object.h
-        point_light.h point_light.cpp)
+        point_light.h point_light.cpp photon_map.h photon_map.cpp photon.h photon.cpp)
