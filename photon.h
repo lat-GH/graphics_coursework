@@ -20,6 +20,7 @@ public:
     Colour intensity; // is this the same as colour?
     Vector direction;
     Vertex position;
+    bool direct_photon = true;
     bool shadow_photon = false;
 
     //constructors

@@ -31,10 +31,11 @@ public:
     PhotonMap(Scene s);
 
     void create_map(Scene s);
-    Photon photon_trace(Photon &p);
+    void photon_trace(Photon &p);
     bool russian_roulette(Photon &p, Hit* &h);
     void add_photoToTree(Photon &p);
     Photon get_nearestPhotons(Photon &p);
+    vector<Photon> get_n_nearestPhotons(Photon &p, int n);
 
 };
 
