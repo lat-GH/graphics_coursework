@@ -1,11 +1,11 @@
 //
 // Created by latma on 05/12/2022.
 //
-
+//
 #ifndef COURSEWORK_STARTER_PHOTON_H
 #define COURSEWORK_STARTER_PHOTON_H
+//
 
-#endif //COURSEWORK_STARTER_PHOTON_H
 //#pragma once
 #include <iostream>
 
@@ -33,3 +33,5 @@ public:
     //TODO check if need to overload 'Item' too -  "const Point& Item::point() const" ??
 
 };
+
+#endif //COURSEWORK_STARTER_PHOTON_H

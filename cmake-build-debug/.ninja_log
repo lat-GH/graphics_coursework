@@ -49,3 +49,10 @@
 8	1196	6918770705602503	CMakeFiles/lab03.dir/global_material.cpp.obj	e690b1603cfd8725
 2524	3496	6917943325181921	CMakeFiles/lab03.dir/quadratic_object.cpp.obj	be718cb475ecbf92
 2465	2718	6917943317421328	CMakeFiles/lab03.dir/point_light.cpp.obj	1bc5fa21d569dcaf
+43	2142	6920406513277731	CMakeFiles/lab03.dir/scene.cpp.obj	c289fd828f839ed7
+30	2179	6920406513977781	CMakeFiles/lab03.dir/directional_light.cpp.obj	8212c0d83445dcad
+60	2478	6920406516687986	CMakeFiles/lab03.dir/global_material.cpp.obj	e690b1603cfd8725
+2148	3363	6920406526045404	CMakeFiles/lab03.dir/photon.cpp.obj	e5dac73a89a536aa
+153	4595	6920406538381523	CMakeFiles/lab03.dir/point_light.cpp.obj	1bc5fa21d569dcaf
+21	1074	6920406701603537	CMakeFiles/lab03.dir/photon.cpp.obj	e5dac73a89a536aa
+24	1072	6920407812917033	CMakeFiles/lab03.dir/photon.cpp.obj	e5dac73a89a536aa

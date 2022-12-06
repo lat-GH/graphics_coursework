@@ -5,8 +5,6 @@
 #ifndef COURSEWORK_STARTER_PHOTON_MAP_H
 #define COURSEWORK_STARTER_PHOTON_MAP_H
 
-#endif //COURSEWORK_STARTER_PHOTON_MAP_H
-
 #include <iostream>
 
 #include "colour.h"
@@ -36,6 +34,8 @@ public:
     Photon photon_trace(Photon &p);
     bool russian_roulette(Photon &p, Hit* &h);
     void add_photoToTree(Photon &p);
-    Photon* get_nearestPhotons(Photon &p);
+    Photon get_nearestPhotons(Photon &p);
 
 };
+
+#endif //COURSEWORK_STARTER_PHOTON_MAP_H

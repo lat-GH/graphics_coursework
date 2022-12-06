@@ -47,9 +47,12 @@ Photon PhotonMap::photon_trace(Photon &p){
         bool absorbed = russian_roulette(p,intersection);
         if(!absorbed){
             p.intensity += photon_trace(p).intensity;
+            return p;
         }
         else{return p;}
     }
+    //if no new intersection found, return p
+    else{return p;}
 
 }
 //?????????????this method shouldnt be altering the colour of the photon????????just generating a new direction????????
@@ -97,6 +100,6 @@ void PhotonMap::add_photoToTree(Photon &p){
     kdTree.insert(p);
 
 }
-Photon* PhotonMap::get_nearestPhotons(Photon &p){
-    kdTree.nearest(p);
+Photon PhotonMap::get_nearestPhotons(Photon &p){
+    return kdTree.nearest(p);
 }

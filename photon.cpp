@@ -23,7 +23,8 @@ float Photon::operator[] (int i) const{
     else if (i==1){return position.y;}
     else if (i==2){return position.z;}
     else{
-        cout<< "indexing a part of Photon's position that doesnt exist?"<<endl;
+        cout<< "indexing "<< i <<"a part of Photon's position that doesnt exist?"<<endl;
+        throw std::invalid_argument( "received invalid index" );
     }
 }
 
