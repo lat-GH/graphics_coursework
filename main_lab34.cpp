@@ -53,6 +53,7 @@
 //classes that contain cameras, all derived from Camera
 #include "simple_camera.h"
 #include "full_camera.h"
+#include "photon_map.h"
 
 
 using namespace std;
@@ -157,11 +158,13 @@ int main(int argc, char *argv[])
 	
 	// Setup the scene
 	build_scene(scene);
+
+    //photon mapping
+    PhotonMap photon_map = *new PhotonMap(scene);
 	
 	// Declare a camera
 	//Camera *camera = new SimpleCamera(0.5f);
-    //postion = 0,0.1,-1
-    //good test = pos=8,0,15 look=0,0,8
+
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
     //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test

@@ -19,3 +19,8 @@
 3	452	6919578323593043	build.ninja	6b6ac6ac8cb82356
 2067	3046	6917935711746246	CMakeFiles/lab03.dir/quadratic_object.cpp.obj	4ddf050d9ad64fcd
 2104	2382	6917935705085539	CMakeFiles/lab03.dir/point_light.cpp.obj	b056ae1edc900011
+5283	6667	6920405446936317	CMakeFiles/lab03.dir/photon.cpp.obj	439649bb1aa34780
+5267	6681	6920405446896319	CMakeFiles/lab03.dir/directional_light.cpp.obj	ba91b18ad2cea2d4
+5272	6720	6920405447666383	CMakeFiles/lab03.dir/scene.cpp.obj	8e502c9447266b6c
+5276	6723	6920405447686377	CMakeFiles/lab03.dir/global_material.cpp.obj	84899f09035d7f03
+5288	8066	6920405461136776	CMakeFiles/lab03.dir/point_light.cpp.obj	b056ae1edc900011

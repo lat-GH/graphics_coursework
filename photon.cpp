@@ -4,7 +4,7 @@
 #include "photon.h"
 
 Photon::Photon(){
-    intensity =  Colour(0.0f, 0.0f, 0.0f);
+    intensity =  Colour(1.0f, 1.0f, 1.0f); //start with full intensity and then slowly lose intensity as the photon travels through the scene???
     direction = Vector(0.0f, 0.0f, 0.0f);
     position = Vertex(0.0f, 0.0f, 0.0f);
 }

@@ -24,6 +24,8 @@ using namespace KD;
 
 class PhotonMap {
     typedef KD::Core<3, Photon> CORE;
+    int numberOfPhotons = 10000;
+
 public:
     Tree<CORE> kdTree = Tree<CORE>(Photon(),Photon());
     Scene scene;
@@ -32,7 +34,7 @@ public:
 
     void create_map(Scene s);
     Photon photon_trace(Photon &p);
-    bool russian_roulette(Photon &p, Hit &h);
+    bool russian_roulette(Photon &p, Hit* &h);
     void add_photoToTree(Photon &p);
     Photon* get_nearestPhotons(Photon &p);
 
