@@ -24,7 +24,6 @@
 #include "light.h"
 #include "hit.h"
 #include "environment.h"
-#include "photon_map.h"
 
 // Scene is a class that is used to build a scene database of objects
 // and lights and then trace a ray through it.
@@ -34,12 +33,11 @@ public:
 
   Object *object_list;
   Light *light_list;
-  PhotonMap photon_map;
+
 
   float ambient_intensity = 0.9f;
 
   Scene();
-  void set_photonMap(PhotonMap &p);
 
   // Filter the list of returned hits to the closest +ve
   Hit* select_first(Hit* list);
@@ -50,7 +48,8 @@ public:
 	
   // Trace a ray through the scene and return its colour. This function
   // is the one that should recurse down the reflection/refraction tree within a material
-  void raytrace(Ray ray, int recurse, Colour& colour, float& depth);
+  //void raytrace(Ray ray, int recurse, Colour& colour, float& depth);
+  void raytrace(Ray ray, int recurse, Colour &colour, float &depth);
 
   // raytrace a shadow ray.
   bool shadowtrace(Ray, float limit);

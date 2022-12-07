@@ -8,8 +8,8 @@
 using namespace std;
 
 PhotonMap::PhotonMap(Scene s){
-    scene = s;
-    create_map(scene);
+    //scene = s;
+    create_map(s);
 }
 
 void PhotonMap::create_map(Scene scene){
@@ -19,7 +19,7 @@ void PhotonMap::create_map(Scene scene){
             Photon photon = Photon(); //TODO make sure this persists in the kdtree
             //generates a photon based on the type of light in a random direction
             lights->generate_photon(photon);
-            photon_trace(photon);
+            photon_trace(photon,scene);
             add_photoToTree(photon);
         }
         lights = lights->next;
@@ -28,7 +28,7 @@ void PhotonMap::create_map(Scene scene){
 }
 
 //Photon PhotonMap::photon_trace(Photon &p){ //it not updating the colour of the photon on the unwind?
-void PhotonMap::photon_trace(Photon &p){
+void PhotonMap::photon_trace(Photon &p, Scene &scene){
     Ray incoming_ray = Ray(p.position,p.direction);
     //finds the closest thing that the photon will hit
     Hit* intersection = scene.trace(incoming_ray); //TODO do you need to add a bias to avoid colliding with the same surface over again?
@@ -44,11 +44,11 @@ void PhotonMap::photon_trace(Photon &p){
         add_photoToTree(p);
 
         //TODO add shadow_trace(); using intersection->next
-
+        //!!!!!!!!!!!!  you need to create a new photon otherwise you are altering the orignal photon again and again
         bool absorbed = russian_roulette(p,intersection);
         if(!absorbed){
             p.direct_photon = false;
-            photon_trace(p);
+            photon_trace(p,scene);
             return;
         }
         else{

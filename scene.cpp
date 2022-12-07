@@ -23,9 +23,6 @@ Scene::Scene()
 	object_list = 0;
 	light_list = 0;
 }
-void Scene::set_photonMap(PhotonMap &p){
-    photon_map = p;
-}
 
 bool Scene::shadowtrace(Ray ray, float limit)
 {
