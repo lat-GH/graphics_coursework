@@ -12,6 +12,7 @@
 #include "colour.h"
 #include "vector.h"
 #include "vertex.h"
+#include "hit.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ public:
     Colour intensity; // is this the same as colour?
     Vector direction;
     Vertex position;
+    Hit* intersection;
     bool direct_photon = true;
     bool shadow_photon = false;
 

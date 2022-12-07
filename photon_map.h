@@ -31,7 +31,7 @@ public:
     PhotonMap(Scene s); //---------------------------------why are they not yellow, not being recognised?
 
 
-        void create_map(Scene s);
+    void create_map(Scene s);
     void photon_trace(Photon &p, Scene &scene);
     bool russian_roulette(Photon &p, Hit* &h);
     void add_photoToTree(Photon &p);

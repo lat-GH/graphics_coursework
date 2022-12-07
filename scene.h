@@ -25,6 +25,10 @@
 #include "hit.h"
 #include "environment.h"
 
+#include "kd-master/src/tree.h"
+#include "kd-master/src/core.h"
+using namespace KD;
+
 // Scene is a class that is used to build a scene database of objects
 // and lights and then trace a ray through it.
 
@@ -34,8 +38,14 @@ public:
   Object *object_list;
   Light *light_list;
 
+  //storing the photon mapp in the KD tree
+  typedef KD::Core<3, Photon> CORE;
+  Tree<CORE> kdTree = Tree<CORE>(Photon(Vector(-900,-900,-900)),Photon(Vector(900,900,900)));
+
 
   float ambient_intensity = 0.9f;
+  //int numberOfPhotons = 10000;
+  int numberOfPhotons = 500;
 
   Scene();
 
@@ -58,4 +68,14 @@ public:
   void add_light(Light *light);
 
   void generateShadowRay(Ray &shadowRay, Hit *hit, Vector lit_dir);
+
+
+
+  //------------photon map--------------
+  void create_photonMap();
+  void photon_trace(Photon &p, int num_bounces);
+  bool russian_roulette(Photon p, Photon &newP);
+  void add_photoToTree(Photon &p);
+  Photon get_nearestPhotons(Photon &p);
+  vector<Photon> get_n_nearestPhotons(Photon &p, int n);
 };

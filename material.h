@@ -23,6 +23,7 @@
 #include "colour.h"
 #include "ray.h"
 #include "hit.h"
+#include "photon.h"
 
 class Material {
 public:
@@ -48,4 +49,13 @@ public:
 	}
 
 	// You will need additional material methods to support Photon-mapping.
+    virtual float get_diffuseReflectionProbability(const Photon &p)
+    {
+        //a default material will have 60% diffuse reflection
+        return 0.6f;
+    }
+    virtual float get_specularReflectionProbability(const Photon &p){
+        //a deafult material will have 40% specular reflection
+        return 0.4f;
+    }
 };

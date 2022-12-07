@@ -161,8 +161,7 @@ int main(int argc, char *argv[])
 	build_scene(scene);
 
     //photon mapping
-    PhotonMap photon_map = *new PhotonMap(scene);
-    scene.set_photonMap(photon_map);
+    scene.create_photonMap();
 	
 	// Declare a camera
 	//Camera *camera = new SimpleCamera(0.5f);

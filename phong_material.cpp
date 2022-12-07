@@ -53,5 +53,15 @@ Colour Phong::compute_per_light(Vector& viewer, Hit& hit, Vector& ldir)
     result = (diffuse_coeff * (N.dot(L))) + (specular_coeff * (pow(R.dot(V),powerOfn)));
 	return result;
 }
+//TODO have a go thinking of a different method of calculating thier probabiliyt
+float Phong::get_diffuseReflectionProbability(const Photon &p){
+    float average = (diffuse_coeff.r + diffuse_coeff.g +diffuse_coeff.b)/3;
+    return average;
+}
+
+float Phong::get_specularReflectionProbability(const Photon &p){
+    float average = (specular_coeff.r + specular_coeff.g +specular_coeff.b)/3;
+    return average;
+}
 
 

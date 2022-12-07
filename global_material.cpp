@@ -138,3 +138,32 @@ Colour GlobalMaterial::compute_per_light(Vector& viewer, Hit& hit, Vector& ldir)
     return result;
 }
 
+float  GlobalMaterial::get_diffuseReflectionProbability(const Photon &p){
+    float snellRatio;
+    //calculating the value of the snells ratio that you pass into the refract()
+    if (p.intersection->entering){
+        snellRatio = ior/1;
+    }
+    else{snellRatio = 1/ior;}
+
+    float reflection_probability;
+    Vector viewer = p.direction;
+    fresnel(viewer, p.intersection->normal, snellRatio, reflection_probability);
+    return 1- reflection_probability;
+
+}
+float  GlobalMaterial::get_specularReflectionProbability(const Photon &p){
+    float snellRatio;
+    //calculating the value of the snells ratio that you pass into the refract()
+    if (p.intersection->entering){
+        snellRatio = ior/1;
+    }
+    else{snellRatio = 1/ior;}
+
+    float reflection_probability;
+    Vector viewer = p.direction;
+    fresnel(viewer, p.intersection->normal, snellRatio, reflection_probability);
+    return reflection_probability;
+
+}
+
