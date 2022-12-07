@@ -21,12 +21,12 @@ using namespace std;
 using namespace KD;
 
 class PhotonMap {
-    typedef KD::Core<3, Photon> CORE;
+public:
+    Scene scene;
     int numberOfPhotons = 10000;
 
-public:
+    typedef KD::Core<3, Photon> CORE;
     Tree<CORE> kdTree = Tree<CORE>(Photon(),Photon());
-    Scene scene;
 
     PhotonMap(Scene s);
 

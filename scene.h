@@ -24,6 +24,7 @@
 #include "light.h"
 #include "hit.h"
 #include "environment.h"
+#include "photon_map.h"
 
 // Scene is a class that is used to build a scene database of objects
 // and lights and then trace a ray through it.
@@ -33,10 +34,12 @@ public:
 
   Object *object_list;
   Light *light_list;
+  PhotonMap photon_map;
 
   float ambient_intensity = 0.9f;
 
   Scene();
+  void set_photonMap(PhotonMap &p);
 
   // Filter the list of returned hits to the closest +ve
   Hit* select_first(Hit* list);

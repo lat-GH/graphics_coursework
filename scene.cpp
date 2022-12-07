@@ -23,6 +23,9 @@ Scene::Scene()
 	object_list = 0;
 	light_list = 0;
 }
+void Scene::set_photonMap(PhotonMap &p){
+    photon_map = p;
+}
 
 bool Scene::shadowtrace(Ray ray, float limit)
 {
@@ -146,6 +149,22 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 	  depth = best_hit->t;
       //working out the colour for the best hit
 	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
+
+      //-------photon mapping--------
+
+      int photon_sample = 10;
+      vector<Photon> photons = photon_map.get_n_nearestPhotons(Photon(best_hit->position));
+      unsigned int numPhotons = photons.size();
+      Colour colour_average = Colour();
+      for(int i=0; i<numPhotons; i++){
+          colour_average += photons[i].intensity;
+      }
+      colour_average = colour_average* (1/numPhotons);
+
+      colour += colour_average;
+
+
+      //--------------------------------
 
 	  // next, compute the light contribution for each light in the scene.
 	  Light* light = light_list;

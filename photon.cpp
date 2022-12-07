@@ -8,6 +8,9 @@ Photon::Photon(){
     direction = Vector(0.0f, 0.0f, 0.0f);
     position = Vertex(0.0f, 0.0f, 0.0f);
 }
+Photon::Photon(Vertex pos){
+    position = pos;
+}
 
 Photon::Photon(Colour col, Vector dir, Vertex pos){
     intensity =  col;

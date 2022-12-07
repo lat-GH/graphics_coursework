@@ -25,6 +25,7 @@ public:
 
     //constructors
     Photon();
+    Photon(Vertex pos);
     Photon(Colour col, Vector dir, Vertex pos);
 
     //will be populated into the kd tree based on it's Vertex position

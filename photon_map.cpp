@@ -116,6 +116,8 @@ Photon PhotonMap::get_nearestPhotons(Photon &p){
     return kdTree.nearest(p);
 }
 vector<Photon> PhotonMap::get_n_nearestPhotons(Photon &p, int n){
+    //hoping will only need to search based on the position, and wont care on the directio or the colour
+    //so the arguement photon can be empty in the sens it only has a positional value
     return kdTree.nearest(p,n);
 
 }
