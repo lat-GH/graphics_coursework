@@ -55,6 +55,11 @@ public:
 	{
 		return;
 	}
+
+    virtual int get_number()
+    {
+        return 0;
+    }
 };
 
 #endif

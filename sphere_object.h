@@ -29,4 +29,5 @@ public:
 	Sphere(Vertex c, float r);
 	Hit *intersection(Ray ray);
 	void apply_transform(Transform& trans);
+    int get_number();
 };

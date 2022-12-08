@@ -20,6 +20,8 @@
 
 #include <bits/stdc++.h>
 
+#include "sphere_object.h"
+
 Scene::Scene()
 {
 	object_list = 0;
@@ -52,23 +54,26 @@ void Scene::photon_trace(Photon &p, int num_bounces){
     Ray incoming_ray = Ray(p.position + (1.000005f*p.direction),p.direction);
     //finds the closest thing that the photon will hit
     p.intersection = trace(incoming_ray);
+//    Colour test_col = p.intersection->what->material->get_specularColour();
+//    cout<< test_col.r << test_col.g << test_col.b <<endl;
+
 
     if(p.intersection != NULL){
         //calculating the colour based on the location of the hit, in a given material? multiply it with the given colour value of the photon
-        p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour();
+        //p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour();
         //p.intensity = p.intersection->what->material->get_diffuseColour();
         //p.intensity = p.intensity + p.intersection->what->material->get_diffuseColour();
 
         //updating the position of the photon to take the position of where it hits
         p.position = p.intersection->position;
         // you need to store the photon at each intersection
-        add_photoToTree(p);
+        //add_photoToTree(p);
 
         //TODO add shadow_trace(); using intersection->next
         //need to create a new photon otherwise you are altering the orignal photon again and again
         Photon newPhoton = Photon();
         newPhoton.position = p.position;
-        newPhoton.intensity = p.intensity;
+        //newPhoton.intensity = p.intensity;
         bool absorbed = russian_roulette(p, newPhoton);
         //cout << "NEW p.direction=" << newPhoton.direction.x << newPhoton.direction.y << newPhoton.direction.z <<endl;
 
@@ -92,7 +97,8 @@ void Scene::photon_trace(Photon &p, int num_bounces){
 
 }
 
-//shouldnt be affecting the colour just generating a new directiion?????
+//decidieng the colour and whether or not to store the current photon
+//then using that to determine the direction of the new photon
 bool Scene::russian_roulette(Photon p, Photon &newP){
     float p_diffuseReflection = p.intersection->what->material->get_diffuseReflectionProbability(p);
     float p_specularReflection = p.intersection->what->material->get_specularReflectionProbability(p);
@@ -102,6 +108,11 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
     //diffusely reflected
     if(r < p_diffuseReflection){
         //cout << "diffuse" << endl;
+        //setting the colour of the photon to use th diffuse value AND adding it to the map, because it leaves some colour behind
+        p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour();
+        add_photoToTree(p);
+
+        newP.intensity = p.intensity;
         //random reflection -- new direction is a random direction within a hemisphere
         newP.generate_randomSphereDirection();
         //cout << "INSIDE =" << newP.direction.x << newP.direction.y << newP.direction.z <<endl;
@@ -115,6 +126,10 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
     //specularly reflected
     else if( r < p_specularReflection){
        // cout << "sepcular" << endl;
+        //setting the colour of the photon to use th specular value BUT not adding it to the photon map;
+        p.intensity = p.intensity * p.intersection->what->material->get_specularColour();
+        newP.intensity = p.intensity;
+
         //specualr reflection --  use reflection equation
         //Incident - 2.0f * (Normal.dot(Incident)) * Normal;
         newP.direction = newP.direction - 2.0f * (p.intersection->normal.dot(newP.direction)) * p.intersection->normal;
@@ -124,7 +139,7 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
     else{
         //cout << "absorbed" << endl;
         //photon has been absorbed
-        //and the absorbed photon has already been added to the kd tree, outisde of russian roulette
+        add_photoToTree(p);
         return true;
     }
 }
@@ -189,6 +204,9 @@ Hit *Scene::trace(Ray ray)
 
 		if (hit != 0)
 		{
+            Colour test_col = hit->what->material->get_specularColour();
+//            cout<< test_col.r << test_col.g << test_col.b <<endl;
+
 			if (best_hit == 0)
 			{
 				best_hit = hit;
@@ -207,6 +225,10 @@ Hit *Scene::trace(Ray ray)
 
 		objects = objects->next;
 	}
+
+    if(best_hit->what->get_number() == 5){
+        //cout << "Sphere" << endl;
+    }
 
 	return best_hit;
 }
@@ -271,7 +293,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
   {
 	  depth = best_hit->t;
       //working out the colour for the best hit
-	  // colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
+	  //colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
       double radius = 0.01;
       Photon bestHit_photon = Photon(best_hit->position);

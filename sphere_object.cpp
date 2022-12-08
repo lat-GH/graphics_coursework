@@ -28,7 +28,8 @@ Sphere::Sphere(Vertex c, float r)
 
 Hit *Sphere::intersection(Ray ray)
 {
-	Vector ro;
+
+    Vector ro;
 
 	// offset ray by sphere position
 	// equivalent to transforming ray into local sphere space
@@ -92,4 +93,8 @@ Hit *Sphere::intersection(Ray ray)
 void Sphere::apply_transform(Transform& transform)
 {
 	transform.apply(center);
+}
+
+int Sphere::get_number() {
+    return 5;
 }
