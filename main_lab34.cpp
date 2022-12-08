@@ -105,7 +105,7 @@ void build_scene(Scene& scene)
 
 	Phong* redPhong = new Phong(Colour(0.2f, 0.0f, 0.0f), Colour(0.4f, 0.0f, 0.0f), Colour(0.4f, 0.4f, 0.4f), 40.f);
 	Phong* bluePhong = new Phong(Colour(0.01f, 0.01f, 0.2f), Colour(0.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
-    Phong* greenPhong = new Phong(Colour(0.0f, 0.2f, 0.0f), Colour(0.0f, 0.1f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
+    Phong* greenPhong = new Phong(Colour(0.0f, 0.2f, 0.0f), Colour(0.0f, 0.5f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     Phong* purplePhong = new Phong(Colour(0.2f, 0.0f, 0.2f), Colour(1.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     FalseColour* rainbow = new FalseColour();
     GlobalMaterial* globalMat_reflect = new GlobalMaterial(&scene, Colour(0.9f, 0.9f, 0.9f), Colour(0.0f, 0.0f, 0.0f), 1.0f);

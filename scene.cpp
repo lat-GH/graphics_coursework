@@ -43,7 +43,7 @@ void Scene::create_photonMap(){
 
 //Photon PhotonMap::photon_trace(Photon &p){ //it not updating the colour of the photon on the unwind?
 void Scene::photon_trace(Photon &p, int num_bounces){
-    //cout << "p.intensity=" << p.intensity.r<< p.intensity.g << p.intensity.b << endl;
+    cout << "p.intensity=" << p.intensity.r<< p.intensity.g << p.intensity.b << endl;
     //cout << "p.direction=" << p.direction.x << p.direction.y << p.direction.z <<endl;
     //cout << "in photon_trace"<< endl;
     Ray incoming_ray = Ray(p.position,p.direction);
@@ -76,11 +76,13 @@ void Scene::photon_trace(Photon &p, int num_bounces){
             return;
         }
         else{
+            cout<< "absorbed"<<endl;
             return;
         }
     }
         //if no new intersection found, return p
     else{
+        cout<< "absorbed"<<endl;
         return;
     }
 
@@ -91,45 +93,36 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
     float p_diffuseReflection = p.intersection->what->material->get_diffuseReflectionProbability(p);
     float p_specularReflection = p.intersection->what->material->get_specularReflectionProbability(p);
 
-    //TODO - test that both probabilites add up to 1
-
-    //is the probability that it gets absorbed - the same for all materials???????
-    float p_absorbed = 0.1;
-
-//    std::random_device rd;
-//    std::mt19937 gen(rd());
-//    std::uniform_real_distribution<> dis(1.0, 2.0);
-//    float r = dis(gen)-0.5f;
     float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
-    if(r < p_absorbed){//10% absorbed
-        //if(r < p_diffuseReflection){
-        if(r < p_specularReflection){
-            cout << "diffuse" << endl;
-            //random reflection -- new direction is a random direction within a hemisphere
-            newP.generate_randomSphereDirection();
-
-            //want the direction of the new hit to move off the surface not through it
-            if(newP.direction.dot(p.intersection->normal) < 0){
-                newP.direction.negate();
-            }
-            return false;
+    //diffusely reflected
+    if(r < p_diffuseReflection){
+        //cout << "diffuse" << endl;
+        //random reflection -- new direction is a random direction within a hemisphere
+        newP.generate_randomSphereDirection();
+        //cout << "INSIDE =" << newP.direction.x << newP.direction.y << newP.direction.z <<endl;
+        //want the direction of the new hit to move off the surface not through it
+        if(newP.direction.dot(p.intersection->normal) < 0){
+            newP.direction.negate();
         }
-        else{
-            cout << "sepcular" << endl;
-            //specualr reflection --  use reflection equation
-            //Incident - 2.0f * (Normal.dot(Incident)) * Normal;
-            newP.direction = newP.direction - 2.0f * (p.intersection->normal.dot(newP.direction)) * p.intersection->normal;
+        return false;
 
-            return false;
-        }
-
-    }else{
+    }
+    //specularly reflected
+    else if( r < p_specularReflection){
+       // cout << "sepcular" << endl;
+        //specualr reflection --  use reflection equation
+        //Incident - 2.0f * (Normal.dot(Incident)) * Normal;
+        newP.direction = newP.direction - 2.0f * (p.intersection->normal.dot(newP.direction)) * p.intersection->normal;
+        //cout << "INSIDE =" << newP.direction.x << newP.direction.y << newP.direction.z <<endl;
+        return false;
+    }
+    else{
+        //cout << "absorbed" << endl;
         //photon has been absorbed
         //and the absorbed photon has already been added to the kd tree, outisde of russian roulette
         return true;
     }
-
 }
 
 void Scene::add_photoToTree(Photon &p){
@@ -282,7 +275,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
           Colour colour_average = Colour();
           //looping through all the nearest photons found, and averaging thier colour results to calculate the colour of the photon at the position og tht hit
           for(int i=0; i<numPhotons; i++){
-              //cout << "photons[i].intensity=" << photons[i].intensity.r<< photons[i].intensity.g << photons[i].intensity.b << endl;
+              cout << "photons[i].intensity=" << photons[i].intensity.r<< photons[i].intensity.g << photons[i].intensity.b << endl;
               colour_average += photons[i].intensity;
           }
           colour_average = colour_average* (1/numPhotons);
