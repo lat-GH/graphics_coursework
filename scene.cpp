@@ -43,17 +43,20 @@ void Scene::create_photonMap(){
 
 //Photon PhotonMap::photon_trace(Photon &p){ //it not updating the colour of the photon on the unwind?
 void Scene::photon_trace(Photon &p, int num_bounces){
-    cout << "p.intensity=" << p.intensity.r<< p.intensity.g << p.intensity.b << endl;
+    //cout << "p.intensity=" << p.intensity.r<< p.intensity.g << p.intensity.b << endl;
     //cout << "p.direction=" << p.direction.x << p.direction.y << p.direction.z <<endl;
     //cout << "in photon_trace"<< endl;
-    Ray incoming_ray = Ray(p.position,p.direction);
+
+    // added a bias to the ray, so doesnt shoot from exact same position
+    Ray incoming_ray = Ray(p.position + (1.000005f*p.direction),p.direction);
     //finds the closest thing that the photon will hit
-    p.intersection = trace(incoming_ray); //?????? do you need to add a bias to avoid colliding with the same surface over again?
+    p.intersection = trace(incoming_ray);
 
     if(p.intersection != NULL){
         //calculating the colour based on the location of the hit, in a given material? multiply it with the given colour value of the photon
         //p.intensity = p.intensity - p.intersection->what->material->compute_once(incoming_ray, *p.intersection, 1); //----not sure should have the * ?????
         p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour();
+        //p.intensity = p.intersection->what->material->get_diffuseColour();
 
         //updating the position of the photon to take the position of where it hits
         p.position = p.intersection->position;
@@ -76,13 +79,13 @@ void Scene::photon_trace(Photon &p, int num_bounces){
             return;
         }
         else{
-            cout<< "absorbed"<<endl;
+            //cout<< "absorbed"<<endl;
             return;
         }
     }
         //if no new intersection found, return p
     else{
-        cout<< "absorbed"<<endl;
+        //cout<< "absorbed"<<endl;
         return;
     }
 
@@ -126,7 +129,7 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
 }
 
 void Scene::add_photoToTree(Photon &p){
-    //cout << "added to tree" << endl;
+    //cout << "added to tree" << p.position.x << p.position.y << p.position.z<<  endl;
     kdTree.insert(p);
 
 }
