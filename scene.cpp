@@ -29,13 +29,14 @@ Scene::Scene()
 }
 
 void Scene::create_photonMap(){
-    //cout << "in create_photonMap"<< endl;
+    cout << "in create_photonMap"<< endl;
     Light *lights = light_list;
     while (lights != NULL){
         for( int i=0; i<numberOfPhotons; i++){
             Photon photon = Photon();
             //generates a photon based on the type of light in a random direction
             lights->generate_photon(photon);
+            /// not generating (many) 000 directions
             int bounces = 0;
             photon_trace(photon,bounces);
         }
@@ -47,12 +48,28 @@ void Scene::create_photonMap(){
 void Scene::photon_trace(Photon &p, int num_bounces){
     //cout << "in photon_trace"<< endl;
     //cout << "p.intensity=" << p.intensity.r<< p.intensity.g << p.intensity.b << endl;
-    //cout << "p.direction=" << p.direction.x << p.direction.y << p.direction.z <<endl;
+    //cout << "BEFORE p.direction=" << p.direction.x << p.direction.y << p.direction.z <<endl;
+
 
     // added a bias to the ray, so doesnt shoot from exact same position
+    /// when negate the direction of bais get shadows
     Ray incoming_ray = Ray(p.position + (1.000005f*p.direction),p.direction);
     //finds the closest thing that the photon will hit
     p.intersection = trace(incoming_ray);
+
+    if(p.intersection->what->get_ID() == 5){
+        //cout << "Sphere" << endl;
+        /// direction is almsot always 000 when hit a sphere
+        cout << "-----------p.direction=" << p.direction.x << p.direction.y << p.direction.z <<endl;
+    }
+    else{
+        ///direction is never 0 when hit the other objects
+        //cout << "p.direction=" << p.direction.x << p.direction.y << p.direction.z <<endl;
+    }
+
+    //cout << "ID=" << p.intersection->what->get_ID() << endl;
+    /// hitting the sphere here
+
 
     if(p.intersection != NULL){
 
@@ -68,6 +85,9 @@ void Scene::photon_trace(Photon &p, int num_bounces){
         //also determines the direction of the new photon
         bool absorbed = russian_roulette(p, newPhoton);
         //cout << "NEW p.direction=" << newPhoton.direction.x << newPhoton.direction.y << newPhoton.direction.z <<endl;
+//        if(newPhoton.direction.x == 0 && newPhoton.direction.y == 0 && newPhoton.direction.z == 0){
+//            cout << "zeroed" << endl;
+//        }
 
         //add a stopping case so only recurses 5times
         if(!absorbed && num_bounces < 6){
@@ -102,16 +122,24 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
         //cout << "diffuse" << endl;
         //setting the colour of the photon to use th diffuse value AND adding it to the map, because it leaves some colour behind
         p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour();
+        //cout << "ID=" << p.intersection->what->get_ID() << endl;
+        //cout <<  p.intersection->position.x <<  p.intersection->position.y <<  p.intersection->position.z << "=" << p.position.x << p.position.y << p.position.z <<endl;
         add_photoToTree(p);
 
+        /// diffuse isnt creating any 000 directions
         newP.intensity = p.intensity;
         //random reflection -- new direction is a random direction within a hemisphere
         newP.generate_randomSphereDirection();
+
         //cout << "INSIDE =" << newP.direction.x << newP.direction.y << newP.direction.z <<endl;
         //want the direction of the new hit to move off the surface not through it
         if(newP.direction.dot(p.intersection->normal) < 0){
             newP.direction.negate();
         }
+        if(newP.direction.x == 0 && newP.direction.y == 0 && newP.direction.z == 0){
+            cout << "zeroed diffuse" << endl;
+        }
+
         return false;
 
     }
@@ -122,10 +150,14 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
         p.intensity = p.intensity * p.intersection->what->material->get_specularColour();
         newP.intensity = p.intensity;
 
+        ///specular reflection are creating 000 directions
         //specualr reflection --  use reflection equation
         //Incident - 2.0f * (Normal.dot(Incident)) * Normal;
-        newP.direction = newP.direction - 2.0f * (p.intersection->normal.dot(newP.direction)) * p.intersection->normal;
+        newP.direction = p.direction - 2.0f * (p.intersection->normal.dot(p.direction)) * p.intersection->normal;
         //cout << "INSIDE =" << newP.direction.x << newP.direction.y << newP.direction.z <<endl;
+        if(newP.direction.x == 0 && newP.direction.y == 0 && newP.direction.z == 0){
+            cout << "zeroed specular" << endl;
+        }
         return false;
     }
     else{
@@ -134,6 +166,10 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
         //set the colour to be that of diffuse it has hit
         p.intensity = p.intersection->what->material->get_diffuseColour(); //TODO check what thing is it hitting
         add_photoToTree(p);
+        if(newP.direction.x == 0 && newP.direction.y == 0 && newP.direction.z == 0){
+            //cout << "zeroed absorde" << endl;
+        }
+
         return true;
     }
 }
@@ -280,6 +316,11 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
   // first step, find the closest primitive
   Hit *best_hit = this->trace(ray);
 
+    if(best_hit->what->get_ID() == 5){
+        //cout << "Sphere" << endl;
+    }
+
+
   // if we found a primitive then compute the colour we should see
   if (best_hit != 0)
   {
@@ -288,7 +329,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 	  //colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
       //-----------photon mapping ----------------
-      double radius = 0.01;
+      double radius = 0.05;
       Photon bestHit_photon = Photon(best_hit->position);
       //getting the n nearest photons to the photon at the position of the best hit
       vector<Photon> photons = get_radius_nearestPhotons(bestHit_photon, radius);
