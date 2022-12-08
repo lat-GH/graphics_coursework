@@ -34,7 +34,6 @@ void Scene::create_photonMap(){
     while (lights != NULL){
         for( int i=0; i<numberOfPhotons; i++){
             Photon photon = Photon();
-            //Photon photon = Photon(Colour(0.0f, 0.0f, 0.0f));
             //generates a photon based on the type of light in a random direction
             lights->generate_photon(photon);
             int bounces = 0;
@@ -46,34 +45,27 @@ void Scene::create_photonMap(){
 
 //Photon PhotonMap::photon_trace(Photon &p){ //it not updating the colour of the photon on the unwind?
 void Scene::photon_trace(Photon &p, int num_bounces){
+    //cout << "in photon_trace"<< endl;
     //cout << "p.intensity=" << p.intensity.r<< p.intensity.g << p.intensity.b << endl;
     //cout << "p.direction=" << p.direction.x << p.direction.y << p.direction.z <<endl;
-    //cout << "in photon_trace"<< endl;
 
     // added a bias to the ray, so doesnt shoot from exact same position
     Ray incoming_ray = Ray(p.position + (1.000005f*p.direction),p.direction);
     //finds the closest thing that the photon will hit
     p.intersection = trace(incoming_ray);
-//    Colour test_col = p.intersection->what->material->get_specularColour();
-//    cout<< test_col.r << test_col.g << test_col.b <<endl;
-
 
     if(p.intersection != NULL){
-        //calculating the colour based on the location of the hit, in a given material? multiply it with the given colour value of the photon
-        //p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour();
-        //p.intensity = p.intersection->what->material->get_diffuseColour();
-        //p.intensity = p.intensity + p.intersection->what->material->get_diffuseColour();
 
         //updating the position of the photon to take the position of where it hits
         p.position = p.intersection->position;
-        // you need to store the photon at each intersection
-        //add_photoToTree(p);
 
         //TODO add shadow_trace(); using intersection->next
         //need to create a new photon otherwise you are altering the orignal photon again and again
         Photon newPhoton = Photon();
         newPhoton.position = p.position;
-        //newPhoton.intensity = p.intensity;
+
+        //using russain roullet to determine whether the current photon stored in the tree or not and its intensity
+        //also determines the direction of the new photon
         bool absorbed = russian_roulette(p, newPhoton);
         //cout << "NEW p.direction=" << newPhoton.direction.x << newPhoton.direction.y << newPhoton.direction.z <<endl;
 
@@ -139,6 +131,8 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
     else{
         //cout << "absorbed" << endl;
         //photon has been absorbed
+        //set the colour to be that of diffuse it has hit
+        p.intensity = p.intersection->what->material->get_diffuseColour(); //TODO check what thing is it hitting
         add_photoToTree(p);
         return true;
     }
@@ -204,8 +198,6 @@ Hit *Scene::trace(Ray ray)
 
 		if (hit != 0)
 		{
-            Colour test_col = hit->what->material->get_specularColour();
-//            cout<< test_col.r << test_col.g << test_col.b <<endl;
 
 			if (best_hit == 0)
 			{
@@ -226,7 +218,7 @@ Hit *Scene::trace(Ray ray)
 		objects = objects->next;
 	}
 
-    if(best_hit->what->get_number() == 5){
+    if(best_hit->what->get_ID() == 5){
         //cout << "Sphere" << endl;
     }
 
@@ -295,6 +287,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
       //working out the colour for the best hit
 	  //colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
+      //-----------photon mapping ----------------
       double radius = 0.01;
       Photon bestHit_photon = Photon(best_hit->position);
       //getting the n nearest photons to the photon at the position of the best hit
@@ -311,6 +304,8 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
       }
 
       colour = colour + averageColour;
+
+      //--------------------------------------------
 
 	  // next, compute the light contribution for each light in the scene.
 	  Light* light = light_list;
@@ -356,19 +351,6 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 		  {
               Colour intensity;
 
-//              //-------------------photon mapping---------------
-//              double radius = 0.1;
-//              Photon bestHit_photon = Photon(best_hit->position);
-//              //getting the n nearest photons to the photon at the position of the best hit
-//              vector<Photon> photons = get_radius_nearestPhotons(bestHit_photon, radius);
-//              unsigned int numPhotons = photons.size();
-//              if (numPhotons > 0){
-//                  intensity = photons[0].intensity;
-//              }
-//              //--------------------------------------------------
-//              else{
-//
-//              }
               light->get_intensity(best_hit->position, intensity);
 
               //colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular

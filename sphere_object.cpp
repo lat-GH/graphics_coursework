@@ -95,6 +95,6 @@ void Sphere::apply_transform(Transform& transform)
 	transform.apply(center);
 }
 
-int Sphere::get_number() {
+int Sphere::get_ID() {
     return 5;
 }

@@ -56,7 +56,7 @@ public:
 		return;
 	}
 
-    virtual int get_number()
+    virtual int get_ID()
     {
         return 0;
     }

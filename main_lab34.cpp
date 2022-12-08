@@ -117,8 +117,8 @@ void build_scene(Scene& scene)
 	//scene.add_object(pm);
 
     //sphere->set_material(globalMat_reflect);
-    sphere->set_material(globalMat_refract);
-    //sphere->set_material(greenPhong);
+    //sphere->set_material(globalMat_refract);
+    sphere->set_material(greenPhong);
 	scene.add_object(sphere);
 
     sphere02->set_material(redPhong);
