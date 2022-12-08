@@ -30,8 +30,9 @@ void Scene::create_photonMap(){
     //cout << "in create_photonMap"<< endl;
     Light *lights = light_list;
     while (lights != NULL){
-        for( int i=0; i<numberOfPhotons; i++){ //TODO or should you be looping based on a value determined by the light?
-            Photon photon = Photon(); //TODO make sure this persists in the kdtree
+        for( int i=0; i<numberOfPhotons; i++){
+            Photon photon = Photon();
+            //Photon photon = Photon(Colour(0.0f, 0.0f, 0.0f));
             //generates a photon based on the type of light in a random direction
             lights->generate_photon(photon);
             int bounces = 0;
@@ -54,9 +55,9 @@ void Scene::photon_trace(Photon &p, int num_bounces){
 
     if(p.intersection != NULL){
         //calculating the colour based on the location of the hit, in a given material? multiply it with the given colour value of the photon
-        //p.intensity = p.intensity - p.intersection->what->material->compute_once(incoming_ray, *p.intersection, 1); //----not sure should have the * ?????
         p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour();
         //p.intensity = p.intersection->what->material->get_diffuseColour();
+        //p.intensity = p.intensity + p.intersection->what->material->get_diffuseColour();
 
         //updating the position of the photon to take the position of where it hits
         p.position = p.intersection->position;
@@ -270,7 +271,24 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
   {
 	  depth = best_hit->t;
       //working out the colour for the best hit
-	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
+	  // colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
+
+      double radius = 0.01;
+      Photon bestHit_photon = Photon(best_hit->position);
+      //getting the n nearest photons to the photon at the position of the best hit
+      vector<Photon> photons = get_radius_nearestPhotons(bestHit_photon, radius);
+      unsigned int numPhotons = photons.size();
+      Colour averageColour;
+      if(numPhotons > 0){
+          for(int i=0; i<numPhotons; i++){
+              averageColour += photons[i].intensity;
+          }
+          averageColour.r = averageColour.r/numPhotons;
+          averageColour.g = averageColour.g/numPhotons;
+          averageColour.b = averageColour.b/numPhotons;
+      }
+
+      colour = colour + averageColour;
 
 	  // next, compute the light contribution for each light in the scene.
 	  Light* light = light_list;
@@ -316,21 +334,22 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 		  {
               Colour intensity;
 
-              //-------------------photon mapping---------------
-              double radius = 0.1;
-              Photon bestHit_photon = Photon(best_hit->position);
-              //getting the n nearest photons to the photon at the position of the best hit
-              vector<Photon> photons = get_radius_nearestPhotons(bestHit_photon, radius);
-              unsigned int numPhotons = photons.size();
-              if (numPhotons > 0){
-                  intensity = photons[0].intensity;
-              }
-              //--------------------------------------------------
-              else{
-                  light->get_intensity(best_hit->position, intensity);
-              }
+//              //-------------------photon mapping---------------
+//              double radius = 0.1;
+//              Photon bestHit_photon = Photon(best_hit->position);
+//              //getting the n nearest photons to the photon at the position of the best hit
+//              vector<Photon> photons = get_radius_nearestPhotons(bestHit_photon, radius);
+//              unsigned int numPhotons = photons.size();
+//              if (numPhotons > 0){
+//                  intensity = photons[0].intensity;
+//              }
+//              //--------------------------------------------------
+//              else{
+//
+//              }
+              light->get_intensity(best_hit->position, intensity);
 
-			  colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
+              //colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
 
 		  }
 

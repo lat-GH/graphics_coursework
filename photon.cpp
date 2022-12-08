@@ -12,6 +12,9 @@ Photon::Photon(){
 Photon::Photon(Vertex pos){
     position = pos;
 }
+Photon::Photon(Colour col){
+    intensity = col;
+}
 
 Photon::Photon(Colour col, Vector dir, Vertex pos){
     intensity =  col;
