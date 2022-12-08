@@ -109,6 +109,7 @@ void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float snellsRatio, 
 
 }
 
+
 bool GlobalMaterial::refract_ray(Vector& viewer, Vector& Normal, float snellsRatio, Vector& refract_ray){
     //calculating the cos of the angle between the normal and the Incident ( I = -viewer)
     float cosIncident = Normal.dot(-viewer);
@@ -136,6 +137,15 @@ Colour GlobalMaterial::compute_per_light(Vector& viewer, Hit& hit, Vector& ldir)
     result.b=0.05f;
 
     return result;
+}
+
+Colour GlobalMaterial::get_diffuseColour(){
+    return Colour(0.0f, 0.0f, 0.0f);
+
+}
+Colour GlobalMaterial::get_specularColour(){
+    return Colour(1.0f, 1.0f, 1.0f);
+
 }
 
 float  GlobalMaterial::get_diffuseReflectionProbability(const Photon &p){

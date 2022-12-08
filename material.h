@@ -48,6 +48,13 @@ public:
 		return result;
 	}
 
+    virtual Colour get_diffuseColour(){
+        return Colour(0.0f, 0.0f, 0.0f);
+    }
+    virtual Colour get_specularColour(){
+        return Colour(0.0f, 0.0f, 0.0f);
+    }
+
 	// You will need additional material methods to support Photon-mapping.
     virtual float get_diffuseReflectionProbability(const Photon &p)
     {

@@ -3,7 +3,7 @@
 //
 #include "point_light.h"
 
-#include <bits/stdc++.h>
+
 using namespace std;
 
 PointLight::PointLight()
@@ -55,14 +55,7 @@ void PointLight::generate_photon(Photon &p){
     p.position.y = position.y;
     p.position.z = position.z;
 
-    //sample a random direction based on the position of the point light
-    //picking a totoally random direction will give the light a cube distribution (think chocloate orange in box)
-    //TODO try implementing a sphere distribution later
-    default_random_engine gen;
-    uniform_real_distribution<float> distribution(-1.0,1.0);
-    p.direction.x = distribution(gen);
-    p.direction.y = distribution(gen);
-    p.direction.z = distribution(gen);
+    p.generate_randomSphereDirection();
 
     //TODO might want to make it such that the photons are shot out in the direction of the hemisphere instead of out in all directions
     //add a dot product and negate agaisnt the look_at

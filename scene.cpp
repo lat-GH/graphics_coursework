@@ -27,8 +27,9 @@ Scene::Scene()
 }
 
 void Scene::create_photonMap(){
+    //cout << "in create_photonMap"<< endl;
     Light *lights = light_list;
-    while (lights->next != NULL){
+    while (lights != NULL){
         for( int i=0; i<numberOfPhotons; i++){ //TODO or should you be looping based on a value determined by the light?
             Photon photon = Photon(); //TODO make sure this persists in the kdtree
             //generates a photon based on the type of light in a random direction
@@ -42,13 +43,17 @@ void Scene::create_photonMap(){
 
 //Photon PhotonMap::photon_trace(Photon &p){ //it not updating the colour of the photon on the unwind?
 void Scene::photon_trace(Photon &p, int num_bounces){
+    //cout << "p.intensity=" << p.intensity.r<< p.intensity.g << p.intensity.b << endl;
+    //cout << "p.direction=" << p.direction.x << p.direction.y << p.direction.z <<endl;
+    //cout << "in photon_trace"<< endl;
     Ray incoming_ray = Ray(p.position,p.direction);
     //finds the closest thing that the photon will hit
     p.intersection = trace(incoming_ray); //?????? do you need to add a bias to avoid colliding with the same surface over again?
 
     if(p.intersection != NULL){
         //calculating the colour based on the location of the hit, in a given material? multiply it with the given colour value of the photon
-        p.intensity = p.intensity * p.intersection->what->material->compute_once(incoming_ray, *p.intersection, 1); //----not sure should have the * ?????
+        //p.intensity = p.intensity - p.intersection->what->material->compute_once(incoming_ray, *p.intersection, 1); //----not sure should have the * ?????
+        p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour();
 
         //updating the position of the photon to take the position of where it hits
         p.position = p.intersection->position;
@@ -58,7 +63,10 @@ void Scene::photon_trace(Photon &p, int num_bounces){
         //TODO add shadow_trace(); using intersection->next
         //need to create a new photon otherwise you are altering the orignal photon again and again
         Photon newPhoton = Photon();
+        newPhoton.position = p.position;
+        newPhoton.intensity = p.intensity;
         bool absorbed = russian_roulette(p, newPhoton);
+        //cout << "NEW p.direction=" << newPhoton.direction.x << newPhoton.direction.y << newPhoton.direction.z <<endl;
 
         //add a stopping case so only recurses 5times
         if(!absorbed && num_bounces < 6){
@@ -85,22 +93,21 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
 
     //TODO - test that both probabilites add up to 1
 
-    //is the probability that it gets absorbed - the same for all materials
+    //is the probability that it gets absorbed - the same for all materials???????
     float p_absorbed = 0.1;
 
-    default_random_engine gen;
-    uniform_real_distribution<float> distribution(0.0,1.0);
-    float r = distribution(gen);
+//    std::random_device rd;
+//    std::mt19937 gen(rd());
+//    std::uniform_real_distribution<> dis(1.0, 2.0);
+//    float r = dis(gen)-0.5f;
+    float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
     if(r < p_absorbed){//10% absorbed
-        if(r < p_diffuseReflection){
-
+        //if(r < p_diffuseReflection){
+        if(r < p_specularReflection){
+            cout << "diffuse" << endl;
             //random reflection -- new direction is a random direction within a hemisphere
-            default_random_engine gen02;
-            uniform_real_distribution<float> distribution(-1.0,1.0);
-            newP.direction.x = distribution(gen02);
-            newP.direction.y = distribution(gen02);
-            newP.direction.z = distribution(gen02);
+            newP.generate_randomSphereDirection();
 
             //want the direction of the new hit to move off the surface not through it
             if(newP.direction.dot(p.intersection->normal) < 0){
@@ -109,6 +116,7 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
             return false;
         }
         else{
+            cout << "sepcular" << endl;
             //specualr reflection --  use reflection equation
             //Incident - 2.0f * (Normal.dot(Incident)) * Normal;
             newP.direction = newP.direction - 2.0f * (p.intersection->normal.dot(newP.direction)) * p.intersection->normal;
@@ -125,6 +133,7 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
 }
 
 void Scene::add_photoToTree(Photon &p){
+    //cout << "added to tree" << endl;
     kdTree.insert(p);
 
 }
@@ -273,11 +282,15 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
           Colour colour_average = Colour();
           //looping through all the nearest photons found, and averaging thier colour results to calculate the colour of the photon at the position og tht hit
           for(int i=0; i<numPhotons; i++){
+              //cout << "photons[i].intensity=" << photons[i].intensity.r<< photons[i].intensity.g << photons[i].intensity.b << endl;
               colour_average += photons[i].intensity;
           }
           colour_average = colour_average* (1/numPhotons);
 
+          //cout << "old colour" << colour.r<< colour.g << colour.b << endl;
+          //cout << "average colour" << colour_average.r<< colour_average.g << colour_average.b << endl;
           colour += colour_average;
+          //cout << "new colour" << colour.r<< colour.g << colour.b << endl;
       }
 
 

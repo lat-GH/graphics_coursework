@@ -45,7 +45,7 @@ public:
 
   float ambient_intensity = 0.9f;
   //int numberOfPhotons = 10000;
-  int numberOfPhotons = 500;
+  int numberOfPhotons = 1000;
 
   Scene();
 

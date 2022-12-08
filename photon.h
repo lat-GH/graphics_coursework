@@ -36,6 +36,8 @@ public:
     bool operator == (Photon p) const;
     //TODO check if need to overload 'Item' too -  "const Point& Item::point() const" ??
 
+    void generate_randomSphereDirection();
+
 };
 
 #endif //COURSEWORK_STARTER_PHOTON_H

@@ -107,6 +107,16 @@ public:
 		return result;
 	}
 
+    Colour operator- (Colour other)
+    {
+        Colour result;
+        result.r = r - other.r;
+        result.g = g - other.g;
+        result.b = b - other.b;
+        result.a = a - other.a;
+        return result;
+    }
+
 	Colour operator* (float rhs)
 	{
 		Colour result;

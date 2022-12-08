@@ -40,6 +40,8 @@ public:
 
     Colour compute_per_light(Vector& viewer, Hit& hit, Vector& ldir);
 
+    Colour get_diffuseColour();
+    Colour get_specularColour();
     float get_diffuseReflectionProbability(const Photon &p);
     float get_specularReflectionProbability(const Photon &p);
 
