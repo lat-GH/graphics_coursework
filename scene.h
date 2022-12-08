@@ -45,7 +45,7 @@ public:
 
   float ambient_intensity = 0.9f;
   //int numberOfPhotons = 10000;
-  int numberOfPhotons = 1000;
+  int numberOfPhotons = 10000;
 
   Scene();
 
@@ -78,4 +78,5 @@ public:
   void add_photoToTree(Photon &p);
   Photon get_nearestPhotons(Photon &p);
   vector<Photon> get_n_nearestPhotons(Photon &p, int n);
+  vector<Photon> get_radius_nearestPhotons(Photon &p, double n);
 };

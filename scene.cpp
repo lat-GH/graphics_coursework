@@ -133,10 +133,16 @@ void Scene::add_photoToTree(Photon &p){
 Photon Scene::get_nearestPhotons(Photon &p){
     return kdTree.nearest(p);
 }
-vector<Photon> Scene::get_n_nearestPhotons(Photon &p, int n){ // TODO try updating this one to the one which uses the Coord radius, coord is a double
+vector<Photon> Scene::get_n_nearestPhotons(Photon &p, int n){
     //hoping will only need to search based on the position, and wont care on the directio or the colour
     //so the arguement photon can be empty in the sens it only has a positional value
     return kdTree.nearest(p,n);
+
+}
+vector<Photon> Scene::get_radius_nearestPhotons(Photon &p, double n){ // TODO try updating this one to the one which uses the Coord radius, coord is a double
+    //hoping will only need to search based on the position, and wont care on the directio or the colour
+    //so the arguement photon can be empty in the sens it only has a positional value
+    return kdTree.within(p,n);
 
 }
 
@@ -263,33 +269,6 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
       //working out the colour for the best hit
 	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
-      //-------photon mapping--------
-
-      int photon_sample = 10;
-      Photon bestHit_photon = Photon(best_hit->position);
-      //getting the n nearest photons to the photon at the position of the best hit
-      vector<Photon> photons = get_n_nearestPhotons(bestHit_photon, photon_sample); //TODO - check that this method can find the photon you are looking for
-
-      unsigned int numPhotons = photons.size();
-      if (numPhotons > 0){
-          Colour colour_average = Colour();
-          //looping through all the nearest photons found, and averaging thier colour results to calculate the colour of the photon at the position og tht hit
-          for(int i=0; i<numPhotons; i++){
-              cout << "photons[i].intensity=" << photons[i].intensity.r<< photons[i].intensity.g << photons[i].intensity.b << endl;
-              colour_average += photons[i].intensity;
-          }
-          colour_average = colour_average* (1/numPhotons);
-
-          //cout << "old colour" << colour.r<< colour.g << colour.b << endl;
-          //cout << "average colour" << colour_average.r<< colour_average.g << colour_average.b << endl;
-          colour += colour_average;
-          //cout << "new colour" << colour.r<< colour.g << colour.b << endl;
-      }
-
-
-
-      //--------------------------------
-
 	  // next, compute the light contribution for each light in the scene.
 	  Light* light = light_list;
 	  while (light != (Light*)0)
@@ -332,10 +311,22 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 
 		  if (lit)
 		  {
-			  Colour intensity;
-			  
-			  light->get_intensity(best_hit->position, intensity);
-			  
+              Colour intensity;
+
+              //-------------------photon mapping---------------
+              double radius = 0.1;
+              Photon bestHit_photon = Photon(best_hit->position);
+              //getting the n nearest photons to the photon at the position of the best hit
+              vector<Photon> photons = get_radius_nearestPhotons(bestHit_photon, radius);
+              unsigned int numPhotons = photons.size();
+              if (numPhotons > 0){
+                  intensity = photons[0].intensity;
+              }
+              //--------------------------------------------------
+              else{
+                  light->get_intensity(best_hit->position, intensity);
+              }
+
 			  colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
 
 		  }
