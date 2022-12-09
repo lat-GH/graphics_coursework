@@ -340,7 +340,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 	  //colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
       //-----------photon mapping ----------------
-      double radius = 0.5;
+      double radius = 0.01;
       Photon bestHit_photon = Photon(best_hit->position);
       ///hitting spheres here
 //      if(best_hit->what->get_ID() == 5){
@@ -418,7 +418,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 
               light->get_intensity(best_hit->position, intensity);
 
-              colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
+              //colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
 
 		  }
 

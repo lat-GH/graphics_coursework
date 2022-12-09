@@ -75,7 +75,7 @@ void build_scene(Scene& scene)
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 0.6f);//-1 0 2 r=0.4
+	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 1.0f);//-1 0 2 r=0.4
     Sphere* sphere02 = new Sphere(Vertex(1.0f, 0.1f, 1.5f), 0.6f);//-1 0 2 r=0.4
 
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
@@ -97,7 +97,8 @@ void build_scene(Scene& scene)
     //csg_object->apply_transform(*transform02);
 
 	//DirectionalLight* light = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f)); //1 -1 1
-    Vector lightDirection = Vector(3.0f, 4.0f, -5.0f);//1, 4. -5
+    //Vector lightDirection = Vector(3.0f, 4.0f, -5.0f);//1, 4. -5
+    Vector lightDirection = Vector(0.0f, 0.0f, -5.0f);//1, 4. -5
     PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection, 0.5);
     //Light* light = new Light();
 
@@ -114,15 +115,15 @@ void build_scene(Scene& scene)
 
     pm->set_material(redPhong);
     //pm->set_material(globalMat);
-	//scene.add_object(pm);
+	scene.add_object(pm);
 
     //sphere->set_material(globalMat_reflect);
     //sphere->set_material(globalMat_refract);
-    sphere->set_material(greenPhong);
-	scene.add_object(sphere);
+    sphere->set_material(redPhong);
+	//scene.add_object(sphere);
 
     sphere02->set_material(redPhong);
-    scene.add_object(sphere02);
+    //scene.add_object(sphere02);
 
     background->set_material(bluePhong);
     background_RHS->set_material(greenPhong);

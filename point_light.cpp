@@ -56,9 +56,9 @@ void PointLight::generate_photon(Photon &p){
     p.position.z = position.z;
 
     p.generate_randomSphereDirection();
-
-    //TODO might want to make it such that the photons are shot out in the direction of the hemisphere instead of out in all directions
-    //add a dot product and negate agaisnt the look_at
-
+    //forcing photons to only be generating in the random direction in the look_at hemisphere
+    if(p.direction.dot(look_at) < 0){
+        p.direction.negate();
+    }
 
 }
