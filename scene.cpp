@@ -153,7 +153,9 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
         if(newP.direction.dot(p.intersection->normal) < 0){
             newP.direction.negate();
         }
+
         return false;
+
 
     }
     //specularly reflected
@@ -169,7 +171,10 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
         //specualr reflection --  use reflection equation
         //Incident - 2.0f * (Normal.dot(Incident)) * Normal;
         newP.direction = p.direction - 2.0f * (p.intersection->normal.dot(p.direction)) * p.intersection->normal;
+
         return false;
+
+
     }
     else{
 //        if(p.intersection->what->get_ID() == 5){
@@ -179,7 +184,6 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
         //photon has been absorbed
         //set the colour to be that of diffuse it has hit
         p.intensity = p.intersection->what->material->get_diffuseColour(); //TODO check what thing is it hitting
-        add_photoToTree(p);
         return true;
     }
 }
@@ -340,7 +344,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 	  //colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
       //-----------photon mapping ----------------
-      double radius = 0.01;
+      double radius = 0.5;
       Photon bestHit_photon = Photon(best_hit->position);
       ///hitting spheres here
 //      if(best_hit->what->get_ID() == 5){
@@ -418,7 +422,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 
               light->get_intensity(best_hit->position, intensity);
 
-              //colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
+              colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
 
 		  }
 

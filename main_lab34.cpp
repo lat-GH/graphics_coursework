@@ -68,8 +68,8 @@ void build_scene(Scene& scene)
 			0.0f, 0.0f, 0.0f, 1.0f);
     //transform02 just moves it up a little
     Transform * transform02 = new Transform(1.0f, 0.0f, 0.0f, 0.0f,
-                                          0.0f, 1.0f, 0.0f, 1.4f,
-                                          0.0f, 0.0f, 1.0f, 0.0f,
+                                          0.0f, 1.0f, 0.0f, -0.5f,
+                                          0.0f, 0.0f, 1.0f, -2.0f,
                                           0.0f, 0.0f, 0.0f, 1.0f);
 
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
@@ -85,10 +85,10 @@ void build_scene(Scene& scene)
     Plane* background_Bottom = new Plane(0.0f, 1.0f, 0.0f, 5.0f);
     Plane* background_Top= new Plane(0.0f, -1.0f, 0.0f, 5.0f);
 
-    //Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,4.0f,0,0,1.0f,0,-1); //cone
-    Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,-1.0f,0,0,1.0f,0,0); //cone
+    Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,1.0f,0,0,1.0f,0,-1); //epsilode
+    //Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,-1.0f,0,0,1.0f,0,0); //cone
     //Quadratic* quad_Obj = new Quadratic(4.0f,0,0,0,4.0f,0,0,0.0f,0,-1); //cylinder
-    //quad_Obj->apply_transform(*transform02); //step through to check if the values get changed
+    quad_Obj->apply_transform(*transform02); //step through to check if the values get changed
 
     CSG::Mode csg_mode = CSG::CSG_DIFF;
     //CSG::Mode csg_mode = CSG::CSG_UNION;
@@ -115,7 +115,7 @@ void build_scene(Scene& scene)
 
     pm->set_material(redPhong);
     //pm->set_material(globalMat);
-	scene.add_object(pm);
+	//scene.add_object(pm);
 
     //sphere->set_material(globalMat_reflect);
     //sphere->set_material(globalMat_refract);
@@ -141,9 +141,11 @@ void build_scene(Scene& scene)
 
 
     quad_Obj->set_material(redPhong);
-    //scene.add_object(quad_Obj);
+    scene.add_object(quad_Obj);
 
     //scene.add_object(csg_object);
+
+    //scene.add_object(sphere);
 }
 
 
