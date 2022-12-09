@@ -97,6 +97,7 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
 
     float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
+    if (r )
     //diffusely reflected
     if(r < p_diffuseReflection){
         //setting the colour of the photon to use th diffuse value AND adding it to the map, because it leaves some colour behind
@@ -282,10 +283,11 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
   {
 	  depth = best_hit->t;
       //working out the colour for the best hit
-	  //colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
+      //will return you the ambient term
+	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
       //-----------photon mapping ----------------
-      double radius = 0.8;
+      double radius = 0.1;
       Photon bestHit_photon = Photon(best_hit->position);
 
       //getting the n nearest photons to the photon at the position of the best hit
@@ -311,12 +313,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
                   colour_wieght = 1 - curr_radius/radius_length;
                   averageColour += photons[i].intensity * colour_wieght;
               }
-              else{
-                  //cout<< "not same object" << endl;
-              }
-
-
-          }
+           }
           averageColour.r = averageColour.r/numPhotons;
           averageColour.g = averageColour.g/numPhotons;
           averageColour.b = averageColour.b/numPhotons;

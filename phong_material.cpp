@@ -21,6 +21,7 @@
 #include "phong_material.h"
 
 #include <math.h>
+#include <initializer_list>
 
 Phong::Phong(Colour p_ambient, Colour p_diffuse, Colour p_specular, float p_power)
 {
@@ -74,14 +75,29 @@ Colour  Phong::get_specularColour(){
 //
 //}
 
+float Phong::get_probabilityOfReflection(){
+    float red = diffuse_coeff.r + specular_coeff.r;
+    float blue = diffuse_coeff.b + specular_coeff.b;
+    float green = diffuse_coeff.g + specular_coeff.g;
+
+    float max;
+    if(red>blue){max=red;}
+    else{max=blue;}
+    if(max<green){max=green;}
+
+    return max;
+}
+
 float Phong::get_diffuseReflectionProbability(const Photon &p){
-    float average = (diffuse_coeff.r + diffuse_coeff.g +diffuse_coeff.b)/3;
-    return average;
+
+    float numerator = diffuse_coeff.r + diffuse_coeff.g +diffuse_coeff.b;
+    float denominator = numerator + specular_coeff.r + specular_coeff.g +specular_coeff.b;
+    return (numerator/ denominator) * get_probabilityOfReflection();
+
 }
 
 float Phong::get_specularReflectionProbability(const Photon &p){
-    float average = (specular_coeff.r + specular_coeff.g +specular_coeff.b)/3;
-    return average;
+    return get_probabilityOfReflection() - get_diffuseReflectionProbability(p);
 }
 
 

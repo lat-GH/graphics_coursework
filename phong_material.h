@@ -35,5 +35,6 @@ public:
 
     float get_diffuseReflectionProbability(const Photon &p);
     float get_specularReflectionProbability(const Photon &p);
+    float get_probabilityOfReflection();
 
 };
