@@ -56,9 +56,9 @@ void PointLight::generate_photon(Photon &p){
     p.position.z = position.z;
 
     p.generate_randomSphereDirection();
-    //forcing photons to only be generating in the random direction in the look_at hemisphere
-    if(p.direction.dot(look_at) < 0){
-        p.direction.negate();
-    }
+//    //forcing photons to only be generating in the random direction in the look_at hemisphere
+//    if(p.direction.dot(look_at) < 0){
+//        p.direction.negate();
+//    }
 
 }

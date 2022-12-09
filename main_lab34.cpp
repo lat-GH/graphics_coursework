@@ -71,6 +71,10 @@ void build_scene(Scene& scene)
                                           0.0f, 1.0f, 0.0f, -0.5f,
                                           0.0f, 0.0f, 1.0f, -2.0f,
                                           0.0f, 0.0f, 0.0f, 1.0f);
+    Transform * transform03 = new Transform(1.0f, 0.0f, 0.0f, 1.0f,
+                                            0.0f, 1.0f, 0.0f, 0.0f,
+                                            0.0f, 0.0f, 1.0f, -1.0f,
+                                            0.0f, 0.0f, 0.0f, 1.0f);
 
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
 	pm->apply_transform(*transform);
@@ -88,7 +92,7 @@ void build_scene(Scene& scene)
     Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,1.0f,0,0,1.0f,0,-1); //epsilode
     //Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,-1.0f,0,0,1.0f,0,0); //cone
     //Quadratic* quad_Obj = new Quadratic(4.0f,0,0,0,4.0f,0,0,0.0f,0,-1); //cylinder
-    quad_Obj->apply_transform(*transform02); //step through to check if the values get changed
+    quad_Obj->apply_transform(*transform03); //step through to check if the values get changed
 
     CSG::Mode csg_mode = CSG::CSG_DIFF;
     //CSG::Mode csg_mode = CSG::CSG_UNION;
@@ -97,17 +101,17 @@ void build_scene(Scene& scene)
     //csg_object->apply_transform(*transform02);
 
 	//DirectionalLight* light = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f)); //1 -1 1
-    //Vector lightDirection = Vector(3.0f, 4.0f, -5.0f);//1, 4. -5
-    Vector lightDirection = Vector(0.0f, 0.0f, -5.0f);//1, 4. -5
+    Vector lightDirection = Vector(3.0f, 4.0f, -5.0f);//1, 4. -5
+    //Vector lightDirection = Vector(0.0f, 0.0f, -5.0f);//1, 4. -5
     PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection, 0.5);
     //Light* light = new Light();
 
 	scene.add_light(light);
 
-	Phong* redPhong = new Phong(Colour(0.2f, 0.0f, 0.0f), Colour(0.4f, 0.0f, 0.0f), Colour(0.4f, 0.4f, 0.4f), 40.f);
-	Phong* bluePhong = new Phong(Colour(0.01f, 0.01f, 0.2f), Colour(0.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
-    Phong* greenPhong = new Phong(Colour(0.0f, 0.2f, 0.0f), Colour(0.0f, 0.5f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
-    Phong* purplePhong = new Phong(Colour(0.2f, 0.0f, 0.2f), Colour(1.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
+	Phong* redPhong = new Phong(Colour(0.01f, 0.01f, 0.01f), Colour(1.0f, 0.0f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
+	Phong* bluePhong = new Phong(Colour(0.01f, 0.01f, 0.01f), Colour(0.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
+    Phong* greenPhong = new Phong(Colour(0.01f, 0.01f, 0.01f), Colour(0.0f, 1.0f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
+    Phong* purplePhong = new Phong(Colour(0.01f, 0.01f, 0.01f), Colour(1.0f, 0.0f, 1.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
     FalseColour* rainbow = new FalseColour();
     GlobalMaterial* globalMat_reflect = new GlobalMaterial(&scene, Colour(0.9f, 0.9f, 0.9f), Colour(0.0f, 0.0f, 0.0f), 1.0f);
     GlobalMaterial* globalMat_refract = new GlobalMaterial(&scene, Colour(0.9f, 0.9f, 0.9f), Colour(0.9f, 0.9f, 0.9f), 1.5);
@@ -125,11 +129,11 @@ void build_scene(Scene& scene)
     sphere02->set_material(redPhong);
     //scene.add_object(sphere02);
 
-    background->set_material(bluePhong);
-    background_RHS->set_material(greenPhong);
-    background_LHS->set_material(greenPhong);
-    background_Bottom->set_material(purplePhong);
-    background_Top->set_material(purplePhong);
+    background->set_material(greenPhong);
+    background_RHS->set_material(purplePhong);
+    background_LHS->set_material(purplePhong);
+    background_Bottom->set_material(bluePhong);
+    background_Top->set_material(bluePhong);
     background_behind->set_material(rainbow);
     scene.add_object(background);
     scene.add_object(background_behind);
@@ -140,7 +144,7 @@ void build_scene(Scene& scene)
 
 
 
-    quad_Obj->set_material(redPhong);
+    quad_Obj->set_material(purplePhong);
     scene.add_object(quad_Obj);
 
     //scene.add_object(csg_object);

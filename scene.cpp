@@ -331,8 +331,8 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
   Hit *best_hit = this->trace(ray);
     //cout << best_hit->what->get_ID() << endl;
   /// we are hitting spheres and planes
-//    if(best_hit->what->get_ID() == 5){
-//        cout << "Sphere" << endl;
+//    if(best_hit->what->get_ID() == 4){
+//        //cout << "Quad" << endl;
 //    }
 
 
@@ -341,10 +341,10 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
   {
 	  depth = best_hit->t;
       //working out the colour for the best hit
-	  //colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
+	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
       //-----------photon mapping ----------------
-      double radius = 0.5;
+      double radius = 0.8;
       Photon bestHit_photon = Photon(best_hit->position);
       ///hitting spheres here
 //      if(best_hit->what->get_ID() == 5){
@@ -363,9 +363,18 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 //      }
       Colour averageColour;
       if(numPhotons > 0){
-          for(int i=0; i<numPhotons; i++){
-              averageColour += photons[i].intensity;
+          //the wieghting of the colour of the pixel should be based on its distamce from the middle pixel
+          //when at the same position as the og photon wieght =1,  when at the distance of the radius wieght=0
+          float colour_wieght;
+          float radius_length = (bestHit_photon.position - photons[numPhotons-1].position).length();
 
+          for(int i=0; i<numPhotons; i++){
+              //calculates the distance from the pixel
+              float curr_radius = (bestHit_photon.position - photons[i].position).length();
+              //get the ratio of the distance away from the og photon vs the radius,
+              // then subtract it from 1 so 1 at center and 0 at edge
+              colour_wieght = 1 - curr_radius/radius_length;
+              averageColour += photons[i].intensity * colour_wieght;
           }
           averageColour.r = averageColour.r/numPhotons;
           averageColour.g = averageColour.g/numPhotons;

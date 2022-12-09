@@ -137,3 +137,8 @@ void Quadratic::apply_transform(Transform& trans)
 
 }
 
+int Quadratic::get_ID()
+{
+    return 4;
+}
+
