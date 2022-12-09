@@ -56,12 +56,12 @@ void Scene::photon_trace(Photon &p, int num_bounces){
     //finds the closest thing that the photon will hit
     p.intersection = trace(incoming_ray);
 
-    if(p.intersection->what->get_ID() == 5){
-        //cout << "Sphere" << endl;
-    }
-    else{
-       //cout << "NOT sphere " <<endl;
-    }
+//    if(p.intersection->what->get_ID() == 5){
+//        //cout << "Sphere" << endl;
+//    }
+//    else{
+//       //cout << "NOT sphere " <<endl;
+//    }
 
     //cout << "ID=" << p.intersection->what->get_ID() << endl;
     /// hitting the sphere here
@@ -341,10 +341,10 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
   {
 	  depth = best_hit->t;
       //working out the colour for the best hit
-	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
+	  //colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
       //-----------photon mapping ----------------
-      double radius = 0.8;
+      double radius = 0.1;
       Photon bestHit_photon = Photon(best_hit->position);
       ///hitting spheres here
 //      if(best_hit->what->get_ID() == 5){
@@ -431,7 +431,7 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 
               light->get_intensity(best_hit->position, intensity);
 
-              colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
+              //colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
 
 		  }
 

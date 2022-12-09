@@ -124,7 +124,7 @@ void build_scene(Scene& scene)
     //sphere->set_material(globalMat_reflect);
     //sphere->set_material(globalMat_refract);
     sphere->set_material(redPhong);
-	//scene.add_object(sphere);
+	scene.add_object(sphere);
 
     sphere02->set_material(redPhong);
     //scene.add_object(sphere02);
@@ -145,12 +145,11 @@ void build_scene(Scene& scene)
 
 
     quad_Obj->set_material(purplePhong);
-    scene.add_object(quad_Obj);
+    //scene.add_object(quad_Obj);
 
     //scene.add_object(csg_object);
 
-    //scene.add_object(sphere);
-}
+    }
 
 
 // This is the entry point function to the program.

@@ -54,9 +54,9 @@ void Photon::generate_randomSphereDirection(){
 
     bool outside_sphere = true;
     while(outside_sphere){
-        x = dis(gen) - 1 ;
-        y = dis(gen) - 1;
-        z = dis(gen) - 1;
+        x = dis(gen) - 1.0f;
+        y = dis(gen) - 1.0f;
+        z = dis(gen) - 1.0f;
 
         //rejecting any points that lie outside the sphere
         if(pow(x,2) + pow(y,2) + pow(z,2) <= 1.0f){
