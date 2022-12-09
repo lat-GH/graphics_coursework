@@ -51,28 +51,15 @@ void Scene::photon_trace(Photon &p, int num_bounces){
 
 
     // added a bias to the ray, so doesnt shoot from exact same position
-    /// when negate the direction of bais get shadows
     Ray incoming_ray = Ray(p.position + (1.000005f*p.direction),p.direction);
     //finds the closest thing that the photon will hit
     p.intersection = trace(incoming_ray);
-
-//    if(p.intersection->what->get_ID() == 5){
-//        //cout << "Sphere" << endl;
-//    }
-//    else{
-//       //cout << "NOT sphere " <<endl;
-//    }
-
-    //cout << "ID=" << p.intersection->what->get_ID() << endl;
-    /// hitting the sphere here
-
 
     if(p.intersection != NULL){
 
         //updating the position of the photon to take the position of where it hits
         p.position = p.intersection->position;
 
-        //TODO add shadow_trace(); using intersection->next
         //need to create a new photon otherwise you are altering the orignal photon again and again
         Photon newPhoton = Photon();
         newPhoton.position = p.position;
@@ -80,30 +67,9 @@ void Scene::photon_trace(Photon &p, int num_bounces){
         //using russain roullet to determine whether the current photon stored in the tree or not and its intensity
         //also determines the direction of the new photon
 
-//        if(p.intersection->what->get_ID() == 5){
-//            //cout <<"BEFORE ID=" << p.intersection->what->get_ID() << endl;
-//            cout <<"BEFORE "<<p.intersection->position.x <<  p.intersection->position.y <<  p.intersection->position.z << "=" << p.position.x << p.position.y << p.position.z <<endl;
-//        }
-
         bool absorbed = russian_roulette(p, newPhoton);
 
-//        if(p.intersection->what->get_ID() == 5){
-//            //cout << "ID=" << p.intersection->what->get_ID() << endl;
-//            cout <<  "RUSSIA "<< p.intersection->position.x <<  p.intersection->position.y <<  p.intersection->position.z << "=" << p.position.x << p.position.y << p.position.z <<endl;
-//            vector<Photon> v = get_radius_nearestPhotons(p,0.1);
-//
-//            unsigned int numPhotons = v.size();
-//            if(numPhotons > 0){
-//                cout << v[0].position.x << endl;
-//            }
-//            /// there are only no photons found when there is a specular reflection which is correct.
-//            /// there are a decent amount if dissue and absored photons on the sphere with correctly position photons
-//            else{cout << "------------none"<<endl; }
-//        }
-
-
-
-        //add a stopping case so only recurses 5times
+        //add a stopping case so only recurses 5 times
         if(!absorbed && num_bounces < 6){
             num_bounces ++;
             newPhoton.direct_photon = false;
@@ -115,7 +81,7 @@ void Scene::photon_trace(Photon &p, int num_bounces){
             return;
         }
     }
-        //if no new intersection found, return p
+    //if no new intersection found, return p
     else{
         //cout<< "absorbed"<<endl;
         return;
@@ -126,7 +92,6 @@ void Scene::photon_trace(Photon &p, int num_bounces){
 //decidieng the colour and whether or not to store the current photon
 //then using that to determine the direction of the new photon
 bool Scene::russian_roulette(Photon p, Photon &newP){
-    //cout << "russsain rouu" << endl;
     float p_diffuseReflection = p.intersection->what->material->get_diffuseReflectionProbability(p);
     float p_specularReflection = p.intersection->what->material->get_specularReflectionProbability(p);
 
@@ -134,15 +99,8 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
 
     //diffusely reflected
     if(r < p_diffuseReflection){
-//        if(p.intersection->what->get_ID() == 5){
-//            cout << "diffuse" << endl;
-//        }
-
         //setting the colour of the photon to use th diffuse value AND adding it to the map, because it leaves some colour behind
-        p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour();
-        /// intersection position is still the same when add it to kdtree
-        //cout << "ID=" << p.intersection->what->get_ID() << endl;
-        //cout <<  p.intersection->position.x <<  p.intersection->position.y <<  p.intersection->position.z << "=" << p.position.x << p.position.y << p.position.z <<endl;
+        p.intensity = p.intensity * p.intersection->what->material->get_diffuseColour(); //TODO this might not be the best method
         add_photoToTree(p);
 
         newP.intensity = p.intensity;
@@ -153,17 +111,11 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
         if(newP.direction.dot(p.intersection->normal) < 0){
             newP.direction.negate();
         }
-
         return false;
-
-
     }
+
     //specularly reflected
     else if( r < p_specularReflection){
-//        if(p.intersection->what->get_ID() == 5){
-//            cout << "sepcular" << endl;
-//        }
-
         //setting the colour of the photon to use th specular value BUT not adding it to the photon map;
         p.intensity = p.intensity * p.intersection->what->material->get_specularColour();
         newP.intensity = p.intensity;
@@ -173,17 +125,12 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
         newP.direction = p.direction - 2.0f * (p.intersection->normal.dot(p.direction)) * p.intersection->normal;
 
         return false;
-
-
     }
     else{
-//        if(p.intersection->what->get_ID() == 5){
-//            cout << "absorbed" << endl;
-//        }
-
         //photon has been absorbed
         //set the colour to be that of diffuse it has hit
-        p.intensity = p.intersection->what->material->get_diffuseColour(); //TODO check what thing is it hitting
+        p.intensity = p.intersection->what->material->get_diffuseColour();
+        add_photoToTree(p);
         return true;
     }
 }
@@ -329,12 +276,6 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 
   // first step, find the closest primitive
   Hit *best_hit = this->trace(ray);
-    //cout << best_hit->what->get_ID() << endl;
-  /// we are hitting spheres and planes
-//    if(best_hit->what->get_ID() == 4){
-//        //cout << "Quad" << endl;
-//    }
-
 
   // if we found a primitive then compute the colour we should see
   if (best_hit != 0)
@@ -344,23 +285,14 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 	  //colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
       //-----------photon mapping ----------------
-      double radius = 0.1;
+      double radius = 0.8;
       Photon bestHit_photon = Photon(best_hit->position);
-      ///hitting spheres here
-//      if(best_hit->what->get_ID() == 5){
-//        cout << "Sphere" << endl;
-//      }
+
       //getting the n nearest photons to the photon at the position of the best hit
       vector<Photon> photons = get_radius_nearestPhotons(bestHit_photon, radius);
 
       unsigned int numPhotons = photons.size();
-      /// spheres are mainly returning 0 hits // planes rarely return 0 hits
-//      if(best_hit->what->get_ID() == 5){
-//          cout << "Sphere"<< numPhotons << endl;
-//      }
-//      else{
-//          cout << "plane "<< numPhotons << endl;
-//      }
+
       Colour averageColour;
       if(numPhotons > 0){
           //the wieghting of the colour of the pixel should be based on its distamce from the middle pixel
@@ -369,12 +301,21 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
           float radius_length = (bestHit_photon.position - photons[numPhotons-1].position).length();
 
           for(int i=0; i<numPhotons; i++){
-              //calculates the distance from the pixel
-              float curr_radius = (bestHit_photon.position - photons[i].position).length();
-              //get the ratio of the distance away from the og photon vs the radius,
-              // then subtract it from 1 so 1 at center and 0 at edge
-              colour_wieght = 1 - curr_radius/radius_length;
-              averageColour += photons[i].intensity * colour_wieght;
+              //only include photons from the object you have hit
+              if(best_hit->what == photons[i].intersection->what){
+                  //cout << "same object" << endl;
+                  //calculates the distance from the pixel
+                  float curr_radius = (bestHit_photon.position - photons[i].position).length();
+                  //get the ratio of the distance away from the og photon vs the radius,
+                  // then subtract it from 1 so 1 at center and 0 at edge
+                  colour_wieght = 1 - curr_radius/radius_length;
+                  averageColour += photons[i].intensity * colour_wieght;
+              }
+              else{
+                  //cout<< "not same object" << endl;
+              }
+
+
           }
           averageColour.r = averageColour.r/numPhotons;
           averageColour.g = averageColour.g/numPhotons;
