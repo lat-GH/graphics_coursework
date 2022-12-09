@@ -79,7 +79,7 @@ void build_scene(Scene& scene)
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 1.0f);//-1 0 2 r=0.4
+	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 0.6f);//-1 0 2 r=0.4
     Sphere* sphere02 = new Sphere(Vertex(1.0f, 0.1f, 1.5f), 0.6f);//-1 0 2 r=0.4
 
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);

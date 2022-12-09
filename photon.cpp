@@ -66,4 +66,5 @@ void Photon::generate_randomSphereDirection(){
     this->direction.x = x;
     this->direction.y = y;
     this->direction.z = z;
+    this->direction.normalise();
 }
