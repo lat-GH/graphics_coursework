@@ -61,11 +61,9 @@ Hit* CSG::intersection(Ray ray)
 // will perform the action of keeping or discarding intersections and produce the relevant resulting output of hits
 void action(Hit* &output, bool keep, Hit* &AorB, bool &out){
     if(keep){
-        //add_to_output(output, AorB);
         Hit *AorB_single = AorB;
         //stepping along the list to be looking at the new value
         AorB = AorB->next;
-        cout.flush();
         output = Hit::add_intoList(output, AorB_single);
     }
     else{

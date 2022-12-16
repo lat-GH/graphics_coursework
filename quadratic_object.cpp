@@ -137,7 +137,7 @@ void Quadratic::apply_transform(Transform& trans)
 
 }
 
-int Quadratic::get_ID()
+int Quadratic::get_ID() //TODO get rid of this
 {
     return 4;
 }
