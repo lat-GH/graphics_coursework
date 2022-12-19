@@ -16,19 +16,19 @@
 * produced it.
 */
 
-#include "scene.h"
+#include "photonMap_scene.h"
 
 #include <bits/stdc++.h>
 
 #include "sphere_object.h"
 
-Scene::Scene()
+photonMap_Scene::photonMap_Scene()
 {
 	object_list = 0;
 	light_list = 0;
 }
 
-void Scene::create_photonMap(){
+void photonMap_Scene::create_photonMap(){
     cout << "in create_photonMap"<< endl;
     Light *lights = light_list;
     while (lights != NULL){
@@ -44,7 +44,7 @@ void Scene::create_photonMap(){
 }
 
 //Photon PhotonMap::photon_trace(Photon &p){ //it not updating the colour of the photon on the unwind?
-void Scene::photon_trace(Photon &p, int num_bounces){
+void photonMap_Scene::photon_trace(Photon &p, int num_bounces){
     //cout << "in photon_trace"<< endl;
     //cout << "p.intensity=" << p.intensity.r<< p.intensity.g << p.intensity.b << endl;
     //cout << "BEFORE p.direction=" << p.direction.x << p.direction.y << p.direction.z <<endl;
@@ -91,7 +91,7 @@ void Scene::photon_trace(Photon &p, int num_bounces){
 
 //decidieng the colour and whether or not to store the current photon
 //then using that to determine the direction of the new photon
-bool Scene::russian_roulette(Photon p, Photon &newP){
+bool photonMap_Scene::russian_roulette(Photon p, Photon &newP){
     float p_diffuseReflection = p.intersection->what->material->get_diffuseReflectionProbability(p);
     float p_specularReflection = p.intersection->what->material->get_specularReflectionProbability(p);
 
@@ -136,28 +136,28 @@ bool Scene::russian_roulette(Photon p, Photon &newP){
     }
 }
 
-void Scene::add_photoToTree(Photon &p){
+void photonMap_Scene::add_photoToTree(Photon &p){
     //cout << "added to tree" << p.position.x << p.position.y << p.position.z<<  endl;
     kdTree.insert(p);
 
 }
-Photon Scene::get_nearestPhotons(Photon &p){
+Photon photonMap_Scene::get_nearestPhotons(Photon &p){
     return kdTree.nearest(p);
 }
-vector<Photon> Scene::get_n_nearestPhotons(Photon &p, int n){
+vector<Photon> photonMap_Scene::get_n_nearestPhotons(Photon &p, int n){
     //hoping will only need to search based on the position, and wont care on the directio or the colour
     //so the arguement photon can be empty in the sens it only has a positional value
     return kdTree.nearest(p,n);
 
 }
-vector<Photon> Scene::get_radius_nearestPhotons(Photon &p, double n){ // TODO try updating this one to the one which uses the Coord radius, coord is a double
+vector<Photon> photonMap_Scene::get_radius_nearestPhotons(Photon &p, double n){ // TODO try updating this one to the one which uses the Coord radius, coord is a double
     //hoping will only need to search based on the position, and wont care on the directio or the colour
     //so the arguement photon can be empty in the sens it only has a positional value
     return kdTree.within(p,n);
 
 }
 
-bool Scene::shadowtrace(Ray ray, float limit)
+bool photonMap_Scene::shadowtrace(Ray ray, float limit)
 {
 	Object *objects = this->object_list;
 
@@ -184,7 +184,7 @@ bool Scene::shadowtrace(Ray ray, float limit)
 }
 
 //works out the hit on the object that is closest to the camera = best_hit
-Hit *Scene::trace(Ray ray)
+Hit *photonMap_Scene::trace(Ray ray)
 {
 	Hit *best_hit = 0;
 
@@ -223,7 +223,7 @@ Hit *Scene::trace(Ray ray)
 	return best_hit;
 }
 
-Hit* Scene::select_first(Hit* list)
+Hit* photonMap_Scene::select_first(Hit* list)
 {
 	Hit* result = 0;
 
@@ -251,7 +251,7 @@ Hit* Scene::select_first(Hit* list)
 	return result;
 }
 
-void Scene::generateShadowRay(Ray &shadowRay, Hit *hit, Vector lit_dir){
+void photonMap_Scene::generateShadowRay(Ray &shadowRay, Hit *hit, Vector lit_dir){
     //need to move it up along the normal by a small amount so that it doesnt inersect again
     float bias = 1.000005f;
     Vector shadow_bias = Vector(bias, bias, bias);
@@ -263,7 +263,7 @@ void Scene::generateShadowRay(Ray &shadowRay, Hit *hit, Vector lit_dir){
 
 }
 
-void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
+void photonMap_Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 {
   Object *objects = object_list;
   Light *lights = light_list;
@@ -386,13 +386,13 @@ void Scene::raytrace(Ray ray, int recurse, Colour &colour, float &depth)
 	}
 }
 
-void Scene::add_object(Object *obj)
+void photonMap_Scene::add_object(Object *obj)
 {
   obj->next = this->object_list;
   this->object_list = obj;
 }
 
-void Scene::add_light(Light *light)
+void photonMap_Scene::add_light(Light *light)
 {
   light->next = this->light_list;
   this->light_list = light;

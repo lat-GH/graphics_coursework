@@ -20,21 +20,21 @@
 #pragma once
 
 #include "material.h"
-#include "scene.h"
+#include "photonMap_scene.h"
 
 class GlobalMaterial: public Material {
 public:
     Colour reflect_weight;
     Colour refract_weight;
     float ior;
-    Scene* environment;
+    Environment* environment;
 //BEGIN_STAGE_ONE
     //void fresnel(Vector& view, Vector& normal, float etai, float etat, float& kr);
     void fresnel(Vector& view, Vector& normal, float ior, float& kr);
     bool refract_ray(Vector& view, Vector& normal, float ior, Vector& refract_ray);
 //END_STAGE_ONE
 
-    GlobalMaterial(Scene* p_env, Colour p_reflect_weight, Colour p_refract_weight, float ior);
+    GlobalMaterial(Environment* p_env, Colour p_reflect_weight, Colour p_refract_weight, float ior);
 
     Colour compute_once(Ray& viewer, Hit& hit, int recurse);
 

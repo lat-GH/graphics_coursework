@@ -36,8 +36,8 @@ add_executable(lab03
         polymesh_object.cpp
         polymesh_object.h
         ray.h
-        scene.cpp
-        scene.h
+        photonMap_scene.cpp
+        photonMap_scene.h
         simple_camera.cpp
         simple_camera.h
         sphere_object.cpp

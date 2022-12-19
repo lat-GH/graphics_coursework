@@ -22,7 +22,7 @@
 
 Vector reflect(Vector incident, Vector Normal);
 
-GlobalMaterial::GlobalMaterial(Scene* p_env, Colour p_reflect_weight, Colour p_refract_weight, float p_ior)
+GlobalMaterial::GlobalMaterial(Environment* p_env, Colour p_reflect_weight, Colour p_refract_weight, float p_ior)
 {
     reflect_weight = p_reflect_weight;
     refract_weight = p_refract_weight;

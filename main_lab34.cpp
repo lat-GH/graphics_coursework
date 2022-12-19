@@ -32,7 +32,7 @@
 
 // these are core raytracing classes
 #include "framebuffer.h"
-#include "scene.h"
+#include "photonMap_scene.h"
 
 // classes that contain our objects to be rendered, all derived from Object
 #include "polymesh_object.h"
@@ -60,7 +60,7 @@
 using namespace std;
 
 // you will find it useful during development/debugging to create multiple functions that fill out the scene.
-void build_scene(Scene& scene)
+void build_scene(Environment& scene)
 {
 	// The following transform allows 4D homogeneous coordinates to be transformed.It moves the supplied teapot model to somewhere visible.
 	Transform * transform = new Transform(1.0f, 0.0f, 0.0f, 0.0f,
@@ -145,7 +145,6 @@ void build_scene(Scene& scene)
     scene.add_object(background_Top);
 
 
-
     quad_Obj->set_material(purplePhong);
     //scene.add_object(quad_Obj);
 
@@ -163,13 +162,13 @@ int main(int argc, char *argv[])
 	FrameBuffer* fb = new FrameBuffer(width, height);
 	
 	// Create a scene
-	Scene scene;
+    photonMap_Scene photonMap_Scene;
 	
 	// Setup the scene
-	build_scene(scene);
+	build_scene(photonMap_Scene);
 
     //photon mapping
-    scene.create_photonMap();
+    photonMap_Scene.create_photonMap();
     cout << "PHoton map complete" << endl;
 	
 	// Declare a camera
@@ -188,7 +187,7 @@ int main(int argc, char *argv[])
 
 
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
-	camera->render(scene,*fb);
+	camera->render(photonMap_Scene,*fb);
 	
 	// Output the framebuffer colour and depth as two images
 	fb->writeRGBFile((char *)"test.ppm");

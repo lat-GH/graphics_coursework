@@ -32,7 +32,7 @@ using namespace KD;
 // Scene is a class that is used to build a scene database of objects
 // and lights and then trace a ray through it.
 
-class Scene: public Environment {
+class photonMap_Scene: public Environment {
 public:
 
   Object *object_list;
@@ -48,7 +48,7 @@ public:
   int numberOfPhotons = 100000;
   //int numberOfPhotons = 1000000;
 
-  Scene();
+    photonMap_Scene();
 
   // Filter the list of returned hits to the closest +ve
   Hit* select_first(Hit* list);

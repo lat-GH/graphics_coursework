@@ -11,7 +11,7 @@
 #include "vector.h"
 #include "vertex.h"
 #include "photon.h"
-#include "scene.h"
+#include photonMap_scene.h
 #include "hit.h"
 #include "light.h"
 #include "kd-master/src/tree.h"

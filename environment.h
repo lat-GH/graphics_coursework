@@ -22,6 +22,8 @@
 
 #include "ray.h"
 #include "colour.h"
+#include "object.h"
+#include "light.h"
 
 class Environment {
 public:
@@ -41,4 +43,6 @@ public:
 	{
 		return false;
 	}
+    virtual void add_object(Object *obj);
+    virtual void add_light(Light *light);
 };
