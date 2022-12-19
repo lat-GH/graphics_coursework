@@ -33,6 +33,7 @@
 // these are core raytracing classes
 #include "framebuffer.h"
 #include "photonMap_scene.h"
+#include "scene.h"
 
 // classes that contain our objects to be rendered, all derived from Object
 #include "polymesh_object.h"
@@ -54,7 +55,6 @@
 #include "simple_camera.h"
 #include "full_camera.h"
 #include "DOF_camera.h"
-#include "photon_map.h"
 
 
 using namespace std;
@@ -129,7 +129,7 @@ void build_scene(Environment& scene)
 	scene.add_object(sphere);
 
     sphere02->set_material(redPhong);
-    //scene.add_object(sphere02);
+    scene.add_object(sphere02);
 
     background->set_material(greenPhong);
     background_RHS->set_material(purplePhong);
@@ -162,14 +162,15 @@ int main(int argc, char *argv[])
 	FrameBuffer* fb = new FrameBuffer(width, height);
 	
 	// Create a scene
-    photonMap_Scene photonMap_Scene;
+    //photonMap_Scene scene;
+    Scene scene;
 	
 	// Setup the scene
-	build_scene(photonMap_Scene);
+	build_scene(scene);
 
     //photon mapping
-    photonMap_Scene.create_photonMap();
-    cout << "PHoton map complete" << endl;
+    //photonMap_Scene.create_photonMap();
+    //cout << "PHoton map complete" << endl;
 	
 	// Declare a camera
 	//Camera *camera = new SimpleCamera(0.5f);
@@ -178,8 +179,8 @@ int main(int argc, char *argv[])
     //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
     //---------box scene camera ------------
-    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
-    //Camera* camera =  new DOFCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f), 3.0f, 2.0f,100);
+    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    Camera* camera =  new DOFCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f), 3.0f, 1.0f,100);
 
     //--------------CSG cameras------------------------
     //Camera* camera = new FullCamera(350.0f, Vertex(-10.0f, 0.0f, -2.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));//epsiloiod
@@ -187,7 +188,7 @@ int main(int argc, char *argv[])
 
 
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.
-	camera->render(photonMap_Scene,*fb);
+	camera->render(scene,*fb);
 	
 	// Output the framebuffer colour and depth as two images
 	fb->writeRGBFile((char *)"test.ppm");
