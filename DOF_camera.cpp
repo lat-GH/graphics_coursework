@@ -50,7 +50,7 @@ DOFCamera:: DOFCamera(float p_f, Vertex p_position, Vector p_lookat, Vector p_up
 
 }
 
-void DOFCamera::calculate_secondaryRay(Vertex curr_orig, Vertex destination_point, Ray result)
+void DOFCamera::calculate_secondaryRay(Vertex curr_orig, Vertex destination_point, Ray &result)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -126,11 +126,13 @@ void DOFCamera::render(Environment& env, FrameBuffer& fb)
                 //calculate a new eye origin, in a random direction, within the aperture distance
                 calculate_secondaryRay(primary_ray.position, focal_point, secondary_ray);
                 env.raytrace(secondary_ray, 5, temp_colour, recurssion_depth);
+                //cout << "temp_colour = "<< temp_colour.r <<temp_colour.g <<temp_colour.b <<endl;
                 final_colour += temp_colour;
             }
 
             //calculate an average colour from all the samples
-            final_colour = final_colour / num_of_samples;
+            final_colour = final_colour / float(num_of_samples);
+            //cout << "final_colour = "<< final_colour.r <<final_colour.g <<final_colour.b <<endl;
 
             fb.plotPixel(x, y, final_colour.r, final_colour.g, final_colour.b);
             fb.plotDepth(x, y, recurssion_depth);
@@ -139,7 +141,3 @@ void DOFCamera::render(Environment& env, FrameBuffer& fb)
         cerr << "#" << flush;
     }
 }
-
-//
-// Created by latma on 16/12/2022.
-//

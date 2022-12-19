@@ -60,7 +60,7 @@ public:
     //FullCamera(float p_f, Vertex& p_position, Vector& p_lookat, Vector &p_up);
     DOFCamera(float p_f, Vertex p_position, Vector p_lookat, Vector p_up, float p_focalL, float p_aperture, int samples);
 
-    void calculate_secondaryRay(Vertex curr_orig, Vertex destination_point, Ray result);
+    void calculate_secondaryRay(Vertex curr_orig, Vertex destination_point, Ray &result);
 
     void get_ray_pixel(int p_x, int p_y, Ray &ray);
 

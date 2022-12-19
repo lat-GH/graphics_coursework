@@ -80,7 +80,7 @@ void build_scene(Environment& scene)
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, 0.0f), 0.6f);//-1 0 2 r=0.4
+	Sphere* sphere = new Sphere(Vertex(0.0f, 0.0f, -0.5f), 0.6f);//-1 0 2 r=0.4
     Sphere* sphere02 = new Sphere(Vertex(1.0f, 0.1f, 1.5f), 0.6f);//-1 0 2 r=0.4
 
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
@@ -169,7 +169,6 @@ int main(int argc, char *argv[])
 	build_scene(scene);
 
     //photon mapping
-    //photonMap_Scene.create_photonMap();
     //cout << "PHoton map complete" << endl;
 	
 	// Declare a camera
@@ -180,7 +179,7 @@ int main(int argc, char *argv[])
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
     //---------box scene camera ------------
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
-    Camera* camera =  new DOFCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f), 3.0f, 1.0f,100);
+    Camera* camera =  new DOFCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f), 1.0f, 0.02f,500);
 
     //--------------CSG cameras------------------------
     //Camera* camera = new FullCamera(350.0f, Vertex(-10.0f, 0.0f, -2.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));//epsiloiod

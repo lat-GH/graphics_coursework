@@ -48,7 +48,7 @@ public:
   int numberOfPhotons = 100000;
   //int numberOfPhotons = 1000000;
 
-    photonMap_Scene();
+  photonMap_Scene();
 
   // Filter the list of returned hits to the closest +ve
   Hit* select_first(Hit* list);

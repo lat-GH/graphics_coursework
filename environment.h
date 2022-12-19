@@ -43,6 +43,10 @@ public:
 	{
 		return false;
 	}
-    virtual void add_object(Object *obj);
-    virtual void add_light(Light *light);
+    virtual void add_object(Object *obj){
+        return;
+    }
+    virtual void add_light(Light *light){
+        return;
+    }
 };

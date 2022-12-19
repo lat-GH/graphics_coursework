@@ -26,6 +26,7 @@ photonMap_Scene::photonMap_Scene()
 {
 	object_list = 0;
 	light_list = 0;
+    create_photonMap();
 }
 
 void photonMap_Scene::create_photonMap(){
@@ -97,7 +98,6 @@ bool photonMap_Scene::russian_roulette(Photon p, Photon &newP){
 
     float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
-    if (r )
     //diffusely reflected
     if(r < p_diffuseReflection){
         //setting the colour of the photon to use th diffuse value AND adding it to the map, because it leaves some colour behind
