@@ -16,18 +16,19 @@
 * produced it.
 */
 
-#include "full_camera.h"
+#include "DOF_camera.h"
+#include <bits/stdc++.h>
 
-FullCamera::FullCamera() //ADD an implementation of when dont have the values, whats the default
+DOFCamera::DOFCamera() //ADD an implementation of when dont have the values, whats the default
 {
 //BEGIN_STAGE_ONE
 //END_STAGE_ONE
 }
 
 //FullCamera::FullCamera(float f, Vertex& p_position, Vector& p_lookat, Vector& p_up)
-FullCamera::FullCamera(float f, Vertex p_position, Vector p_lookat, Vector p_up)
+DOFCamera:: DOFCamera(float p_f, Vertex p_position, Vector p_lookat, Vector p_up, float p_focalL, float p_aperture, int p_samples)
 {
-    fov = f;
+    fov = p_f;
     position = p_position; //=Eye
     lookat = p_lookat;
     up = p_up;
@@ -35,24 +36,39 @@ FullCamera::FullCamera(float f, Vertex p_position, Vector p_lookat, Vector p_up)
     //calculating the coordinate system of the camera
     w = position-lookat;
     w.normalise();
-    //cout <<"w="<< w.x<<", " << w.y<<", " << w.z<<", "<<endl;
 
     up.cross(w,u);
     u.normalise();
-    //cout <<"u="<< u.x<<", " << u.y<<", " << u.z<<", "<<endl;
 
     w.cross(u,v);
-    //cout <<"v="<< v.x<<", " << v.y<<", " << v.z<<", "<<endl;
+
+    focal_length = p_focalL;
+    aperture_size = p_aperture;
+    num_of_samples = p_samples;
+
+
 
 }
 
-void FullCamera::get_ray_offset(int p_x, int p_y, float p_ox, float p_oy, Ray& p_ray)
+void DOFCamera::calculate_secondaryRay(Vertex curr_orig, Vertex destination_point, Ray result)
 {
-//BEGIN_STAGE_ONE
-// END_STAGE_ONE
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    //can't generate random numbers -ve numbers, so generate over larger +ve range and subtract later
+    std::uniform_real_distribution<float> dis(0.0, 2*aperture_size);
+
+    float x,y,z;
+    //ASSUMPTION apature size is the radius (not the diameter)
+    x = dis(gen) - aperture_size;
+    y = dis(gen) - aperture_size;
+    z = dis(gen) - aperture_size; //do you move the camera in all directiosn or is it just a plane?
+
+    result.position = curr_orig + Vertex(x,y,z);
+    result.direction = destination_point - result.position;
+
 }
 
-void FullCamera::get_ray_pixel(int p_x, int p_y, Ray &ray)
+void DOFCamera::get_ray_pixel(int p_x, int p_y, Ray &ray)
 {
     //ray needs a position and direction
     //position = eye of camera
@@ -78,12 +94,12 @@ void FullCamera::get_ray_pixel(int p_x, int p_y, Ray &ray)
 
 }
 
-void FullCamera::render(Environment& env, FrameBuffer& fb)
+void DOFCamera::render(Environment& env, FrameBuffer& fb)
 {
     width = fb.width;
     height = fb.height;
 
-    //looping through the pixels of the 2d image
+    //looping through the pixels of the 2d image plane
     for (int y = 0; y < height; y += 1)
     {
         for (int x = 0; x < width; x += 1)
@@ -91,20 +107,33 @@ void FullCamera::render(Environment& env, FrameBuffer& fb)
             //cout << x << "," << y << endl;
 
             //rays have a position and a direction
-            Ray ray;
+            Ray primary_ray;
             //for each pixel in the image calculate the corresponding ray
             //position is equivalent to the eye of the camera
             //direction is calculated...
-            get_ray_pixel(x, y, ray);
+            get_ray_pixel(x, y, primary_ray);
 
             //rgba values
-            Colour colour;
-            float depth;
+            Colour final_colour;
+            float recurssion_depth;
 
-            env.raytrace(ray, 5, colour, depth);
+            //calculate the focal point using the primary ray
+            Vertex focal_point = primary_ray.position + primary_ray.direction*focal_length;
 
-            fb.plotPixel(x, y, colour.r, colour.g, colour.b);
-            fb.plotDepth(x, y, depth);
+            for(int i=0; i< num_of_samples; i++){
+                Ray secondary_ray;
+                Colour temp_colour;
+                //calculate a new eye origin, in a random direction, within the aperture distance
+                calculate_secondaryRay(primary_ray.position, focal_point, secondary_ray);
+                env.raytrace(secondary_ray, 5, temp_colour, recurssion_depth);
+                final_colour += temp_colour;
+            }
+
+            //calculate an average colour from all the samples
+            final_colour = final_colour / num_of_samples;
+
+            fb.plotPixel(x, y, final_colour.r, final_colour.g, final_colour.b);
+            fb.plotDepth(x, y, recurssion_depth);
         }
 
         cerr << "#" << flush;

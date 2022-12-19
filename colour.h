@@ -85,6 +85,15 @@ public:
 		result.a = a * other.a;
 		return result;
 	}
+    Colour operator/ (Colour other)
+    {
+        Colour result;
+        result.r = r / other.r;
+        result.g = g / other.g;
+        result.b = b / other.b;
+        result.a = a / other.a;
+        return result;
+    }
 
 //	Colour operator+ (Colour& other)
 //	{
@@ -126,6 +135,15 @@ public:
 		result.a = a;
 		return result;
 	}
+    Colour operator/ (float rhs)
+    {
+        Colour result;
+        result.r = r / rhs;
+        result.g = g / rhs;
+        result.b = b / rhs;
+        result.a = a;
+        return result;
+    }
 
 //	Colour operator+= (Colour& other)
 //	{

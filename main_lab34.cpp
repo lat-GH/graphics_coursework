@@ -53,6 +53,7 @@
 //classes that contain cameras, all derived from Camera
 #include "simple_camera.h"
 #include "full_camera.h"
+#include "DOF_camera.h"
 #include "photon_map.h"
 
 
@@ -179,6 +180,7 @@ int main(int argc, char *argv[])
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
     //---------box scene camera ------------
     Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    //Camera* camera =  new DOFCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f), 3.0f, 2.0f,100);
 
     //--------------CSG cameras------------------------
     //Camera* camera = new FullCamera(350.0f, Vertex(-10.0f, 0.0f, -2.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));//epsiloiod
