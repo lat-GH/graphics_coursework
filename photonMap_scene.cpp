@@ -96,7 +96,11 @@ bool photonMap_Scene::russian_roulette(Photon p, Photon &newP){
     float p_diffuseReflection = p.intersection->what->material->get_diffuseReflectionProbability(p);
     float p_specularReflection = p.intersection->what->material->get_specularReflectionProbability(p);
 
-    float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    //float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dis(0.0, 1.0);
+    float r =  dis(gen);
 
     //diffusely reflected
     if(r < p_diffuseReflection){
@@ -118,7 +122,7 @@ bool photonMap_Scene::russian_roulette(Photon p, Photon &newP){
     //specularly reflected
     else if( r < p_specularReflection){
         //setting the colour of the photon to use th specular value BUT not adding it to the photon map;
-        p.intensity = p.intensity * p.intersection->what->material->get_specularColour();
+        p.intensity = p.intensity * p.intersection->what->material->get_specularColour(); //TODO try removing this
         newP.intensity = p.intensity;
 
         //specualr reflection --  use reflection equation
@@ -150,7 +154,7 @@ vector<Photon> photonMap_Scene::get_n_nearestPhotons(Photon &p, int n){
     return kdTree.nearest(p,n);
 
 }
-vector<Photon> photonMap_Scene::get_radius_nearestPhotons(Photon &p, double n){ // TODO try updating this one to the one which uses the Coord radius, coord is a double
+vector<Photon> photonMap_Scene::get_radius_nearestPhotons(Photon &p, double n){
     //hoping will only need to search based on the position, and wont care on the directio or the colour
     //so the arguement photon can be empty in the sens it only has a positional value
     return kdTree.within(p,n);

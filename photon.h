@@ -25,7 +25,7 @@ public:
     bool direct_photon = true;
     bool shadow_photon = false;
 
-    //constructors
+    //constructors //TODO check if need all these constructors
     Photon();
     Photon(Vertex pos);
     Photon(Colour col);
@@ -35,7 +35,6 @@ public:
     //kd tree needs to be able to index it's position
     float operator[] (int i) const;
     bool operator == (Photon p) const;
-    //TODO check if need to overload 'Item' too -  "const Point& Item::point() const" ??
 
     void generate_randomSphereDirection();
 
