@@ -109,13 +109,11 @@ void build_scene(Environment& scene)
     //csg_object->apply_transform(*transform02);
 
     //DirectionalLight* light = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f)); //1 -1 1
-    //Vector lightDirection = Vector(2.0f, 4.0f, -4.0f);//1, 4. -5
+    Vector lightDirection = Vector(0.0f, 4.0f, -5.0f);//1, 4. -5
     //Vector lightDirection = Vector(0.0f, 0.0f, -5.0f);
     //Vector lightDirection = Vector(0.0f, 4.0f, 4.0f); //TODO try get a ceiling light working, but might need to fix how point light calculates its intensity
-    Vector lightDirection = Vector(0.0f, 4.0f, -1.0f);
-    PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection, 0.9);
-    //Light* light = new Light();
-
+    //Vector lightDirection = Vector(0.0f, 4.0f, -1.0f);
+    PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection, 0.5);
 	scene.add_light(light);
 
 	Phong* redPhong = new Phong(Colour(0.01f, 0.01f, 0.01f), Colour(1.0f, 0.0f, 0.0f), Colour(0.5f, 0.5f, 0.5f), 40.f);
@@ -131,11 +129,11 @@ void build_scene(Environment& scene)
     //pm->set_material(globalMat);
     //scene.add_object(pm);
 
-    sphere->set_material(redPhong);
+    sphere->set_material(greenPhong);
     //sphere->set_material(globalMat_reflect);
 	scene.add_object(sphere);
 
-    sphere02->set_material(greenPhong);
+    sphere02->set_material(redPhong);
     scene.add_object(sphere02);
 
     background->set_material(bluePhong);
@@ -169,11 +167,12 @@ int main(int argc, char *argv[])
 	FrameBuffer* fb = new FrameBuffer(width, height);
 	
 	// Create a scene
-    //photonMap_Scene scene;
-    Scene scene;
+    //Scene scene;
+    photonMap_Scene scene;
 	
 	// Setup the scene
 	build_scene(scene);
+    scene.create_photonMap();
 
     //photon mapping
     //cout << "PHoton map complete" << endl;
@@ -181,18 +180,11 @@ int main(int argc, char *argv[])
 	// Declare a camera
 	//Camera *camera = new SimpleCamera(0.5f);
 
-    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -1.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
-    //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
-    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
     //---------box scene camera ------------
-    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.0f, -5.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.0f, -5.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
     //Camera* camera = new FullCamera(350.0f, Vertex(-1.0f, 0.1f, -3.0f), Vector(1.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f));
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -3.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f));
-    Camera* camera =  new DOFCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f), 1.0, 0.03f,100);
-
-    //--------------CSG cameras------------------------
-    //Camera* camera = new FullCamera(350.0f, Vertex(-10.0f, 0.0f, -2.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));//epsiloiod
-    //Camera* camera = new FullCamera(350.0f, Vertex(10.0f, 0.0f, -5.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));// good for cone
+    //Camera* camera =  new DOFCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f), 1.0, 0.03f,1000);
 
 
 	// Camera generates rays for each pixel in the framebuffer and records colour + depth.

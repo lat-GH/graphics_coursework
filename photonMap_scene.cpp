@@ -24,9 +24,8 @@
 
 photonMap_Scene::photonMap_Scene()
 {
-	object_list = 0;
+    object_list = 0;
 	light_list = 0;
-    create_photonMap();
 }
 
 void photonMap_Scene::create_photonMap(){
@@ -96,11 +95,11 @@ bool photonMap_Scene::russian_roulette(Photon p, Photon &newP){
     float p_diffuseReflection = p.intersection->what->material->get_diffuseReflectionProbability(p);
     float p_specularReflection = p.intersection->what->material->get_specularReflectionProbability(p);
 
-    //float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis(0.0, 1.0);
-    float r =  dis(gen);
+    float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+//    std::random_device rd;
+//    std::mt19937 gen(rd());
+//    std::uniform_real_distribution<float> dis(0.0, 1.0);
+//    float r =  dis(gen);
 
     //diffusely reflected
     if(r < p_diffuseReflection){
@@ -291,7 +290,7 @@ void photonMap_Scene::raytrace(Ray ray, int recurse, Colour &colour, float &dept
 	  colour = colour + best_hit->what->material->compute_once(ray, *best_hit, recurse)*ambient_intensity; // this will be the global components such as ambient or reflect/refract
 
       //-----------photon mapping ----------------
-      double radius = 0.1;
+      double radius = 0.5;
       Photon bestHit_photon = Photon(best_hit->position);
 
       //getting the n nearest photons to the photon at the position of the best hit
@@ -373,7 +372,7 @@ void photonMap_Scene::raytrace(Ray ray, int recurse, Colour &colour, float &dept
 
               light->get_intensity(best_hit->position, intensity);
 
-              //colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
+              colour = colour + intensity * best_hit->what->material->compute_per_light(viewer, *best_hit, ldir); // this is the per light local contrib e.g. diffuse, specular
 
 		  }
 
