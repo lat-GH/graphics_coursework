@@ -29,7 +29,7 @@ bool PointLight::get_direction(Vertex &surface, Vector &dir)
 {
     dir = surface - position;
     dir.normalise();
-    if(dir.dot(look_at) < 0){return false;} //if facing in opposite directions then the direction is facing behind the light //TODO try what this will look like without this?
+    if(dir.dot(look_at) < 0){return false;} //if facing in opposite directions then the direction is facing behind the light
     return true;
 }
 

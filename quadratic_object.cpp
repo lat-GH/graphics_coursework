@@ -33,7 +33,6 @@ Quadratic::Quadratic(float a, float b, float c, float d, float e, float f, float
     H = h;
     I = i;
     J = j;
-  //next = (Object *)0; //TODO find out what is suppossed to be used for
 }
 
 Hit *Quadratic::intersection(Ray ray)
@@ -50,7 +49,7 @@ Hit *Quadratic::intersection(Ray ray)
     float discriminant = pow(B_quad,2) - (4*A_quad*C_qaud);
     //case when no intersections
     if (discriminant < 0){
-        Hit *hits = 0; // TODO move this outiside the if statement
+        Hit *hits = 0;
         return hits;
     }
     //case when only one intersection, ray it tangent to the surface
@@ -64,7 +63,7 @@ Hit *Quadratic::intersection(Ray ray)
         newHit->normal = calcNormal(newHit->position);
         newHit->normal.normalise();
 
-        newHit->entering = false; //TODO check this might not be the correct way to assign it...?
+        newHit->entering = false;
         newHit->next = 0;
 
         return newHit;
@@ -115,14 +114,10 @@ Vector Quadratic::calcNormal(Vector P){
 void Quadratic::apply_transform(Transform& trans)
 {
 
-    //TODO work out how to assign the values from the matrix transformation to the  A,B,C,D,E,F,G,H,I,J;
     Transform Q = Transform(A,B,C,D,B,E,F,G,C,F,H,I,D,G,I,J);
-    //Transform Q = Transform(&A,&B,&C,&D,&B,&E,&F,&G,&C,&F,&H,&I,&D,&G,&I,&J);
     Transform transpose = trans.transpose();
     Transform temp = Q * trans;
     Transform result = transpose * temp;
-
-    //cout<< trans.matrix[0][0] << Q.matrix[0][0] << transpose.matrix[0][0] <<  temp.matrix[0][0] << result.matrix[0][0] << endl;
 
     A = result.matrix[0][0];
     B = result.matrix[0][1];
@@ -137,8 +132,4 @@ void Quadratic::apply_transform(Transform& trans)
 
 }
 
-int Quadratic::get_ID() //TODO get rid of this
-{
-    return 4;
-}
 

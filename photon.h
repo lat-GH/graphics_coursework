@@ -25,7 +25,7 @@ public:
     bool direct_photon = true;
     bool shadow_photon = false;
 
-    //constructors //TODO check if need all these constructors
+    //constructors
     Photon();
     Photon(Vertex pos);
     Photon(Colour col);

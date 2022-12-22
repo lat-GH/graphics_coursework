@@ -62,18 +62,6 @@ Colour  Phong::get_specularColour(){
     return specular_coeff;
 
 }
-//TODO attempt a new method of generating the ratio between them
-//Colour Phong::diffuse_specular_ratio(){
-//    float r = diffuse_coeff.r/ specular_coeff.r;
-//    float g = diffuse_coeff.g/ specular_coeff.g;
-//    float b = diffuse_coeff.b/ specular_coeff.b;
-//
-//    //-------------
-//    float numerator = diffuse_coeff.r + diffuse_coeff.g +diffuse_coeff.b;
-//    float denominator = specular_coeff.r + specular_coeff.g +specular_coeff.b;
-//
-//
-//}
 
 float Phong::get_probabilityOfReflection(){
     float red = diffuse_coeff.r + specular_coeff.r;

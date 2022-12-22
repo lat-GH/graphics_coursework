@@ -89,11 +89,9 @@ Colour GlobalMaterial::compute_once(Ray& viewer, Hit& hit, int recurse)
 
 
 Vector reflect(Vector Incident, Vector Normal){
-    return Incident - 2.0f * (Normal.dot(Incident)) * Normal; //original
-    //return -Incident - 2.0f * (Normal.dot(-Incident)) * Normal;
+    return Incident - 2.0f * (Normal.dot(Incident)) * Normal;
 }
 
-//void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float etai, float etat, float& reflectionTerm){
 void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float snellsRatio, float& fresnel_reflection){
     float cosIncident = Normal.dot(-viewer);
     float cosTransmitted_squared = 1 - (1/pow(snellsRatio,2)) * (1-pow(cosIncident,2));
@@ -102,7 +100,7 @@ void GlobalMaterial::fresnel(Vector& viewer, Vector& Normal, float snellsRatio, 
         return;
     }
     float cosTransmitted = sqrtf( cosTransmitted_squared );
-    float Rx = ((snellsRatio*cosIncident) - cosTransmitted) / ((snellsRatio*cosIncident) + cosTransmitted); //TODO whyy is cosIncident == cosTransmitted
+    float Rx = ((snellsRatio*cosIncident) - cosTransmitted) / ((snellsRatio*cosIncident) + cosTransmitted);
     float Ry = (cosIncident - (snellsRatio*cosTransmitted)) / (cosIncident + (snellsRatio*cosTransmitted));
 
     fresnel_reflection = (pow(Rx,2) + pow(Ry,2)) / 2;
@@ -131,7 +129,7 @@ Colour GlobalMaterial::compute_per_light(Vector& viewer, Hit& hit, Vector& ldir)
 //    result.r=0.0f;
 //    result.g=0.0f;
 //    result.b=0.0f;
-    //------------------------not sure why... but this makes it look a lil nicer?
+
     result.r=0.005f;
     result.g=0.05f;
     result.b=0.05f;

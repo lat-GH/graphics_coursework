@@ -31,7 +31,6 @@ CSG::CSG(CSG::Mode p_mode, Object* p_left, Object* p_right)
     chosenMode = p_mode;
     obj_A = p_left;
     obj_B = p_right;
-	//next = (Object*)0; TODO wtf does this mean???
 }
 
 //called in the trace() of the scene.cpp and should return an orderd list of hits
@@ -85,7 +84,6 @@ void CSG::Difference(Hit* &output, Ray ray){
     Hit *B = obj_B->intersection(ray);
 
     //ASSUME the ray starts outside of both the objects
-    //TODO set these base on thier entering values?
     bool A_outside = true;
     bool B_outside = true;
 
@@ -184,7 +182,6 @@ void CSG::Union(Hit* &output, Ray ray){
     Hit *B = obj_B->intersection(ray);
 
     //ASSUME the ray starts outside of both the objects
-    //TODO set these base on thier entering values?
     bool A_outside = true;
     bool B_outside = true;
 
@@ -281,7 +278,6 @@ void CSG::Intersection(Hit *&output, Ray ray) {
     Hit *B = obj_B->intersection(ray);
 
     //ASSUME the ray starts outside of both the objects
-    //TODO set these base on thier entering values?
     bool A_outside = true;
     bool B_outside = true;
 

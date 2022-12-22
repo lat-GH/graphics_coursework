@@ -67,6 +67,10 @@ void build_scene(Environment& scene)
 			0.0f, 0.0f, 1.0f, -2.7f,
 			0.0f, 1.0f, 0.0f, 5.0f,
 			0.0f, 0.0f, 0.0f, 1.0f);
+//    Transform * transform = new Transform(1.0f, 0.0f, 0.0f, 0.0f,
+//                                          0.0f, 0.0f, 1.0f, -2.7f,
+//                                          0.0f, 1.0f, 0.0f, 0.5f,
+//                                          0.0f, 0.0f, 0.0f, 1.0f);
     //transform02 just moves it up a little
     Transform * transform02 = new Transform(1.0f, 0.0f, 0.0f, 0.0f,
                                           0.0f, 1.0f, 0.0f, -0.5f,
@@ -80,7 +84,9 @@ void build_scene(Environment& scene)
     PolyMesh* pm = new PolyMesh((char *) "teapot_smaller.ply", true);
 	pm->apply_transform(*transform);
 
-	Sphere* sphere = new Sphere(Vertex(-0.5f, 0.0f, -1.0f), 0.6f);//-1 0 2 r=0.4
+	Sphere* sphere = new Sphere(Vertex(-0.5f, 0.0f, -1.0f), 0.6f);//-1 0 2 r=0.4 //DOF -0.5f, 0.0f, -1.0f
+    //Sphere* sphere = new Sphere(Vertex(0.0f, -2.0f, 3.5f), 2.0f);//CSG
+    //sphere->apply_transform(*transform);
     Sphere* sphere02 = new Sphere(Vertex(1.0f, 0.1f, 1.5f), 0.6f);//-1 0 2 r=0.4
 
     Plane* background = new Plane(0.0f, 0.0f, -1.0f, 10.0f);
@@ -90,22 +96,24 @@ void build_scene(Environment& scene)
     Plane* background_Bottom = new Plane(0.0f, 1.0f, 0.0f, 5.0f);
     Plane* background_Top= new Plane(0.0f, -1.0f, 0.0f, 5.0f);
 
-    Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,1.0f,0,0,1.0f,0,-1); //epsilode
-    //Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,-1.0f,0,0,1.0f,0,0); //cone
-    //Quadratic* quad_Obj = new Quadratic(4.0f,0,0,0,4.0f,0,0,0.0f,0,-1); //cylinder
-    quad_Obj->apply_transform(*transform03); //step through to check if the values get changed
 
-    CSG::Mode csg_mode = CSG::CSG_DIFF;
+    //Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,3.0f,0,0,1.0f,0,-1); //epsilode
+    //Quadratic* quad_Obj = new Quadratic(1.0f,0,0,0,-1.0f,0,0,1.0f,0,0); //cone
+    Quadratic* quad_Obj = new Quadratic(4.0f,0,0,0,4.0f,0,0,0.0f,0,-1); //cylinder
+    quad_Obj->apply_transform(*transform); //step through to check if the values get changed
+
+    //CSG::Mode csg_mode = CSG::CSG_DIFF;
     //CSG::Mode csg_mode = CSG::CSG_UNION;
-    //CSG::Mode csg_mode = CSG::CSG_INTER;
-    CSG* csg_object = new CSG(csg_mode,sphere, sphere02);
+    CSG::Mode csg_mode = CSG::CSG_INTER;
+    CSG* csg_object = new CSG(csg_mode,sphere, quad_Obj);
     //csg_object->apply_transform(*transform02);
 
-	//DirectionalLight* light = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f)); //1 -1 1
-    Vector lightDirection = Vector(3.0f, 4.0f, -5.0f);//1, 4. -5
-    //Vector lightDirection = Vector(0.0f, 0.0f, -5.0f);//1, 4. -5
-    //Vector lightDirection = Vector(0.0f, 4.0f, 4.0f);//1, 4. -5 //TODO try get a ceiling light working, but might need to fix how point light calculates its intensity
-    PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection, 0.5);
+    //DirectionalLight* light = new DirectionalLight(Vector(1.0f, -1.0f, 1.0f), Colour(1.0f, 1.0f, 1.0f, 0.0f)); //1 -1 1
+    //Vector lightDirection = Vector(2.0f, 4.0f, -4.0f);//1, 4. -5
+    //Vector lightDirection = Vector(0.0f, 0.0f, -5.0f);
+    //Vector lightDirection = Vector(0.0f, 4.0f, 4.0f); //TODO try get a ceiling light working, but might need to fix how point light calculates its intensity
+    Vector lightDirection = Vector(0.0f, 4.0f, -1.0f);
+    PointLight* light = new PointLight(Vertex (lightDirection), Colour(1.0f, 1.0f, 1.0f, 1.0f), lightDirection, 0.9);
     //Light* light = new Light();
 
 	scene.add_light(light);
@@ -121,21 +129,20 @@ void build_scene(Environment& scene)
 
     pm->set_material(redPhong);
     //pm->set_material(globalMat);
-	//scene.add_object(pm);
+    //scene.add_object(pm);
 
-    //sphere->set_material(globalMat_reflect);
-    //sphere->set_material(globalMat_refract);
     sphere->set_material(redPhong);
+    //sphere->set_material(globalMat_reflect);
 	scene.add_object(sphere);
 
-    sphere02->set_material(redPhong);
+    sphere02->set_material(greenPhong);
     scene.add_object(sphere02);
 
-    background->set_material(greenPhong);
-    background_RHS->set_material(purplePhong);
-    background_LHS->set_material(purplePhong);
-    background_Bottom->set_material(bluePhong);
-    background_Top->set_material(bluePhong);
+    background->set_material(bluePhong);
+    background_RHS->set_material(greenPhong);
+    background_LHS->set_material(greenPhong);
+    background_Bottom->set_material(purplePhong);
+    background_Top->set_material(purplePhong);
     background_behind->set_material(rainbow);
     scene.add_object(background);
     scene.add_object(background_behind);
@@ -145,7 +152,7 @@ void build_scene(Environment& scene)
     scene.add_object(background_Top);
 
 
-    quad_Obj->set_material(purplePhong);
+    quad_Obj->set_material(redPhong);
     //scene.add_object(quad_Obj);
 
     //scene.add_object(csg_object);
@@ -178,8 +185,10 @@ int main(int argc, char *argv[])
     //Camera* camera = new FullCamera(350.0f, Vertex(8.0f, 0.1f, 15.0f), Vector(0.0f, 0.0f, 8.0f), Vector(0.0f, -1.0f, 0.0f)); //good test for multiple intersections
     //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -1.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //good reflection test
     //---------box scene camera ------------
-    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
-    Camera* camera =  new DOFCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f), 1.0, 0.05f,500);
+    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 0.0f, -5.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f)); //standard
+    //Camera* camera = new FullCamera(350.0f, Vertex(-1.0f, 0.1f, -3.0f), Vector(1.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f));
+    //Camera* camera = new FullCamera(350.0f, Vertex(0.0f, 1.0f, -3.0f), Vector(0.0f, -1.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f));
+    Camera* camera =  new DOFCamera(350.0f, Vertex(0.0f, 0.1f, -3.0f), Vector(0.0f, 0.0f, 1.0f), Vector(0.0f, -1.0f, 0.0f), 1.0, 0.03f,100);
 
     //--------------CSG cameras------------------------
     //Camera* camera = new FullCamera(350.0f, Vertex(-10.0f, 0.0f, -2.0f), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, -1.0f, 0.0f));//epsiloiod

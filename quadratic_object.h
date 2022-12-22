@@ -29,5 +29,4 @@ public:
   Hit *intersection(Ray ray);
   Vector calcNormal(Vector P);
   void apply_transform(Transform& trans);
-  int get_ID();
 };

@@ -205,7 +205,6 @@ Vector get_TriangleNormal(Vector vA, Vector vB, Vector vC){
 Hit* PolyMesh::intersection(Ray ray)
 {
     //dont want to define the normals till have the verticies have been transformed
-    //TODO transform these verticies in the transform method
     setup_triangleNormals_and_vertexNormals();
 
     Hit *hits = 0;

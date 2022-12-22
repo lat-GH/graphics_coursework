@@ -39,7 +39,7 @@ public:
   Light *light_list;
 
   //storing the photon mapp in the KD tree
-  //TODO add refernce to the github
+  //K. Burk 2015 “A KD-Tree in C++” Available: xavierholt/kd: A KD-Tree in C++ (github.com)
   typedef KD::Core<3, Photon> CORE;
   Tree<CORE> kdTree = Tree<CORE>(Photon(Vector(-900,-900,-900)),Photon(Vector(900,900,900)));
 
